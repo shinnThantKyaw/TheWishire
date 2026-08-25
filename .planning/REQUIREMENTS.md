@@ -8,11 +8,11 @@
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Next.js project initialized with App Router, TypeScript, and Tailwind CSS
+- [x] **INFRA-01**: Next.js project initialized with App Router, TypeScript, and Tailwind CSS
 - [ ] **INFRA-02**: Supabase project configured (PostgreSQL database, storage buckets with RLS policies and file size limits) — auth is NOT required for v1
-- [ ] **INFRA-03**: Prisma schema defined and deployed (wishes, users, media, templates tables)
+- [x] **INFRA-03**: Prisma schema defined and deployed (wishes, users, media, templates tables)
 - [ ] **INFRA-04**: Vercel deployment configured with ISR for published wishes
-- [ ] **INFRA-05**: Template JSON schema defined with Zod validation (strict contract before templates exist)
+- [x] **INFRA-05**: Template JSON schema defined with Zod validation (strict contract before templates exist)
 
 ### Templates & Design
 
