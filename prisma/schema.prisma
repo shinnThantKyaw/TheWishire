@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────
+// Core Tables
+// ──────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  wishes       Wish[]
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+model Wish {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  title         String
+  occasion      String    @default("birthday")
+  templateId    String    @map("template_id")
+  recipientName String    @map("recipient_name")
+  senderName    String    @map("sender_name")
+  config        Json      @default("{}")
+  published     Boolean   @default(false)
+  slug          String?   @unique
+  publishedAt   DateTime? @map("published_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media WishMedia[]
+
+  @@index([userId])
+  @@index([slug])
+  @@index([published, publishedAt])
+  @@map("wishes")
+}
+
+model WishMedia {
+  id         String   @id @default(uuid()) @db.Uuid
+  wishId     String   @map("wish_id") @db.Uuid
+  type       String // 'photo', 'video', 'voice'
+  url        String
+  filename   String?
+  sizeBytes  Int?     @map("size_bytes")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  wish Wish @relation(fields: [wishId], references: [id], onDelete: Cascade)
+
+  @@index([wishId])
+  @@map("wish_media")
+}
+
+model Subscription {
+  id                    String    @id @default(uuid()) @db.Uuid
+  userId                String    @map("user_id") @db.Uuid
+  stripeSubscriptionId  String?   @unique @map("stripe_subscription_id")
+  stripeCustomerId      String?   @map("stripe_customer_id")
+  status                String    @default("active")
+  plan                  String    @default("pro")
+  currentPeriodEnd      DateTime? @map("current_period_end")
+  createdAt             DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+model Template {
+  id        String @id // e.g., 'birthday-classic'
+  name      String
+  occasion  String
+  config    Json
+  isPremium Boolean @default(false) @map("is_premium")
+
+  @@map("templates")
+}
