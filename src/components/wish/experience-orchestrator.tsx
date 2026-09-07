@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useExperienceState } from "@/lib/experience-state";
 import { normalizeFlowMode } from "@/types/experience";
-import type { FlowMode, StartAction, BoxOpenMethod } from "@/types/experience";
+import type { FlowMode, StartAction } from "@/types/experience";
 import type { ThemeConfig } from "@/types/template";
 import type { MergedStage, GiftChapterConfig, CharacterGifConfig, DecorationConfig } from "@/types/wish";
 
@@ -48,8 +48,6 @@ interface ExperienceOrchestratorProps {
   decorations?: DecorationConfig;
   /** Start action for Screen 2. Defaults to tap. */
   startAction?: StartAction;
-  /** Gift box open method for Screen 4. Defaults to "tap". */
-  boxOpenMethod?: BoxOpenMethod;
   /** Gift chapter configuration for Screen 10. */
   giftConfig?: GiftChapterConfig;
 }
@@ -101,7 +99,6 @@ export const ExperienceOrchestrator = ({
   characterGif,
   decorations,
   startAction,
-  boxOpenMethod = "tap",
   giftConfig,
 }: ExperienceOrchestratorProps) => {
   // Normalize legacy flowMode values ("buttons" → "click-through", "tap-to-reveal" → "interactive")
@@ -143,17 +140,22 @@ export const ExperienceOrchestrator = ({
             startAction={resolvedStartAction}
             onNext={actions.next}
             onBack={actions.back}
-            primaryColor={primaryColor}
+            primaryColor={theme.colors.primary}
+            secondaryColor={theme.colors.secondary}
+            backgroundColor={theme.colors.background}
+            foregroundColor={theme.colors.foreground}
           />
         );
 
       case "gift-reveal":
         return (
           <GiftRevealScreen
-            boxOpenMethod={boxOpenMethod}
             onNext={actions.next}
             onBack={actions.back}
-            primaryColor={primaryColor}
+            primaryColor={theme.colors.primary}
+            secondaryColor={theme.colors.secondary}
+            backgroundColor={theme.colors.background}
+            foregroundColor={theme.colors.foreground}
           />
         );
 
@@ -162,7 +164,10 @@ export const ExperienceOrchestrator = ({
           <GiftOpeningScreen
             onNext={actions.next}
             onBack={actions.back}
-            primaryColor={primaryColor}
+            primaryColor={theme.colors.primary}
+            secondaryColor={theme.colors.secondary}
+            backgroundColor={theme.colors.background}
+            foregroundColor={theme.colors.foreground}
           />
         );
 
@@ -209,7 +214,10 @@ export const ExperienceOrchestrator = ({
           <ClosingScreen
             senderName={senderName}
             onRestart={actions.restart}
-            primaryColor={primaryColor}
+            primaryColor={theme.colors.primary}
+            secondaryColor={theme.colors.secondary}
+            backgroundColor={theme.colors.background}
+            foregroundColor={theme.colors.foreground}
           />
         );
     }

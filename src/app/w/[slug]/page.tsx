@@ -61,7 +61,6 @@ export default async function WishPage({ params }: Props) {
       characterGif={config.content.characterGif}
       decorations={config.content.decorations}
       startAction={config.settings.startAction}
-      boxOpenMethod={config.settings.boxOpenMethod}
       giftConfig={config.settings.giftChapter}
     />
   );

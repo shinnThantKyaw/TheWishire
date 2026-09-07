@@ -9,6 +9,7 @@ export function cn(...inputs: ClassValue[]) {
  * Generate a short, URL-friendly slug for published wishes.
  * Uses a combination of timestamp and random characters for uniqueness.
  */
+
 export function generateSlug(): string {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
   const timestamp = Date.now().toString(36);
