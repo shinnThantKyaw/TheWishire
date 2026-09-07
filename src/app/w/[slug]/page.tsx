@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getTemplate } from "@/templates/registry";
+import { mergeWishWithTemplate } from "@/lib/wish-merge";
+import { ExperienceOrchestrator } from "@/components/wish/experience-orchestrator";
 import type { WishConfig } from "@/types/wish";
 import type { Metadata } from "next";
 
@@ -37,40 +40,29 @@ export default async function WishPage({ params }: Props) {
   }
 
   const config = wish.config as unknown as WishConfig;
+  const template = getTemplate(wish.templateId);
+
+  if (!template) {
+    notFound();
+  }
+
+  // Merge template structure with wish content into render-ready stages
+  const stages = mergeWishWithTemplate(config, template, wish.media);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-pink-50 to-white dark:from-pink-950/20 dark:to-background">
-      <div className="mx-auto max-w-2xl px-6 py-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight">{wish.title}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          From <span className="font-medium text-foreground">{wish.senderName}</span> to{" "}
-          <span className="font-medium text-foreground">{wish.recipientName}</span>
-        </p>
-
-        {/* TODO: Replace with template renderer and stage machine */}
-        <div className="mt-12 space-y-8">
-          {config.content.letter && (
-            <div className="rounded-lg border bg-card p-8 shadow-sm">
-              <p className="whitespace-pre-wrap text-lg leading-relaxed">{config.content.letter}</p>
-            </div>
-          )}
-
-          {wish.media.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {wish.media.map((media: { id: string; url: string }) => (
-                <div key={media.id} className="overflow-hidden rounded-lg border">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={media.url}
-                    alt={`Photo from ${wish.senderName}`}
-                    className="h-48 w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <ExperienceOrchestrator
+      stages={stages}
+      theme={template.theme}
+      senderName={wish.senderName}
+      recipientName={wish.recipientName}
+      occasion={wish.occasion}
+      flowMode={config.settings.flowMode}
+      musicUrl={config.content.musicUrl}
+      characterGif={config.content.characterGif}
+      decorations={config.content.decorations}
+      startAction={config.settings.startAction}
+      boxOpenMethod={config.settings.boxOpenMethod}
+      giftConfig={config.settings.giftChapter}
+    />
   );
 }

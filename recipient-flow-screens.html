@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishire Recipient Flow — Mobile Screens</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&display=swap">
+<style>
+  :root {
+    --bg: #0f0a1e;
+    --surface: #1a1035;
+    --surface-alt: #231745;
+    --accent-gold: #f5c542;
+    --accent-pink: #e91e63;
+    --accent-purple: #9c27b0;
+    --accent-lavender: #b8a9d4;
+    --text: #faf5ff;
+    --text-dim: #8a7ba8;
+    --text-faint: #5a4d73;
+    --phone-bezel: #1c1c1e;
+    --phone-screen: #000;
+    --warm-start: #2d1b4e;
+    --warm-mid: #4a1942;
+    --celebration: #ff6b9d;
+    --success: #4caf50;
+    --gift-red: #d32f2f;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f0ff;
+      --surface: #ffffff;
+      --surface-alt: #f0eaf8;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 3rem 2rem 1rem;
+  }
+
+  .page-header .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    text-wrap: balance;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--accent-gold);
+  }
+
+  .page-header .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Emotion Journey Bar */
+  .emotion-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 1.5rem 2rem;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .emotion-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+  }
+
+  .emotion-feel {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    background: var(--surface);
+    min-width: 70px;
+  }
+
+  .emotion-arrow {
+    color: var(--text-faint);
+    font-size: 0.7rem;
+    padding: 0 0.15rem;
+  }
+
+  /* Flow Legend */
+  .flow-legend {
+    text-align: center;
+    padding: 0 2rem 2rem;
+  }
+
+  .flow-legend .flow-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .flow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+  }
+
+  .flow-dot.common { background: var(--accent-lavender); }
+  .flow-dot.chapter { background: var(--accent-pink); }
+  .flow-dot.gift { background: var(--gift-red); }
+  .flow-dot.closing { background: var(--success); }
+
+  .flow-label-inline {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+  }
+
+  /* Section Headers */
+  .section-header {
+    padding: 2rem 2rem 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-header h2 .num {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    background: rgba(245, 197, 66, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .section-header p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  /* Phone Screens Container */
+  .screens-row {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 2rem 3rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .screens-row::-webkit-scrollbar { height: 4px; }
+  .screens-row::-webkit-scrollbar-track { background: var(--surface); border-radius: 2px; }
+  .screens-row::-webkit-scrollbar-thumb { background: var(--text-faint); border-radius: 2px; }
+
+  /* Phone Mockup */
+  .phone-wrapper {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 260px;
+  }
+
+  .phone {
+    width: 240px;
+    height: 500px;
+    background: var(--phone-bezel);
+    border-radius: 32px;
+    padding: 8px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 20px 60px rgba(0,0,0,0.5),
+      inset 0 0 0 1px rgba(255,255,255,0.03);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 22px;
+    background: var(--phone-bezel);
+    border-radius: 0 0 14px 14px;
+    z-index: 10;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Screen label below phone */
+  .screen-label {
+    text-align: center;
+    width: 100%;
+  }
+
+  .screen-label .screen-num {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+  }
+
+  .screen-label .screen-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 0.1rem;
+  }
+
+  .screen-label .screen-desc {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+    line-height: 1.4;
+    max-width: 220px;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* INDIVIDUAL SCREEN DESIGNS                       */
+  /* ═══════════════════════════════════════════════ */
+
+  /* Screen 1: Introduction */
+  .s1 { background: linear-gradient(170deg, #0d0620 0%, #1a0a3e 40%, #0d0620 100%); }
+
+  .s1 .sparkle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.5); }
+    50% { opacity: 0.8; transform: scale(1.2); }
+  }
+
+  .s1 .gift-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .s1 .greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.3;
+  }
+
+  .s1 .context {
+    font-size: 0.7rem;
+    color: var(--accent-lavender);
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .s1 .badge {
+    font-size: 0.6rem;
+    background: rgba(233, 30, 99, 0.15);
+    color: var(--accent-pink);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    margin-top: 0.75rem;
+    font-weight: 500;
+  }
+
+  .s1 .btn {
+    margin-top: 1.25rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
+  }
+
+  /* Screen 2: Unlock */
+  .s2 { background: linear-gradient(180deg, #0d0620 0%, #150830 100%); }
+
+  .s2 .lock-body {
+    width: 80px;
+    height: 60px;
+    background: linear-gradient(145deg, #f5c542, #d4a030);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(245, 197, 66, 0.2);
+  }
+
+  .s2 .lock-shackle {
+    width: 44px;
+    height: 28px;
+    border: 4px solid #d4a030;
+    border-bottom: none;
+    border-radius: 22px 22px 0 0;
+    position: absolute;
+    top: -28px;
+  }
+
+  .s2 .lock-keyhole {
+    width: 12px;
+    height: 12px;
+    background: #1a1035;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .s2 .lock-keyhole::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 10px;
+    background: #1a1035;
+    border-radius: 0 0 2px 2px;
+  }
+
+  .s2 .hint {
+    font-size: 0.65rem;
+    color: var(--accent-gold);
+    margin-top: 1.25rem;
+    opacity: 0.8;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .s2 .unlock-text {
+    font-size: 0.8rem;
+    color: var(--accent-gold);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+
+  /* Screen 3: Are You Ready */
+  .s3 { background: linear-gradient(170deg, #2d1b4e 0%, #4a1942 50%, #2d1b4e 100%); }
+
+  .s3 .greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.4;
+  }
+
+  .s3 .cake {
+    margin: 1rem 0;
+    position: relative;
+  }
+
+  .s3 .cake-body {
+    width: 100px;
+    height: 50px;
+    background: linear-gradient(180deg, #f8bbd0, #e91e63);
+    border-radius: 8px 8px 12px 12px;
+    position: relative;
+  }
+
+  .s3 .cake-tier {
+    width: 80px;
+    height: 35px;
+    background: linear-gradient(180deg, #f48fb1, #e91e63);
+    border-radius: 6px 6px 10px 10px;
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .s3 .candle {
+    width: 4px;
+    height: 18px;
+    background: #fff;
+    position: absolute;
+    top: -18px;
+    border-radius: 2px;
+  }
+
+  .s3 .flame {
+    width: 8px;
+    height: 10px;
+    background: radial-gradient(ellipse, #ffeb3b, #ff9800);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: absolute;
+    top: -10px;
+    left: -2px;
+    animation: flicker 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes flicker {
+    0% { transform: scale(1) rotate(-2deg); }
+    100% { transform: scale(1.1) rotate(2deg); }
+  }
+
+  .s3 .plate {
+    width: 120px;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .s3 .instruction {
+    font-size: 0.65rem;
+    color: var(--accent-lavender);
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+
+  /* Screen 4: Gift Reveal */
+  .s4 { background: linear-gradient(170deg, #1a0a3e 0%, #2d1b4e 50%, #1a0a3e 100%); }
+
+  .s4 .box {
+    position: relative;
+    width: 100px;
+    height: 80px;
+  }
+
+  .s4 .box-body {
+    width: 100px;
+    height: 60px;
+    background: linear-gradient(145deg, #e91e63, #c2185b);
+    border-radius: 6px;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+  }
+
+  .s4 .box-lid {
+    width: 108px;
+    height: 20px;
+    background: linear-gradient(145deg, #f06292, #e91e63);
+    border-radius: 4px 4px 0 0;
+    position: absolute;
+    top: 0;
+    left: -4px;
+  }
+
+  .s4 .ribbon-v {
+    width: 12px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent-gold), #d4a030);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+
+  .s4 .ribbon-h {
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(90deg, var(--accent-gold), #d4a030);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 2px;
+  }
+
+  .s4 .bow {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+  }
+
+  .s4 .prompt {
+    font-size: 0.7rem;
+    color: var(--accent-gold);
+    margin-top: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .s4 .music-note {
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  /* Screen 5: Gift Opening */
+  .s5 { background: linear-gradient(170deg, #1a0a3e 0%, #3d1a5e 50%, #1a0a3e 100%); }
+
+  .s5 .confetti-piece {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    animation: confettiFall 2s ease-in-out infinite;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100px) rotate(720deg); opacity: 0; }
+  }
+
+  .s5 .open-box {
+    position: relative;
+  }
+
+  .s5 .lid-fly {
+    width: 80px;
+    height: 16px;
+    background: linear-gradient(145deg, #f06292, #e91e63);
+    border-radius: 3px;
+    transform: rotate(-25deg) translateY(-30px);
+    opacity: 0.7;
+  }
+
+  .s5 .box-open-body {
+    width: 80px;
+    height: 50px;
+    background: linear-gradient(145deg, #c2185b, #ad1457);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+  }
+
+  .s5 .celebration-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .s5 .materials {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .s5 .mat-item {
+    font-size: 1rem;
+    animation: materialBounce 0.6s ease-out infinite alternate;
+  }
+
+  @keyframes materialBounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+  }
+
+  /* Screen 6: Letter */
+  .s6 { background: linear-gradient(170deg, #2d1b4e 0%, #3d2060 100%); }
+
+  .s6 .paper {
+    width: 190px;
+    min-height: 200px;
+    background: #fdf6e3;
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.3),
+      inset 0 0 40px rgba(0,0,0,0.02);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .s6 .paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      transparent, transparent 27px, #e8dcc8 27px, #e8dcc8 28px
+    );
+    opacity: 0.3;
+  }
+
+  .s6 .seal {
+    width: 28px;
+    height: 28px;
+    background: radial-gradient(circle, #e91e63, #c2185b);
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4);
+  }
+
+  .s6 .letter-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.72rem;
+    color: #3e2723;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .s6 .photos-row {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .s6 .mini-photo {
+    width: 55px;
+    height: 40px;
+    border-radius: 3px;
+    object-fit: cover;
+  }
+
+  .s6 .photo-placeholder {
+    width: 55px;
+    height: 40px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #f8bbd0, #ce93d8);
+  }
+
+  .s6 .next-btn {
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 600;
+    border: none;
+    margin-top: 0.75rem;
+  }
+
+  /* Screen 7: Photos */
+  .s7 { background: linear-gradient(170deg, #1a1035 0%, #2d1b4e 100%); }
+
+  .s7 .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .s7 .masonry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    width: 190px;
+  }
+
+  .s7 .masonry-item {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .s7 .masonry-item.tall { grid-row: span 2; }
+
+  .s7 .photo-block {
+    width: 100%;
+    height: 100%;
+    min-height: 50px;
+    border-radius: 4px;
+  }
+
+  .s7 .play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+  }
+
+  /* Screen 8: Poem */
+  .s8 {
+    background: linear-gradient(170deg, #2d1b4e 0%, #4a1942 50%, #2d1b4e 100%);
+    padding: 1.5rem;
+  }
+
+  .s8 .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--accent-gold);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: -0.5rem;
+  }
+
+  .s8 .poem-lines {
+    text-align: center;
+    padding: 0 0.5rem;
+  }
+
+  .s8 .poem-line {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--text);
+    line-height: 2;
+    opacity: 0.9;
+  }
+
+  .s8 .author {
+    font-size: 0.6rem;
+    color: var(--accent-gold);
+    margin-top: 0.75rem;
+    text-align: right;
+    font-style: italic;
+  }
+
+  .s8 .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--accent-gold);
+    opacity: 0.3;
+    margin: 0.75rem auto;
+  }
+
+  .s8 .rose {
+    text-align: center;
+    font-size: 1.5rem;
+    opacity: 0.4;
+    margin-top: 0.5rem;
+  }
+
+  /* Screen 9: Timeline */
+  .s9 { background: linear-gradient(170deg, #1a1035 0%, #2d1b4e 100%); }
+
+  .s9 .timeline {
+    position: relative;
+    width: 200px;
+    padding-left: 20px;
+  }
+
+  .s9 .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent-pink), var(--accent-purple), var(--accent-gold));
+  }
+
+  .s9 .tl-card {
+    background: var(--surface-alt);
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .s9 .tl-card::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+
+  .s9 .tl-date {
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .s9 .tl-title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    margin-top: 0.1rem;
+  }
+
+  .s9 .tl-desc {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+  }
+
+  .s9 .tl-photo {
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    margin-top: 0.3rem;
+    object-fit: cover;
+  }
+
+  /* Screen 10: Gift Chapter */
+  .s10 { background: linear-gradient(170deg, #2d1b4e 0%, #4a1942 50%, #2d1b4e 100%); }
+
+  .s10 .gift-header {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1rem;
+    line-height: 1.4;
+  }
+
+  .s10 .challenge-box {
+    background: var(--surface-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 0.75rem;
+    width: 190px;
+    text-align: center;
+    margin: 0.75rem 0;
+  }
+
+  .s10 .challenge-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .s10 .challenge-prompt {
+    font-size: 0.6rem;
+    color: var(--accent-lavender);
+    margin-bottom: 0.4rem;
+  }
+
+  .s10 .password-input {
+    width: 100%;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+    color: var(--text);
+    font-size: 0.6rem;
+    text-align: center;
+    outline: none;
+  }
+
+  .s10 .yes-no-btns {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.4rem;
+  }
+
+  .s10 .yn-btn {
+    padding: 0.35rem 1rem;
+    border-radius: 16px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+
+  .s10 .yn-yes {
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+    color: white;
+  }
+
+  .s10 .yn-no {
+    background: rgba(255,255,255,0.08);
+    color: var(--text-dim);
+  }
+
+  .s10 .gift-reveal-imgs {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.5rem;
+    justify-content: center;
+  }
+
+  .s10 .gift-photo {
+    width: 60px;
+    height: 55px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #f8bbd0, #ce93d8);
+  }
+
+  .s10 .gift-msg {
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.7rem;
+    color: var(--accent-gold);
+    text-align: center;
+    margin-top: 0.4rem;
+  }
+
+  .s10 .spin-wheel-mini {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #e91e63 0deg 60deg,
+      #f5c542 60deg 120deg,
+      #9c27b0 120deg 180deg,
+      #4caf50 180deg 240deg,
+      #2196f3 240deg 300deg,
+      #ff9800 300deg 360deg
+    );
+    position: relative;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .s10 .spin-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: var(--accent-pink);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .s10 .spin-pointer {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid white;
+  }
+
+  .s10 .chances {
+    font-size: 0.6rem;
+    color: var(--accent-gold);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .s10 .ticket-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent-gold), #ff9800);
+    color: #1a1035;
+    font-size: 0.6rem;
+    font-weight: 700;
+    border: none;
+    margin-top: 0.5rem;
+  }
+
+  /* Screen 11: Closing */
+  .s11 { background: linear-gradient(170deg, #2d1b4e 0%, #3d2060 50%, #2d1b4e 100%); }
+
+  .s11 .thank-you {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1.5rem;
+    line-height: 1.5;
+  }
+
+  .s11 .brand {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-top: 0.75rem;
+  }
+
+  .s11 .brand strong {
+    color: var(--accent-gold);
+    font-weight: 700;
+  }
+
+  .s11 .closing-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    width: 170px;
+  }
+
+  .s11 .c-btn {
+    padding: 0.5rem;
+    border-radius: 20px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+  }
+
+  .s11 .c-btn-primary {
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+    color: white;
+  }
+
+  .s11 .c-btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+  }
+
+  .s11 .hearts {
+    font-size: 1rem;
+    opacity: 0.3;
+    margin-top: 0.5rem;
+  }
+
+  /* Phase indicators */
+  .phase-tag {
+    display: inline-block;
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    margin-bottom: 0.25rem;
+  }
+
+  .phase-tag.common { background: rgba(184,169,212,0.15); color: var(--accent-lavender); }
+  .phase-tag.act-iv { background: rgba(233,30,99,0.15); color: var(--accent-pink); }
+  .phase-tag.gift { background: rgba(211,47,47,0.15); color: #ef9a9a; }
+  .phase-tag.finale { background: rgba(76,175,80,0.15); color: #81c784; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .phone-wrapper { width: 220px; }
+    .phone { width: 200px; height: 420px; }
+    .screens-row { padding: 1rem; gap: 1.5rem; }
+    .emotion-bar { display: none; }
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: white; color: #1a1035; }
+    .phone { box-shadow: 0 0 0 1px #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="eyebrow">Phase 2 — Recipient Experience</div>
+  <h1>The <em>Surprise</em> Experience</h1>
+  <p class="subtitle">11 mobile screens — click-through (slide-by-slide) flow. Each screen maps to a React component in the implementation.</p>
+</header>
+
+<div class="emotion-bar">
+  <div class="emotion-step"><div class="emotion-feel">🤔 Why did I get this?</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">😢 Someone made this for me</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">👀 What's inside?</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">💪 I'm ready!</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">🎁 Gift box!</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">🎊 It's open!</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">💌 For me</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">💕 Our memories</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">🎉 There's more!</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">🏆 I won!</div></div>
+  <span class="emotion-arrow">→</span>
+  <div class="emotion-step"><div class="emotion-feel">💜 That was special</div></div>
+</div>
+
+<div class="flow-legend">
+  <div class="flow-label">Screen Flow</div>
+  <div class="flow-steps">
+    <span class="flow-dot common"></span>
+    <span class="flow-label-inline">Intro</span>
+    <span class="flow-dot common"></span>
+    <span class="flow-label-inline">Unlock</span>
+    <span class="flow-dot common"></span>
+    <span class="flow-label-inline">Start</span>
+    <span class="flow-dot common"></span>
+    <span class="flow-label-inline">Reveal</span>
+    <span class="flow-dot common"></span>
+    <span class="flow-label-inline">Open</span>
+    <span class="flow-dot chapter"></span>
+    <span class="flow-label-inline">Letter</span>
+    <span class="flow-dot chapter"></span>
+    <span class="flow-label-inline">Photos</span>
+    <span class="flow-dot chapter"></span>
+    <span class="flow-label-inline">Poem</span>
+    <span class="flow-dot chapter"></span>
+    <span class="flow-label-inline">Timeline</span>
+    <span class="flow-dot gift"></span>
+    <span class="flow-label-inline">Gift</span>
+    <span class="flow-dot closing"></span>
+    <span class="flow-label-inline">Close</span>
+  </div>
+</div>
+
+<!-- ═══ COMMON BEGINNING ═══ -->
+<div class="section-header">
+  <h2><span class="num">Common Beginning</span> Screens 1–5</h2>
+  <p>Every recipient goes through these screens regardless of flow mode or occasion. This builds anticipation before the main experience.</p>
+</div>
+
+<div class="screens-row">
+
+  <!-- Screen 1: Introduction -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s1">
+        <div class="sparkle" style="top:15%;left:20%;animation-delay:0s"></div>
+        <div class="sparkle" style="top:25%;right:15%;animation-delay:0.5s"></div>
+        <div class="sparkle" style="top:45%;left:10%;animation-delay:1s"></div>
+        <div class="sparkle" style="top:60%;right:25%;animation-delay:1.5s"></div>
+        <div class="sparkle" style="top:75%;left:30%;animation-delay:2s"></div>
+        <div class="gift-icon">🎁</div>
+        <div class="greeting">Hey Sarah!</div>
+        <div class="context">You have a special surprise...</div>
+        <div class="badge">🎂 Birthday Surprise</div>
+        <div class="btn">Continue</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag common">Common</div>
+      <div class="screen-num">Screen 1</div>
+      <div class="screen-name">Surprise Introduction</div>
+      <div class="screen-desc">Mystery + context. Dark gradient, floating sparkles, staggered text fade-in.</div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Unlock -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s2">
+        <div class="sparkle" style="top:10%;left:15%;animation-delay:0.3s"></div>
+        <div class="sparkle" style="top:20%;right:20%;animation-delay:0.8s"></div>
+        <div class="sparkle" style="top:80%;left:25%;animation-delay:1.3s"></div>
+        <div class="lock-body">
+          <div class="lock-shackle"></div>
+          <div class="lock-keyhole"></div>
+        </div>
+        <div class="hint">Tap to unlock ✨</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag common">Common</div>
+      <div class="screen-num">Screen 2</div>
+      <div class="screen-name">Surprise Unlock</div>
+      <div class="screen-desc">Interactive lock. 4 variants: padlock, ribbon cut, wax seal, chain break. Tap/drag to unlock.</div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Are You Ready -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s3">
+        <div class="greeting">Hey Sarah, I prepared a birthday surprise for you!</div>
+        <div class="cake">
+          <div class="cake-tier">
+            <div class="candle" style="left:15px"><div class="flame"></div></div>
+            <div class="candle" style="left:30px"><div class="flame" style="animation-delay:0.2s"></div></div>
+            <div class="candle" style="left:45px"><div class="flame" style="animation-delay:0.4s"></div></div>
+          </div>
+          <div class="cake-body">
+            <div class="candle" style="left:20px"><div class="flame" style="animation-delay:0.1s"></div></div>
+            <div class="candle" style="left:40px"><div class="flame" style="animation-delay:0.3s"></div></div>
+            <div class="candle" style="left:60px"><div class="flame" style="animation-delay:0.5s"></div></div>
+          </div>
+          <div class="plate"></div>
+        </div>
+        <div class="instruction">Light the candles to start celebrating! 🎂</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag common">Common</div>
+      <div class="screen-num">Screen 3</div>
+      <div class="screen-name">Surprise Start</div>
+      <div class="screen-desc">"Are you ready?" CTA. Birthday = light candles. Anniversary = Yes/No. General = password/tap.</div>
+    </div>
+  </div>
+
+  <!-- Screen 4: Gift Reveal -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s4">
+        <div class="sparkle" style="top:12%;left:20%;animation-delay:0.2s"></div>
+        <div class="sparkle" style="top:18%;right:18%;animation-delay:0.7s"></div>
+        <div class="box">
+          <div class="box-lid"></div>
+          <div class="box-body">
+            <div class="ribbon-v"></div>
+            <div class="ribbon-h"></div>
+          </div>
+          <div class="bow">🎀</div>
+        </div>
+        <div class="prompt">Tap to open 💝</div>
+        <div class="music-note">🎵</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag common">Common</div>
+      <div class="screen-num">Screen 4</div>
+      <div class="screen-name">Gift Reveal</div>
+      <div class="screen-desc">Premium 3D gift box. Music starts here. Open by tap / ribbon cut / shake.</div>
+    </div>
+  </div>
+
+  <!-- Screen 5: Gift Opening -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s5">
+        <div class="confetti-piece" style="top:5%;left:15%;background:#e91e63;animation-delay:0s"></div>
+        <div class="confetti-piece" style="top:8%;left:45%;background:#f5c542;animation-delay:0.2s;width:8px;height:4px"></div>
+        <div class="confetti-piece" style="top:3%;right:20%;background:#9c27b0;animation-delay:0.4s"></div>
+        <div class="confetti-piece" style="top:12%;left:30%;background:#4caf50;animation-delay:0.1s;width:4px;height:8px"></div>
+        <div class="confetti-piece" style="top:6%;right:35%;background:#ff9800;animation-delay:0.3s"></div>
+        <div class="confetti-piece" style="top:15%;left:60%;background:#2196f3;animation-delay:0.5s;width:5px;height:5px;border-radius:50%"></div>
+        <div class="open-box">
+          <div class="lid-fly">🎁</div>
+          <div class="box-open-body">✨</div>
+        </div>
+        <div class="celebration-text">Surprise!</div>
+        <div class="materials">
+          <span class="mat-item" style="animation-delay:0s">💌</span>
+          <span class="mat-item" style="animation-delay:0.1s">📷</span>
+          <span class="mat-item" style="animation-delay:0.2s">📖</span>
+          <span class="mat-item" style="animation-delay:0.3s">⏰</span>
+          <span class="mat-item" style="animation-delay:0.4s">🎁</span>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag common">Common</div>
+      <div class="screen-num">Screen 5</div>
+      <div class="screen-name">Gift Box Opening</div>
+      <div class="screen-desc">THE peak moment. Confetti burst, materials fly out, celebration animations. Music full volume.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ CHAPTERS ═══ -->
+<div class="section-header">
+  <h2><span class="num">Click-Through Chapters</span> Screens 6–10</h2>
+  <p>Creator chose "click-through" mode. Recipient navigates chapters one at a time with Next/Back buttons. The 5 chapters are: Letter, Photos & Videos, Poem, Memory Timeline, and Gifts & Rewards.</p>
+</div>
+
+<div class="screens-row">
+
+  <!-- Screen 6: Letter -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s6">
+        <div class="paper">
+          <div class="seal">💌</div>
+          <div class="letter-text">
+            My dearest Sarah,<br><br>
+            On this special day, I want you to know how much you mean to me. Every moment with you is a gift...<br><br>
+            With all my love ❤️
+          </div>
+          <div class="photos-row">
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#f8bbd0,#ce93d8)"></div>
+            <div class="photo-placeholder" style="background:linear-gradient(135deg,#b39ddb,#90caf9)"></div>
+          </div>
+        </div>
+        <div class="next-btn">Next →</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag act-iv">Chapter 1</div>
+      <div class="screen-num">Screen 6</div>
+      <div class="screen-name">Letter</div>
+      <div class="screen-desc">Paper-textured card with fold/unfold. Typewriter text animation. Optional photos below.</div>
+    </div>
+  </div>
+
+  <!-- Screen 7: Photos -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s7">
+        <div class="title">Our Memories Together 💕</div>
+        <div class="masonry">
+          <div class="masonry-item tall">
+            <div class="photo-block" style="background:linear-gradient(135deg,#f48fb1,#ce93d8);height:110px"></div>
+          </div>
+          <div class="masonry-item">
+            <div class="photo-block" style="background:linear-gradient(135deg,#90caf9,#80cbc4);height:50px"></div>
+          </div>
+          <div class="masonry-item" style="position:relative">
+            <div class="photo-block" style="background:linear-gradient(135deg,#ffcc80,#ef9a9a);height:50px"></div>
+            <div class="play-btn">▶</div>
+          </div>
+          <div class="masonry-item">
+            <div class="photo-block" style="background:linear-gradient(135deg,#a5d6a7,#80cbc4);height:50px"></div>
+          </div>
+          <div class="masonry-item">
+            <div class="photo-block" style="background:linear-gradient(135deg,#b39ddb,#9fa8da);height:50px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag act-iv">Chapter 2</div>
+      <div class="screen-num">Screen 7</div>
+      <div class="screen-name">Photos & Videos</div>
+      <div class="screen-desc">Masonry grid. Tap for lightbox. Video with play button. Staggered entrance animation.</div>
+    </div>
+  </div>
+
+  <!-- Screen 8: Poem -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s8">
+        <div class="quote-mark">"</div>
+        <div class="poem-lines">
+          <div class="poem-line">You are my sunshine,</div>
+          <div class="poem-line">my only sunshine.</div>
+          <div class="poem-line">You make me happy</div>
+          <div class="poem-line">when skies are gray.</div>
+          <div class="poem-line">You'll never know, dear,</div>
+          <div class="poem-line">how much I love you.</div>
+        </div>
+        <div class="divider"></div>
+        <div class="author">— Johnny Mercer</div>
+        <div class="rose">🌹</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag act-iv">Chapter 3</div>
+      <div class="screen-num">Screen 8</div>
+      <div class="screen-name">Poem</div>
+      <div class="screen-desc">Typography-focused. Line-by-line fade-in animation. Decorative quotes. Author attribution.</div>
+    </div>
+  </div>
+
+  <!-- Screen 9: Timeline -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s9">
+        <div class="timeline">
+          <div class="tl-card">
+            <div class="tl-date">Jan 2020</div>
+            <div class="tl-title">First Meeting ☕</div>
+            <div class="tl-desc">The day everything started</div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-date">Jun 2021</div>
+            <div class="tl-title">First Trip Together ✈️</div>
+            <div class="tl-desc">Bali adventure was unforgettable</div>
+            <div class="tl-photo" style="background:linear-gradient(135deg,#81c784,#4db6ac)"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-date">Dec 2023</div>
+            <div class="tl-title">Moving In Together 🏠</div>
+            <div class="tl-desc">Our little home, our little world</div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-date">Sep 2026</div>
+            <div class="tl-title">Today 🎂</div>
+            <div class="tl-desc">Another beautiful year with you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag act-iv">Chapter 4</div>
+      <div class="screen-num">Screen 9</div>
+      <div class="screen-name">Memory Timeline</div>
+      <div class="screen-desc">Animated vertical timeline. Cards with dates, titles, descriptions, optional photos.</div>
+    </div>
+  </div>
+
+  <!-- Screen 10: Gift Chapter (multi-state) -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s10">
+        <div class="gift-header">Here is a special surprise gift for you!</div>
+        <div class="challenge-box">
+          <div class="challenge-icon">🔐</div>
+          <div class="challenge-prompt">Type the secret code</div>
+          <input class="password-input" type="text" placeholder="Enter password..." readonly>
+        </div>
+        <div class="gift-header" style="margin-top:0.5rem;font-size:0.6rem;color:var(--accent-lavender)">— after unlock —</div>
+        <div class="gift-reveal-imgs">
+          <div class="gift-photo" style="background:linear-gradient(135deg,#f8bbd0,#f48fb1)"></div>
+          <div class="gift-photo" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)"></div>
+          <div class="gift-photo" style="background:linear-gradient(135deg,#f48fb1,#ec407a)"></div>
+        </div>
+        <div class="gift-msg">I hope you love this! 💕</div>
+        <div class="spin-wheel-mini">
+          <div class="spin-pointer"></div>
+          <div class="spin-center">SPIN</div>
+        </div>
+        <div class="chances">🍀 3 chances to win!</div>
+        <div class="ticket-btn">🎫 Download Ticket</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag gift">Chapter 5</div>
+      <div class="screen-num">Screen 10</div>
+      <div class="screen-name">Gifts & Rewards</div>
+      <div class="screen-desc">Multi-stage: challenge gate → main gift reveal → spin wheel/lucky draw → reward ticket download.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ CLOSING ═══ -->
+<div class="section-header">
+  <h2><span class="num">Finale</span> Screen 11</h2>
+  <p>The closing message and call-to-action. After all chapters are experienced, the recipient sees the farewell screen.</p>
+</div>
+
+<div class="screens-row">
+
+  <!-- Screen 11: Closing -->
+  <div class="phone-wrapper">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen s11">
+        <div class="sparkle" style="top:10%;left:20%;animation-delay:0s"></div>
+        <div class="sparkle" style="top:15%;right:25%;animation-delay:0.5s"></div>
+        <div class="sparkle" style="top:80%;left:15%;animation-delay:1s"></div>
+        <div class="sparkle" style="top:75%;right:20%;animation-delay:1.5s"></div>
+        <div class="thank-you">Thank you for being part of this special moment. 💜</div>
+        <div class="brand">Made with love by <strong>Wishire</strong></div>
+        <div class="closing-btns">
+          <button class="c-btn c-btn-primary">✨ Experience Again</button>
+          <button class="c-btn c-btn-outline">🎁 Create Your Own Wish</button>
+        </div>
+        <div class="hearts">💜 💜 💜</div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="phase-tag finale">Finale</div>
+      <div class="screen-num">Screen 11</div>
+      <div class="screen-name">Closing</div>
+      <div class="screen-desc">Thank you message. Wishire branding. "Experience Again" + "Create Your Own Wish" buttons. Music fades out.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Implementation Notes -->
+<div class="section-header" style="padding-bottom:3rem;">
+  <h2><span class="num">Implementation</span> Key Technical Decisions</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1rem;">
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">State Machine</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">Hierarchical: ExperiencePhase → ChapterIndex → GiftSubScreen. Each screen is a component, orchestrator routes to the right one via AnimatePresence.</div>
+    </div>
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">Transitions</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">All screen transitions use Motion's AnimatePresence mode="wait". Slide left/right for chapters. Fade for acts. Scale for gift opening.</div>
+    </div>
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">Confetti</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">canvas-confetti library with emoji shapes via shapeFromText(). Preset functions for each occasion. Hardware-accelerated canvas rendering.</div>
+    </div>
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">Mini-Games</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">Spin wheel: custom SVG + Motion useSpring for realistic deceleration. Lucky draw: CSS 3D flip with perspective transforms. Both configurable by creator.</div>
+    </div>
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">Gate Interactions</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">4 lock variants built with CSS 3D transforms + Motion drag gestures. Ribbon cut uses useDragControls. Each has satisfying unlock animation.</div>
+    </div>
+    <div style="background:var(--surface);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;">Reward Tickets</div>
+      <div style="font-size:0.75rem;color:var(--text-dim);">Canvas API renders styled ticket with item, name, date, branding. Converts to JPG via toDataURL(). Download triggered via anchor element.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -42,7 +42,10 @@ yarn-error.log*
 .cursor/
 .devin/
 
+# Planning & agent configs
+.planning/
+.claude/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.claude/skills/

@@ -1,20 +1,47 @@
 export type AnimationType = "fade" | "slide" | "scale" | "confetti" | "slide-up" | "slide-down" | "zoom-in";
+
+/**
+ * Stage types for the new 11-screen experience (Phase 2 redesign).
+ *
+ * Common Beginning (Screens 1-5):
+ *   introduction → unlock → start → gift-reveal → gift-opening
+ *
+ * Chapters (Screens 6-10, within "chapters" phase):
+ *   letter → photos → poem → timeline → gift
+ *
+ * Finale (Screen 11):
+ *   closing
+ *
+ * Legacy types are kept for backward compatibility.
+ */
 export type StageType =
+  // ── New experience screens ──
+  | "introduction" // Screen 1
+  | "unlock" // Screen 2
+  | "start" // Screen 3
+  | "gift-reveal" // Screen 4
+  | "gift-opening" // Screen 5
+  | "letter" // Screen 6
+  | "photos" // Screen 7
+  | "poem" // Screen 8
+  | "timeline" // Screen 9
+  | "gift" // Screen 10
+  | "closing" // Screen 11
+  // ── Legacy stage types (kept for backward compatibility) ──
   | "envelope"
   | "gift-box"
   | "cake"
   | "ribbon"
   | "main-content"
-  | "letter"
   | "photo-gallery"
   | "video-player"
   | "voice-message"
   | "music-player"
   | "poem-display"
   | "memory-timeline"
+  | "fancy-facts"
   | "gift-challenge"
-  | "spin-wheel"
-  | "closing";
+  | "spin-wheel";
 
 export interface AnimationConfig {
   type: AnimationType;
@@ -53,7 +80,7 @@ export interface TemplateConfig {
   name: string;
   description: string;
   occasion: string;
-  thumbnail: string;
+  thumbnail: string; // URL or path to a preview image for the template (e.g. "/templates/birthday/classic.jpg"). It's a string path, not an ID reference, so `thumbnailImageId` would be misleading. The name `thumbnail` is clear and conventional for preview images.
   stages: StageConfig[];
   theme: ThemeConfig;
 }
