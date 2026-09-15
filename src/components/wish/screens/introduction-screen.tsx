@@ -458,47 +458,18 @@ export const IntroductionScreen = ({
                     transition={{ duration: 0.45, delay: 0.8 }}
                 >
                     <div className="relative flex flex-col items-center">
-                        <div className="relative flex h-20 w-64 items-center justify-center sm:w-72">
-                            {/* Left ribbon half */}
-                            <motion.div
-                                className="absolute left-0 top-1/2 h-3 w-[42%] origin-left rounded-l-sm"
-                                style={{
-                                    background: `linear-gradient(180deg, ${primaryColor}ee, ${primaryColor}, ${primaryColor}dd)`,
-                                    boxShadow: `0 2px 8px ${primaryColor}20, inset 0 1px 0 rgba(255,255,255,0.3)`,
-                                    translateY: "-50%",
-                                }}
-                                animate={
-                                    cutting
-                                        ? { x: -60, rotate: -12, opacity: 0 }
-                                        : { x: 0, rotate: 0, opacity: 1 }
-                                }
-                                transition={{ duration: 0.5, ease: "easeOut" }}
-                            />
 
-                            {/* Right ribbon half */}
-                            <motion.div
-                                className="absolute right-0 top-1/2 h-3 w-[42%] origin-right rounded-r-sm"
-                                style={{
-                                    background: `linear-gradient(180deg, ${primaryColor}dd, ${primaryColor}cc, ${primaryColor}bb)`,
-                                    boxShadow: `0 2px 8px ${primaryColor}20, inset 0 1px 0 rgba(255,255,255,0.25)`,
-                                    translateY: "-50%",
-                                }}
-                                animate={
-                                    cutting
-                                        ? { x: 60, rotate: 12, opacity: 0 }
-                                        : { x: 0, rotate: 0, opacity: 1 }
-                                }
-                                transition={{ duration: 0.5, ease: "easeOut" }}
-                            />
 
+                        {/* Ribbon container */}
+                        <div className="relative flex h-28 w-72 items-center justify-center sm:w-80">
                             {/* Glow pulse behind ribbon */}
                             {!cutDone && (
                                 <motion.div
-                                    className="absolute left-1/2 top-1/2 h-8 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                    className="absolute left-1/2 top-1/2 h-12 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full"
                                     style={{
-                                        background: `radial-gradient(ellipse, ${primaryColor}20, transparent)`,
+                                        background: `radial-gradient(ellipse, ${primaryColor}18, transparent)`,
                                     }}
-                                    animate={{ opacity: [0.4, 0.8, 0.4] }}
+                                    animate={{ opacity: [0.5, 1, 0.5] }}
                                     transition={{
                                         duration: 2.5,
                                         repeat: Infinity,
@@ -507,94 +478,150 @@ export const IntroductionScreen = ({
                                 />
                             )}
 
-                            {/* Cut glow line */}
+                            {/* Left ribbon half */}
                             <motion.div
-                                className="absolute left-1/2 top-1/2 h-5 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                className="absolute left-0 top-1/2 h-4 w-[44%] origin-left rounded-l-sm"
                                 style={{
-                                    backgroundColor: "white",
-                                    boxShadow: `0 0 12px 3px ${primaryColor}60`,
+                                    background: `linear-gradient(180deg, ${primaryColor}f0, ${primaryColor}, ${primaryColor}e0)`,
+                                    boxShadow: `0 3px 12px ${primaryColor}25, inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.08)`,
+                                    translateY: "-50%",
                                 }}
                                 animate={
                                     cutting
-                                        ? { opacity: [0, 1, 0], scaleY: [0.5, 1.8, 0.5] }
+                                        ? { x: -70, rotate: -18, opacity: 0, y: 20 }
+                                        : { x: 0, rotate: 0, opacity: 1, y: 0 }
+                                }
+                                transition={{ duration: 0.55, ease: "easeOut" }}
+                            >
+                                {/* Satin sheen */}
+                                <div
+                                    className="absolute inset-0 rounded-l-sm"
+                                    style={{
+                                        background: "linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 40%, rgba(255,255,255,0.1) 100%)",
+                                    }}
+                                />
+                            </motion.div>
+
+                            {/* Right ribbon half */}
+                            <motion.div
+                                className="absolute right-0 top-1/2 h-4 w-[44%] origin-right rounded-r-sm"
+                                style={{
+                                    background: `linear-gradient(180deg, ${primaryColor}e0, ${primaryColor}dd, ${primaryColor}cc)`,
+                                    boxShadow: `0 3px 12px ${primaryColor}25, inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(0,0,0,0.08)`,
+                                    translateY: "-50%",
+                                }}
+                                animate={
+                                    cutting
+                                        ? { x: 70, rotate: 18, opacity: 0, y: 20 }
+                                        : { x: 0, rotate: 0, opacity: 1, y: 0 }
+                                }
+                                transition={{ duration: 0.55, ease: "easeOut" }}
+                            >
+                                <div
+                                    className="absolute inset-0 rounded-r-sm"
+                                    style={{
+                                        background: "linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 40%, rgba(255,255,255,0.08) 100%)",
+                                    }}
+                                />
+                            </motion.div>
+
+                            {/* Cut flash line */}
+                            <motion.div
+                                className="absolute left-1/2 top-1/2 h-8 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                style={{
+                                    backgroundColor: "white",
+                                    boxShadow: `0 0 16px 4px ${primaryColor}50, 0 0 30px 8px ${primaryColor}20`,
+                                }}
+                                animate={
+                                    cutting
+                                        ? { opacity: [0, 1, 0], scaleY: [0.3, 2, 0.3] }
                                         : { opacity: 0 }
                                 }
-                                transition={{ duration: 0.6, delay: 0.2 }}
+                                transition={{ duration: 0.5, delay: 0.15 }}
                             />
 
                             {/* Left bow */}
                             <motion.div
-                                className="absolute left-[18%] top-[22%]"
-                                style={{ width: 32, height: 24 }}
+                                className="absolute left-[14%] top-[18%]"
+                                style={{ width: 44, height: 34 }}
                                 animate={
                                     cutDone
-                                        ? { y: -40, opacity: 0, scale: 0.3, rotate: -25 }
+                                        ? { y: -50, opacity: 0, scale: 0.2, rotate: -35 }
                                         : { y: 0, opacity: 1, scale: 1, rotate: 0 }
                                 }
                                 transition={{
                                     type: "spring",
-                                    stiffness: 100,
-                                    damping: 10,
-                                    delay: cutDone ? 0.2 : 0,
+                                    stiffness: 80,
+                                    damping: 8,
+                                    delay: cutDone ? 0.15 : 0,
                                 }}
                             >
+                                {/* Left loop */}
                                 <div
-                                    className="absolute left-0 top-0 h-5 w-4 rounded-full"
+                                    className="absolute left-0 top-1 h-7 w-6 rounded-full"
                                     style={{
                                         background: `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
-                                        transform: "rotate(-20deg)",
+                                        transform: "rotate(-22deg)",
+                                        boxShadow: `inset 0 -2px 4px ${primaryColor}40, 0 2px 4px ${primaryColor}15`,
                                     }}
                                 />
-
+                                {/* Right loop */}
                                 <div
-                                    className="absolute right-0 top-0 h-5 w-4 rounded-full"
+                                    className="absolute right-0 top-1 h-7 w-6 rounded-full"
                                     style={{
                                         background: `linear-gradient(225deg, ${secondaryColor}, ${primaryColor})`,
-                                        transform: "rotate(20deg)",
+                                        transform: "rotate(22deg)",
+                                        boxShadow: `inset 0 -2px 4px ${primaryColor}40, 0 2px 4px ${primaryColor}15`,
                                     }}
                                 />
-
+                                {/* Center knot */}
                                 <div
-                                    className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                                    style={{ backgroundColor: primaryColor }}
+                                    className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                    style={{
+                                        background: `radial-gradient(circle at 35% 35%, ${primaryColor}, ${primaryColor}cc)`,
+                                        boxShadow: `0 1px 3px ${primaryColor}30`,
+                                    }}
                                 />
                             </motion.div>
 
                             {/* Right bow */}
                             <motion.div
-                                className="absolute right-[18%] top-[22%]"
-                                style={{ width: 32, height: 24 }}
+                                className="absolute right-[14%] top-[18%]"
+                                style={{ width: 44, height: 34 }}
                                 animate={
                                     cutDone
-                                        ? { y: -40, opacity: 0, scale: 0.3, rotate: 25 }
+                                        ? { y: -50, opacity: 0, scale: 0.2, rotate: 35 }
                                         : { y: 0, opacity: 1, scale: 1, rotate: 0 }
                                 }
                                 transition={{
                                     type: "spring",
-                                    stiffness: 100,
-                                    damping: 10,
-                                    delay: cutDone ? 0.25 : 0,
+                                    stiffness: 80,
+                                    damping: 8,
+                                    delay: cutDone ? 0.2 : 0,
                                 }}
                             >
                                 <div
-                                    className="absolute left-0 top-0 h-5 w-4 rounded-full"
+                                    className="absolute left-0 top-1 h-7 w-6 rounded-full"
                                     style={{
                                         background: `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
-                                        transform: "rotate(-20deg)",
+                                        transform: "rotate(-22deg)",
+                                        boxShadow: `inset 0 -2px 4px ${primaryColor}40, 0 2px 4px ${primaryColor}15`,
                                     }}
                                 />
-
                                 <div
-                                    className="absolute right-0 top-0 h-5 w-4 rounded-full"
+                                    className="absolute right-0 top-1 h-7 w-6 rounded-full"
                                     style={{
                                         background: `linear-gradient(225deg, ${secondaryColor}, ${primaryColor})`,
-                                        transform: "rotate(20deg)",
+                                        transform: "rotate(22deg)",
+                                        boxShadow: `inset 0 -2px 4px ${primaryColor}40, 0 2px 4px ${primaryColor}15`,
                                     }}
                                 />
-
                                 <div
-                                    className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                                    style={{ backgroundColor: primaryColor }}
+                                    className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                    style={{
+                                        background: `radial-gradient(circle at 35% 35%, ${primaryColor}, ${primaryColor}cc)`,
+                                        boxShadow: `0 1px 3px ${primaryColor}30`,
+                                    }}
                                 />
                             </motion.div>
 
@@ -607,19 +634,19 @@ export const IntroductionScreen = ({
                                 className="relative z-20 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-[3px] border-white shadow-lg transition-all focus:outline-none focus:ring-4 disabled:cursor-default"
                                 style={{
                                     backgroundColor: primaryColor,
-                                    boxShadow: `0 8px 30px ${primaryColor}40`,
+                                    boxShadow: `0 8px 32px ${primaryColor}45, 0 2px 8px ${primaryColor}20`,
                                 }}
                                 animate={
                                     cutting
                                         ? {
-                                              x: "280%",
-                                              rotate: [0, -15, 15, 0],
-                                              scale: [1, 1.15, 0.9, 1],
+                                              rotate: [0, -20, 20, 0],
+                                              scale: [1, 1.2, 0.85, 1],
+                                              opacity: [1, 1, 0],
                                           }
-                                        : { scale: [1, 1.06, 1] }
+                                        : { scale: [1, 1.08, 1] }
                                 }
                                 transition={{
-                                    duration: cutting ? 0.5 : 2.2,
+                                    duration: cutting ? 0.55 : 2,
                                     repeat: cutting ? 0 : Infinity,
                                     ease: "easeInOut",
                                 }}
@@ -628,7 +655,7 @@ export const IntroductionScreen = ({
                                     size={24}
                                     className="text-white"
                                     style={{
-                                        transition: "transform 0.2s",
+                                        transition: "transform 0.15s",
                                         transform: cutting
                                             ? "rotate(90deg)"
                                             : "rotate(0deg)",
@@ -637,10 +664,10 @@ export const IntroductionScreen = ({
                             </motion.button>
                         </div>
 
-                        {/* Action prompt */}
+                        {/* Action prompt  */}
                         <motion.div
-                            className="mt-1 flex items-center gap-1.5"
-                            animate={{ opacity: cutDone ? 0 : cutting ? 0.4 : 0.55 }}
+                            className="mb-3 flex items-center gap-1.5"
+                            animate={{ opacity: cutDone ? 0 : cutting ? 0.4 : 0.6 }}
                             transition={{ duration: 0.2 }}
                         >
                             <Sparkles size={12} style={{ color: primaryColor }} />
@@ -651,7 +678,7 @@ export const IntroductionScreen = ({
                             >
                                 {cutting
                                     ? "Opening your surprise..."
-                                    : "Tap the scissors to unwrap your surprise"}
+                                    : "Cut the ribbon to unwrap your surprise"}
                             </p>
                         </motion.div>
                     </div>
