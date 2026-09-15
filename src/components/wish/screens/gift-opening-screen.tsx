@@ -165,6 +165,23 @@ export const GiftOpeningScreen = ({
             </motion.div>
           ))}
         </div>
+
+        {/* Continue button */}
+        <motion.button
+          onClick={onNext}
+          className="mt-10 rounded-full px-8 py-3.5 text-sm font-semibold text-white shadow-lg"
+          style={{
+            background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
+            boxShadow: `0 6px 24px ${primaryColor}35`,
+          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          See your surprise →
+        </motion.button>
       </motion.div>
     </div>
   );

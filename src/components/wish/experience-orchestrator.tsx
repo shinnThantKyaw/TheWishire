@@ -243,7 +243,7 @@ export const ExperienceOrchestrator = ({
       {characterGif && state.phase !== "introduction" && (
         <CharacterGif {...characterGif} />
       )}
-      {decorations && decorations.elements.length > 0 && (
+      {decorations && decorations.elements.length > 0 && state.phase !== "introduction" && (
         <Decorations config={decorations} />
       )}
 
