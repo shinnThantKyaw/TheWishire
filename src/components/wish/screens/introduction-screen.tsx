@@ -101,15 +101,6 @@ export const IntroductionScreen = ({
     const [cutDone, setCutDone] = useState(false);
 
     const nextTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    /** Large drifting gradient orbs — computed with current theme colors */
-    const orbs = [
-        { left: -8, top: -5, w: 520, h: 480, color: secondaryColor, opacity: 0.45, dur: 22, dx: 30, dy: 20 },
-        { left: 70, top: -8, w: 460, h: 420, color: primaryColor, opacity: 0.38, dur: 26, dx: -25, dy: 18 },
-        { left: 15, top: 65, w: 500, h: 460, color: secondaryColor, opacity: 0.30, dur: 24, dx: 20, dy: -22 },
-        { left: 60, top: 55, w: 400, h: 380, color: primaryColor, opacity: 0.25, dur: 28, dx: -18, dy: -15 },
-        { left: 35, top: 25, w: 350, h: 340, color: secondaryColor, opacity: 0.18, dur: 20, dx: 15, dy: 25 },
-    ];
     const cutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const currentOccasion =
@@ -152,64 +143,108 @@ export const IntroductionScreen = ({
             className="relative flex min-h-screen items-center justify-center overflow-hidden"
             style={{ backgroundColor }}
         >
-            {/* ── Premium Background ────────────────── */}
+            {/* ── Premium Background ───────────────────────────── */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {/* Base warm gradient */}
+                {/* Soft base gradient */}
                 <div
                     className="absolute inset-0"
                     style={{
-                        background: `linear-gradient(160deg, ${backgroundColor} 0%, ${secondaryColor}08 40%, ${primaryColor}06 70%, ${backgroundColor} 100%)`,
+                        background: `
+                            radial-gradient(
+                                ellipse at 50% 0%,
+                                rgba(255,255,255,0.95) 0%,
+                                transparent 55%
+                            ),
+                            linear-gradient(
+                                145deg,
+                                ${backgroundColor} 0%,
+                                ${secondaryColor}12 45%,
+                                ${primaryColor}0c 75%,
+                                ${backgroundColor} 100%
+                            )
+                        `,
                     }}
                 />
 
-                {/* Large drifting gradient orbs — the hero effect */}
-                {orbs.map((orb, i) => (
-                    <motion.div
-                        key={`orb-${i}`}
-                        className="absolute rounded-full"
-                        style={{
-                            left: `${orb.left}%`,
-                            top: `${orb.top}%`,
-                            width: orb.w,
-                            height: orb.h,
-                            background: `radial-gradient(circle, ${orb.color}${Math.round(orb.opacity * 255).toString(16).padStart(2, "0")}, transparent 70%)`,
-                            filter: "blur(60px)",
-                        }}
-                        animate={{
-                            x: [0, orb.dx, -orb.dx * 0.5, 0],
-                            y: [0, orb.dy, -orb.dy * 0.6, 0],
-                            scale: [1, 1.08, 0.95, 1],
-                        }}
-                        transition={{
-                            duration: orb.dur,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
-                    />
-                ))}
-
-                {/* Soft white light from top */}
-                <div
-                    className="absolute inset-0"
+                {/* Large dreamy color washes */}
+                <motion.div
+                    className="absolute -left-32 -top-24 h-[420px] w-[420px] rounded-full"
                     style={{
-                        background: "radial-gradient(ellipse 70% 45% at 50% -5%, rgba(255,255,255,0.85), transparent 65%)",
+                        background: `radial-gradient(circle, ${secondaryColor}35, transparent 68%)`,
+                        filter: "blur(35px)",
+                    }}
+                    animate={{
+                        x: [0, 35, -15, 0],
+                        y: [0, 25, 45, 0],
+                        scale: [1, 1.08, 0.96, 1],
+                    }}
+                    transition={{
+                        duration: 24,
+                        repeat: Infinity,
+                        ease: "easeInOut",
                     }}
                 />
 
-                {/* Subtle warm glow bottom-right */}
-                <div
-                    className="absolute inset-0"
+                <motion.div
+                    className="absolute -right-40 top-16 h-[480px] w-[480px] rounded-full"
                     style={{
-                        background: `radial-gradient(circle at 80% 90%, ${secondaryColor}12, transparent 40%)`,
+                        background: `radial-gradient(circle, ${primaryColor}25, transparent 68%)`,
+                        filter: "blur(45px)",
+                    }}
+                    animate={{
+                        x: [0, -30, 15, 0],
+                        y: [0, 35, -20, 0],
+                        scale: [1, 0.94, 1.08, 1],
+                    }}
+                    transition={{
+                        duration: 28,
+                        repeat: Infinity,
+                        ease: "easeInOut",
                     }}
                 />
 
-                {/* SVG noise texture — print-quality grain */}
-                <svg className="absolute inset-0 h-full w-full opacity-[0.035]">
+                <motion.div
+                    className="absolute -bottom-48 left-1/3 h-[500px] w-[500px] rounded-full"
+                    style={{
+                        background: `radial-gradient(circle, ${secondaryColor}20, transparent 70%)`,
+                        filter: "blur(55px)",
+                    }}
+                    animate={{
+                        x: [0, -25, 25, 0],
+                        y: [0, -30, 15, 0],
+                    }}
+                    transition={{
+                        duration: 30,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                    }}
+                />
+
+                {/* Subtle spotlight behind the content */}
+                <div
+                    className="absolute left-1/2 top-[38%] h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                    style={{
+                        background: `radial-gradient(circle, rgba(255,255,255,0.65), transparent 68%)`,
+                    }}
+                />
+
+                {/* Fine decorative rings */}
+                <div
+                    className="absolute left-1/2 top-[38%] h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full border"
+                    style={{ borderColor: `${primaryColor}0d` }}
+                />
+
+                <div
+                    className="absolute left-1/2 top-[38%] h-[580px] w-[580px] -translate-x-1/2 -translate-y-1/2 rounded-full border"
+                    style={{ borderColor: `${secondaryColor}0b` }}
+                />
+
+                {/* Soft grain */}
+                <svg className="absolute inset-0 h-full w-full opacity-[0.025]">
                     <filter id="wishireGrain">
                         <feTurbulence
                             type="fractalNoise"
-                            baseFrequency="0.65"
+                            baseFrequency="0.7"
                             numOctaves="3"
                             stitchTiles="stitch"
                         />
@@ -217,7 +252,7 @@ export const IntroductionScreen = ({
                     <rect width="100%" height="100%" filter="url(#wishireGrain)" />
                 </svg>
 
-                {/* Twinkling sparkle dots */}
+                {/* Twinkling stars */}
                 {SPARKLE_DOTS.map((s, i) => (
                     <motion.div
                         key={`sparkle-${i}`}
@@ -227,10 +262,12 @@ export const IntroductionScreen = ({
                             top: `${s.top}%`,
                             width: s.size,
                             height: s.size,
-                            backgroundColor: i % 3 === 0 ? primaryColor : secondaryColor,
+                            backgroundColor:
+                                i % 3 === 0 ? primaryColor : secondaryColor,
+                            boxShadow: `0 0 12px ${primaryColor}45`,
                         }}
                         animate={{
-                            opacity: [0.1, 0.7, 0.1],
+                            opacity: [0.15, 0.8, 0.15],
                             scale: [1, 1.8, 1],
                         }}
                         transition={{
@@ -245,15 +282,19 @@ export const IntroductionScreen = ({
 
             {/* ── Content ──────────────────────────────── */}
             <div className="relative z-10 flex w-full max-w-lg flex-col items-center px-5 py-8 text-center sm:px-8">
-                {/* Logo */}
+                {/* ── Logo ─────────────────────────────────────────── */}
                 <motion.img
                     src="/Logo/LogoWithText.png"
                     alt="Wishire"
-                    className="mb-6 h-auto w-36 select-none sm:w-44"
+                    className="mb-7 h-auto w-36 select-none sm:w-44"
                     draggable={false}
                     initial={{ opacity: 0, scale: 0.85, y: -10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 0.6, type: "spring", stiffness: 180 }}
+                    transition={{
+                        duration: 0.6,
+                        type: "spring",
+                        stiffness: 180,
+                    }}
                 />
 
                 {/* ── Ornamental Divider ───────────────── */}
@@ -271,7 +312,10 @@ export const IntroductionScreen = ({
                         className="h-1.5 w-1.5 rotate-45"
                         style={{ backgroundColor: `${primaryColor}40` }}
                     />
-                    <Sparkles size={13} style={{ color: primaryColor, opacity: 0.5 }} />
+                    <Sparkles
+                        size={13}
+                        style={{ color: primaryColor, opacity: 0.5 }}
+                    />
                     <div
                         className="h-1.5 w-1.5 rotate-45"
                         style={{ backgroundColor: `${primaryColor}40` }}
@@ -282,17 +326,51 @@ export const IntroductionScreen = ({
                     />
                 </motion.div>
 
-                {/* ── Greeting ─────────────────────────── */}
-                <motion.h1
-                    className="text-3xl font-semibold tracking-tight sm:text-4xl"
-                    style={{ color: foregroundColor }}
-                    initial={{ opacity: 0, y: 14 }}
+                {/* ── Personalized Greeting Badge ─────────────────── */}
+                <motion.div
+                    className="relative mb-5"
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
+                    transition={{ duration: 0.5, delay: 0.35 }}
                 >
-                    Hey {recipientName}!{" "}
-                    <span aria-hidden="true">{currentOccasion.emoji}</span>
-                </motion.h1>
+                    <div
+                        className="relative inline-flex items-center gap-2 rounded-full border px-4 py-2 shadow-sm"
+                        style={{
+                            backgroundColor: `${primaryColor}0d`,
+                            borderColor: `${primaryColor}25`,
+                        }}
+                    >
+                        <span
+                            className="flex h-6 w-6 items-center justify-center rounded-full text-xs"
+                            style={{
+                                backgroundColor: `${primaryColor}18`,
+                                color: primaryColor,
+                            }}
+                        >
+                            ✨
+                        </span>
+
+                        <span
+                            className="text-sm font-medium tracking-wide"
+                            style={{ color: primaryColor }}
+                        >
+                            Hey {recipientName}!
+                        </span>
+
+                        <span aria-hidden="true">{currentOccasion.emoji}</span>
+                    </div>
+                </motion.div>
+
+                {/* ── Greeting Subtitle ────────────────────────────── */}
+                <motion.p
+                    className="mb-2 max-w-sm text-sm leading-relaxed"
+                    style={{ color: foregroundColor, opacity: 0.62 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.62 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                    Someone made something special just for you.
+                </motion.p>
 
                 {/* ── Glass Card ───────────────────────── */}
                 <motion.div
