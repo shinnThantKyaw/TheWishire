@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import {clsx} from "clsx";
 
 interface GiftOpeningScreenProps {
   onNext: () => void;
@@ -238,7 +239,7 @@ export const GiftOpeningScreen = ({
             className="text-sm"
             style={{ color: foregroundColor }}
             initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: opening ? 0 : 0.5, y: opening ? -10 : 0 }}
+            animate={{ opacity: opening ? 0 : 0.5 }}
             transition={{ delay: 0.3, duration: 0.3 }}
           >
             {senderName
@@ -248,6 +249,7 @@ export const GiftOpeningScreen = ({
 
           {/* Post-open heading */}
           <motion.div
+              className={clsx(opening?"mb-34":"mb-0")}
             initial={{ opacity: 0 }}
             animate={opening ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
