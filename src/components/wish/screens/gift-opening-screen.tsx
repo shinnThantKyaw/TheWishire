@@ -465,48 +465,52 @@ export const GiftOpeningScreen = ({
           style={{ pointerEvents: opening ? "auto" : "none" }}
         >
           {/* ── Flying items that launch from box center ─────── */}
-          <div className="relative mb-4 h-[170px] w-full max-w-sm">
-            {/* Small ghost box at bottom center — the visual source */}
+          <div className="relative mb-4 h-[200px] w-full max-w-sm">
+            {/* Ghost box at bottom center — the visual source */}
             <motion.div
               className="absolute bottom-0 left-1/2 -translate-x-1/2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={opening ? { opacity: 0.35, scale: 0.6, y: 10 } : { opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={opening ? { opacity: 0.3, scale: 0.7, y: 8 } : { opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.6, delay: 0.05 }}
             >
+              {/* Lid */}
               <div
-                className="mx-auto rounded-t-lg"
+                className="mx-auto rounded-t-xl"
                 style={{
-                  width: 100,
-                  height: 18,
+                  width: 140,
+                  height: 22,
                   background: `linear-gradient(180deg, ${secondaryColor}, ${primaryColor}cc)`,
                 }}
               />
+              {/* Body */}
               <div
-                className="relative rounded-b-lg"
+                className="relative rounded-b-xl"
                 style={{
-                  width: 100,
-                  height: 60,
+                  width: 140,
+                  height: 80,
                   background: `linear-gradient(180deg, ${primaryColor}bb, ${primaryColor}99)`,
+                  boxShadow: `0 6px 16px ${primaryColor}15`,
                 }}
               >
                 <div
                   className="absolute left-1/2 top-0 -translate-x-1/2"
-                  style={{ width: 10, height: "100%", background: `${secondaryColor}60` }}
+                  style={{ width: 14, height: "100%", background: `${secondaryColor}50` }}
                 />
                 <div
                   className="absolute left-0 top-1/2 -translate-y-1/2"
-                  style={{ width: "100%", height: 8, background: `${secondaryColor}60` }}
+                  style={{ width: "100%", height: 10, background: `${secondaryColor}50` }}
                 />
               </div>
             </motion.div>
 
             {/* Items launching outward */}
             {copy.contents.map((item, i) => {
+              // Wider spread, different heights to avoid label overlap
               const arcs = [
-                { x: -90, y: -150, rotate: -20 },
-                { x: 90, y: -150, rotate: 20 },
-                { x: -55, y: -110, rotate: -12 },
-                { x: 55, y: -110, rotate: 12 },
+                { x: -110, y: -175, rotate: -15 },  // top-left, tallest
+                { x: 110, y: -175, rotate: 15 },     // top-right, tallest
+                { x: -70, y: -105, rotate: -8 },     // bottom-left
+                { x: 70, y: -105, rotate: 8 },       // bottom-right
               ];
               const arc = arcs[i % arcs.length];
 
@@ -514,40 +518,47 @@ export const GiftOpeningScreen = ({
                 <motion.div
                   key={i}
                   className="absolute left-1/2 top-full flex flex-col items-center"
-                  style={{ marginLeft: -32 }}
-                  initial={{ x: 0, y: 0, scale: 0.2, opacity: 0 }}
+                  style={{ marginLeft: -24 }}
+                  initial={{ x: 0, y: 0, scale: 0.1, opacity: 0, rotate: 0 }}
                   animate={opening ? {
                     x: arc.x,
                     y: arc.y,
                     scale: 1,
                     opacity: 1,
                     rotate: arc.rotate,
-                  } : { x: 0, y: 0, scale: 0.2, opacity: 0 }}
+                  } : { x: 0, y: 0, scale: 0.1, opacity: 0, rotate: 0 }}
                   transition={{
                     type: "spring",
-                    stiffness: 120,
-                    damping: 10,
-                    delay: 0.1 + i * 0.1,
+                    stiffness: 100,
+                    damping: 8,
+                    mass: 0.8,
+                    delay: 0.08 + i * 0.1,
                   }}
                 >
                   <div
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl text-2xl"
+                    className="relative flex h-11 w-11 items-center justify-center rounded-xl text-xl"
                     style={{
-                      background: "rgba(255,255,255,0.85)",
+                      background: "rgba(255,255,255,0.88)",
                       backdropFilter: "blur(12px)",
                       WebkitBackdropFilter: "blur(12px)",
-                      boxShadow: `0 6px 20px ${primaryColor}15, 0 2px 6px rgba(0,0,0,0.06)`,
+                      boxShadow: `0 4px 14px ${primaryColor}18, 0 1px 4px rgba(0,0,0,0.05)`,
                       border: `1px solid rgba(255,255,255,0.7)`,
                     }}
                   >
                     {item.emoji}
+                    {/* Small label badge inside the card, bottom-right */}
+                    <span
+                      className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-px text-[9px] font-semibold"
+                      style={{
+                        background: `${primaryColor}12`,
+                        color: primaryColor,
+                        border: `1px solid ${primaryColor}15`,
+                        lineHeight: "14px",
+                      }}
+                    >
+                      {item.label}
+                    </span>
                   </div>
-                  <span
-                    className="mt-1 text-[11px] font-medium"
-                    style={{ color: foregroundColor, opacity: 0.5 }}
-                  >
-                    {item.label}
-                  </span>
                 </motion.div>
               );
             })}
