@@ -120,7 +120,6 @@ export interface MaterialItem {
 export const PHASE_ORDER: ExperiencePhase[] = [
   "introduction",
   "start",
-  "gift-reveal",
   "gift-opening",
   "chapters",
   "closing",

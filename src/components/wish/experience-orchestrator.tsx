@@ -11,7 +11,6 @@ import type { MergedStage, GiftChapterConfig, CharacterGifConfig, DecorationConf
 // ── Screens ──
 import { IntroductionScreen } from "./screens/introduction-screen";
 import { StartScreen } from "./screens/start-screen";
-import { GiftRevealScreen } from "./screens/gift-reveal-screen";
 import { GiftOpeningScreen } from "./screens/gift-opening-screen";
 import { ClosingScreen } from "./screens/closing-screen";
 
@@ -138,18 +137,6 @@ export const ExperienceOrchestrator = ({
             recipientName={recipientName}
             senderName={senderName}
             startAction={resolvedStartAction}
-            onNext={actions.next}
-            onBack={actions.back}
-            primaryColor={theme.colors.primary}
-            secondaryColor={theme.colors.secondary}
-            backgroundColor={theme.colors.background}
-            foregroundColor={theme.colors.foreground}
-          />
-        );
-
-      case "gift-reveal":
-        return (
-          <GiftRevealScreen
             onNext={actions.next}
             onBack={actions.back}
             primaryColor={theme.colors.primary}
