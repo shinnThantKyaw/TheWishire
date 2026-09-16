@@ -233,7 +233,7 @@ export const GiftOpeningScreen = ({
         transition={{ duration: 0.5 }}
       >
         {/* ═══ TOP: Heading area ═══ */}
-        <div className="relative z-20 flex-shrink-0 pt-10 mb-auto">
+        <div className="relative z-20 flex-shrink-0 pt-10 mb-4">
           {/* Pre-open hint */}
           <motion.p
             className="text-sm"
@@ -249,7 +249,7 @@ export const GiftOpeningScreen = ({
 
           {/* Post-open heading */}
           <motion.div
-              className={clsx(opening?"mb-34":"mb-0")}
+              className={clsx(opening?"mb-11":"mb-0")}
             initial={{ opacity: 0 }}
             animate={opening ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
