@@ -2,7 +2,6 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {clsx} from "clsx";
 
 interface GiftOpeningScreenProps {
   onNext: () => void;
@@ -232,11 +231,11 @@ export const GiftOpeningScreen = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* ═══ TOP: Heading area ═══ */}
-        <div className="relative z-20 flex-shrink-0 pt-10 mb-4">
+        {/* ═══ TOP: Heading (absolute — never shifts the box) ═══ */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 px-5 text-center">
           {/* Pre-open hint */}
           <motion.p
-            className="text-sm mt-10"
+            className="text-sm mt-20"
             style={{ color: foregroundColor }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: opening ? 0 : 0.5 }}
@@ -249,7 +248,6 @@ export const GiftOpeningScreen = ({
 
           {/* Post-open heading */}
           <motion.div
-              className={clsx(opening?"mb-11":"-mb-30")}
             initial={{ opacity: 0 }}
             animate={opening ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
@@ -287,11 +285,8 @@ export const GiftOpeningScreen = ({
           </motion.div>
         </div>
 
-        {/* ═══ MIDDLE: spacer + items ═══ */}
-        <div className="relative min-h-0 flex-1" />
-
-        {/* ═══ BOTTOM: Box + button ═══ */}
-        <div className="flex-shrink-0 pb-8 mt-20">
+        {/* ═══ BOTTOM: Box + button (box stays in same position always) ═══ */}
+        <div className="flex-shrink-0 pb-8">
           {/* ── Gift Box ── */}
           <div className="relative mx-auto" style={{ perspective: 400, transformStyle: "preserve-3d", width: 180, height: 162 }}>
             {/* Tap target */}
