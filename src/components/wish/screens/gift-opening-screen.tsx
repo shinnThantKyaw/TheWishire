@@ -226,11 +226,13 @@ export const GiftOpeningScreen = ({
       </div>
 
       <motion.div
-        className="relative z-10 flex w-full max-w-md flex-col items-center px-5 text-center"
+        className="relative z-10 flex w-full max-w-md flex-col items-center px-5 pb-24 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
+        {/* Spacer pushes box to lower half of screen */}
+        <div className="h-16 flex-shrink-0" />
         {/* ── Hint text — fades on open ── */}
         <motion.p
           className="mb-6 text-sm"
@@ -273,55 +275,79 @@ export const GiftOpeningScreen = ({
 
           {/* ── Items emerging from inside the box ── */}
           {opening && copy.contents.map((item, i) => {
-            // Items start deep inside the box and float well above it
             const positions = [
-              { x: -65, y: -210, rotate: -8 },   // top-left
-              { x: 65, y: -210, rotate: 8 },     // top-right
-              { x: -40, y: -150, rotate: -4 },   // mid-left
-              { x: 40, y: -150, rotate: 4 },     // mid-right
+              { x: -68, y: -200, rotate: -12 },
+              { x: 68, y: -200, rotate: 12 },
+              { x: -42, y: -140, rotate: -5 },
+              { x: 42, y: -140, rotate: 5 },
             ];
             const pos = positions[i % positions.length];
+
+            // Each card gets a unique subtle tint
+            const tints = [
+              { bg: `${primaryColor}08`, border: `${primaryColor}18` },
+              { bg: `${secondaryColor}10`, border: `${secondaryColor}20` },
+              { bg: `${primaryColor}0a`, border: `${primaryColor}15` },
+              { bg: `${secondaryColor}08`, border: `${secondaryColor}18` },
+            ];
+            const tint = tints[i % tints.length];
 
             return (
               <motion.div
                 key={i}
                 className="absolute left-1/2 flex flex-col items-center"
                 style={{
-                  marginLeft: -28,
-                  top: 110, // deep inside the box body
+                  marginLeft: -30,
+                  top: 110,
                   zIndex: 10,
                 }}
-                initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }}
+                initial={{ x: 0, y: 20, scale: 0, opacity: 0, rotate: 0 }}
                 animate={{
                   x: pos.x,
                   y: pos.y,
-                  scale: 1,
-                  opacity: 1,
+                  scale: [0, 1.15, 0.95, 1],
+                  opacity: [0, 1, 1, 1],
                   rotate: pos.rotate,
                 }}
                 transition={{
-                  type: "spring",
-                  stiffness: 55,
-                  damping: 14,
-                  mass: 1.1,
-                  delay: 0.05 + i * 0.09,
+                  duration: 0.7,
+                  delay: 0.05 + i * 0.1,
+                  ease: [0.34, 1.56, 0.64, 1],
+                  scale: {
+                    times: [0, 0.5, 0.75, 1],
+                    duration: 0.7,
+                    delay: 0.05 + i * 0.1,
+                  },
+                  opacity: {
+                    times: [0, 0.2, 1, 1],
+                    duration: 0.7,
+                    delay: 0.05 + i * 0.1,
+                  },
                 }}
               >
                 <div
-                  className="flex flex-col items-center rounded-2xl px-3 py-2.5"
+                  className="relative flex flex-col items-center overflow-hidden rounded-2xl px-3.5 py-3"
                   style={{
-                    background: "rgba(255,255,255,0.92)",
-                    backdropFilter: "blur(16px)",
-                    WebkitBackdropFilter: "blur(16px)",
-                    boxShadow: `0 6px 20px ${primaryColor}15, 0 2px 6px rgba(0,0,0,0.06)`,
-                    border: `1px solid rgba(255,255,255,0.8)`,
-                    width: 56,
+                    background: `linear-gradient(145deg, rgba(255,255,255,0.95), ${tint.bg})`,
+                    boxShadow: `0 8px 24px ${primaryColor}12, 0 2px 8px rgba(0,0,0,0.05)`,
+                    border: `1px solid ${tint.border}`,
+                    width: 60,
                   }}
                 >
-                  <span className="text-xl leading-none">{item.emoji}</span>
+                  {/* Shine sweep on appear */}
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{
+                      background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%)",
+                    }}
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "200%" }}
+                    transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: "easeInOut" }}
+                  />
+                  <span className="relative text-2xl leading-none">{item.emoji}</span>
                   <span
-                    className="mt-1 text-center text-[8px] font-semibold leading-tight"
-                    style={{ color: primaryColor, opacity: 0.7 }}
+                    className="relative mt-1.5 text-center text-[9px] font-bold leading-tight tracking-wide"
+                    style={{ color: primaryColor }}
                   >
                     {item.label}
                   </span>
