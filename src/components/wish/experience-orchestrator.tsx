@@ -70,7 +70,7 @@ const themeToCSSVars = (theme: ThemeConfig): React.CSSProperties =>
 const getDefaultStartAction = (occasion: string): StartAction => {
   switch (occasion) {
     case "birthday":
-      return { type: "candles", count: 5 };
+      return { type: "candles", count: 3 };
     case "anniversary":
     case "valentine":
       return { type: "yes-no", prompt: "Are you ready to see your surprise? 💕" };

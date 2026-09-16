@@ -5,18 +5,18 @@ import { motion } from "motion/react";
 import type { DecorationConfig } from "@/types/wish";
 
 const ELEMENT_EMOJIS: Record<string, string[]> = {
-  flowers: ["🌸", "🌺", "🌷", "🌻", "🌹"],
-  sparkles: ["✨", "💫", "⭐", "🌟"],
-  confetti: ["🎊", "🎉", "🎈", "🎀"],
-  balloons: ["🎈", "🪅", "🎁"],
-  stars: ["⭐", "🌟", "✨", "💫"],
-  hearts: ["❤️", "💖", "💕", "💗", "💘"],
+  flowers: ["🌸", "🌸", "🌸", "🌸", "🌸"],
+  sparkles: ["❤️", "❤️", "❤️", "❤️"],
+  confetti: ["❤️", "🌸", "❤️", "🌸"],
+  balloons: ["❤️", "❤️", "❤️", "❤️"],
+  stars: ["❤️", "❤️", "❤️", "❤️"],
+  hearts: ["❤️", "❤️", "❤️", "❤️", "❤️"],
 };
 
 const DENSITY_COUNT: Record<DecorationConfig["density"], number> = {
-  light: 10,
-  medium: 18,
-  heavy: 28,
+  light: 6,
+  medium: 10,
+  heavy: 16,
 };
 
 interface DecorationsProps {
@@ -36,10 +36,10 @@ export const Decorations = ({ config }: DecorationsProps) => {
 
     return Array.from({ length: count }, (_, i) => {
       const emoji = allEmojis[i % allEmojis.length];
-      const left = (i * 37 + 13) % 95; // pseudo-random spread
-      const delay = (i * 0.7) % 5;
-      const duration = 6 + (i % 4) * 2;
-      const size = 14 + (i % 3) * 4;
+      const left = (i * 31 + 7) % 90;
+      const delay = (i * 1.8) % 8;
+      const duration = 12 + (i % 3) * 5;
+      const size = 12 + (i % 3) * 3;
 
       return { id: i, emoji, left, delay, duration, size };
     });
@@ -55,18 +55,18 @@ export const Decorations = ({ config }: DecorationsProps) => {
             left: `${p.left}%`,
             fontSize: `${p.size}px`,
           }}
-          initial={{ y: "110vh", opacity: 0 }}
+          initial={{ y: "105vh", opacity: 0 }}
           animate={{
-            y: "-10vh",
-            opacity: [0, 0.6, 0.7, 0.5, 0],
-            x: [0, (p.id % 2 === 0 ? 1 : -1) * 30, 0],
-            rotate: [0, p.id % 2 === 0 ? 360 : -360],
+            y: "-15vh",
+            opacity: [0, 0.3, 0.4, 0.3, 0],
+            x: [0, (p.id % 2 === 0 ? 1 : -1) * 20, (p.id % 2 === 0 ? -1 : 1) * 10, 0],
+            rotate: [0, p.id % 2 === 0 ? 15 : -15, 0],
           }}
           transition={{
             duration: p.duration,
             repeat: Infinity,
             delay: p.delay,
-            ease: "easeOut",
+            ease: "easeInOut",
           }}
         >
           {p.emoji}
