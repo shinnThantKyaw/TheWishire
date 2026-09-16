@@ -293,7 +293,7 @@ export const GiftOpeningScreen = ({
         {/* ═══ BOTTOM: Box + button ═══ */}
         <div className="flex-shrink-0 pb-8">
           {/* ── Gift Box ── */}
-          <div className="relative mx-auto" style={{ perspective: 400, transformStyle: "preserve-3d", width: 180 }}>
+          <div className="relative mx-auto" style={{ perspective: 400, transformStyle: "preserve-3d", width: 180, height: 162 }}>
             {/* Tap target */}
             {!opening && (
               <button
