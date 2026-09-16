@@ -328,7 +328,7 @@ export const IntroductionScreen = ({
 
                 {/* ── Personalized Greeting Badge ─────────────────── */}
                 <motion.div
-                    className="relative mb-5"
+                    className="relative mb-2"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.35 }}
@@ -363,7 +363,7 @@ export const IntroductionScreen = ({
 
                 {/* ── Greeting Subtitle ────────────────────────────── */}
                 <motion.p
-                    className="mb-2 max-w-sm text-sm leading-relaxed"
+                    className="mb-1 max-w-sm text-sm leading-relaxed"
                     style={{ color: foregroundColor, opacity: 0.62 }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 0.62 }}
@@ -374,7 +374,7 @@ export const IntroductionScreen = ({
 
                 {/* ── Glass Card ───────────────────────── */}
                 <motion.div
-                    className="mt-5 w-full max-w-md overflow-hidden rounded-2xl sm:p-6"
+                    className="mt-3 w-full max-w-md overflow-hidden rounded-2xl sm:p-6"
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 }}
@@ -389,9 +389,11 @@ export const IntroductionScreen = ({
                         <div
                             className="rounded-2xl px-5 py-5 sm:px-6"
                             style={{
-                                backgroundColor: "rgba(255,255,255,0.75)",
-                                backdropFilter: "blur(20px)",
-                                WebkitBackdropFilter: "blur(20px)",
+                                backgroundColor: "rgba(255,255,255,0.82)",
+                                backdropFilter: "blur(24px)",
+                                WebkitBackdropFilter: "blur(24px)",
+                                boxShadow: `0 8px 32px ${primaryColor}12, 0 2px 8px rgba(0,0,0,0.06)`,
+                                border: `1px solid rgba(255,255,255,0.6)`,
                             }}
                         >
                             {/* Sender highlight */}
