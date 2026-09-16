@@ -232,7 +232,7 @@ export const GiftOpeningScreen = ({
         transition={{ duration: 0.5 }}
       >
         {/* ═══ TOP: Heading area ═══ */}
-        <div className="flex-shrink-0 pt-10">
+        <div className="flex-shrink-0 pt-4">
           {/* Pre-open hint */}
           <motion.p
             className="text-sm"
@@ -313,10 +313,10 @@ export const GiftOpeningScreen = ({
             {/* ── Items emerging from inside the box ── */}
             {opening && copy.contents.map((item, i) => {
               const positions = [
-                { x: -68, y: -180, rotate: -12 },
-                { x: 68, y: -180, rotate: 12 },
-                { x: -42, y: -120, rotate: -5 },
-                { x: 42, y: -120, rotate: 5 },
+                { x: -68, y: -150, rotate: -12 },
+                { x: 68, y: -150, rotate: 12 },
+                { x: -42, y: -95, rotate: -5 },
+                { x: 42, y: -95, rotate: 5 },
               ];
               const pos = positions[i % positions.length];
               const tints = [
