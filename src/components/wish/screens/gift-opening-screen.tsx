@@ -477,17 +477,116 @@ export const GiftOpeningScreen = ({
               </AnimatePresence>
             </motion.div>
           ) : (
-            /* ── Post-opening: revealed contents ─────── */
+            /* ── Post-opening: items fly out from box ─────── */
             <motion.div
               key="revealed"
               className="flex flex-col items-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
             >
-              {/* Heading */}
+              {/* ── Flying items that launch from box ─────── */}
+              <div className="relative mb-2 h-[180px] w-full max-w-sm">
+                {/* Small ghost box at the bottom — the source of the items */}
+                <motion.div
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2"
+                  initial={{ opacity: 1, scale: 1 }}
+                  animate={{ opacity: 0.35, scale: 0.6, y: 10 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  {/* Mini lid */}
+                  <div
+                    className="mx-auto rounded-t-lg"
+                    style={{
+                      width: 100,
+                      height: 18,
+                      background: `linear-gradient(180deg, ${secondaryColor}, ${primaryColor}cc)`,
+                    }}
+                  />
+                  {/* Mini body */}
+                  <div
+                    className="relative rounded-b-lg"
+                    style={{
+                      width: 100,
+                      height: 60,
+                      background: `linear-gradient(180deg, ${primaryColor}bb, ${primaryColor}99)`,
+                    }}
+                  >
+                    {/* Mini vertical ribbon */}
+                    <div
+                      className="absolute left-1/2 top-0 -translate-x-1/2"
+                      style={{
+                        width: 10,
+                        height: "100%",
+                        background: `${secondaryColor}60`,
+                      }}
+                    />
+                    {/* Mini horizontal ribbon */}
+                    <div
+                      className="absolute left-0 top-1/2 -translate-y-1/2"
+                      style={{
+                        width: "100%",
+                        height: 8,
+                        background: `${secondaryColor}60`,
+                      }}
+                    />
+                  </div>
+                </motion.div>
+                {copy.contents.map((item, i) => {
+                  // Each item launches in a different arc direction
+                  const arcs = [
+                    { x: -90, y: -160, rotate: -20 },   // top-left
+                    { x: 90, y: -160, rotate: 20 },      // top-right
+                    { x: -60, y: -120, rotate: -12 },    // mid-left
+                    { x: 60, y: -120, rotate: 12 },      // mid-right
+                  ];
+                  const arc = arcs[i % arcs.length];
+
+                  return (
+                    <motion.div
+                      key={i}
+                      className="absolute left-1/2 top-full flex flex-col items-center"
+                      style={{ marginLeft: -32 }}
+                      initial={{ x: 0, y: 0, scale: 0.3, opacity: 0 }}
+                      animate={{
+                        x: arc.x,
+                        y: arc.y,
+                        scale: 1,
+                        opacity: 1,
+                        rotate: arc.rotate,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 10,
+                        delay: 0.15 + i * 0.12,
+                      }}
+                    >
+                      <div
+                        className="flex h-14 w-14 items-center justify-center rounded-2xl text-2xl"
+                        style={{
+                          background: "rgba(255,255,255,0.85)",
+                          backdropFilter: "blur(12px)",
+                          WebkitBackdropFilter: "blur(12px)",
+                          boxShadow: `0 6px 20px ${primaryColor}15, 0 2px 6px rgba(0,0,0,0.06)`,
+                          border: `1px solid rgba(255,255,255,0.7)`,
+                        }}
+                      >
+                        {item.emoji}
+                      </div>
+                      <span
+                        className="mt-1 text-[11px] font-medium"
+                        style={{ color: foregroundColor, opacity: 0.5 }}
+                      >
+                        {item.label}
+                      </span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* ── Heading ─────────────── */}
               <motion.h1
-                className="mb-3 text-2xl font-bold leading-tight sm:text-3xl"
+                className="mb-2 text-2xl font-bold leading-tight sm:text-3xl"
                 style={{
                   fontFamily: "var(--wish-font-heading), Georgia, serif",
                   background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
@@ -497,65 +596,32 @@ export const GiftOpeningScreen = ({
                 }}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 150, delay: 0.1 }}
+                transition={{ type: "spring", stiffness: 150, delay: 0.6 }}
               >
                 {copy.heading}
               </motion.h1>
 
               {/* Personalized subheading */}
               <motion.p
-                className="mb-8 max-w-sm text-sm leading-relaxed"
+                className="mb-6 max-w-sm text-sm leading-relaxed"
                 style={{ color: foregroundColor, opacity: 0.55 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.55 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.8 }}
               >
                 {recipientName
                   ? `Hey ${recipientName}, ${copy.subheading.charAt(0).toLowerCase() + copy.subheading.slice(1)}`
                   : copy.subheading}
               </motion.p>
 
-              {/* ── Content Preview Cards ─────────────── */}
-              <div className="grid grid-cols-2 gap-3">
-                {copy.contents.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex flex-col items-center rounded-2xl px-4 py-4"
-                    style={{
-                      background: "rgba(255,255,255,0.75)",
-                      backdropFilter: "blur(16px)",
-                      WebkitBackdropFilter: "blur(16px)",
-                      boxShadow: `0 4px 16px ${primaryColor}10, 0 1px 4px rgba(0,0,0,0.04)`,
-                      border: `1px solid rgba(255,255,255,0.6)`,
-                    }}
-                    initial={{ opacity: 0, y: 30, scale: 0.7 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 180,
-                      damping: 14,
-                      delay: 0.2 + i * 0.12,
-                    }}
-                  >
-                    <span className="mb-1.5 text-2xl">{item.emoji}</span>
-                    <span
-                      className="text-xs font-medium"
-                      style={{ color: foregroundColor, opacity: 0.55 }}
-                    >
-                      {item.label}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-
               {/* ── Sender attribution ─────────────── */}
               {senderName && (
                 <motion.p
-                  className="mt-6 text-xs"
+                  className="mb-4 text-xs"
                   style={{ color: foregroundColor, opacity: 0.35 }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.35 }}
-                  transition={{ delay: 0.8 }}
+                  transition={{ delay: 1 }}
                 >
                   With love, from {senderName}
                 </motion.p>
@@ -564,14 +630,14 @@ export const GiftOpeningScreen = ({
               {/* Continue button */}
               <motion.button
                 onClick={onNext}
-                className="mt-8 rounded-full px-8 py-3.5 text-sm font-semibold text-white shadow-lg"
+                className="rounded-full px-8 py-3.5 text-sm font-semibold text-white shadow-lg"
                 style={{
                   background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
                   boxShadow: `0 6px 24px ${primaryColor}35`,
                 }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
+                transition={{ delay: 1.1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
