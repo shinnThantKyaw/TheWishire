@@ -273,12 +273,12 @@ export const GiftOpeningScreen = ({
 
           {/* ── Items emerging from inside the box ── */}
           {opening && copy.contents.map((item, i) => {
-            // Items start from inside the box body and float just above it
+            // Items start deep inside the box and float well above it
             const positions = [
-              { x: -60, y: -80, rotate: -8 },   // top-left, just above box
-              { x: 60, y: -80, rotate: 8 },     // top-right, just above box
-              { x: -35, y: -45, rotate: -4 },   // mid-left, near box rim
-              { x: 35, y: -45, rotate: 4 },     // mid-right, near box rim
+              { x: -65, y: -130, rotate: -8 },   // top-left
+              { x: 65, y: -130, rotate: 8 },     // top-right
+              { x: -40, y: -85, rotate: -4 },    // mid-left
+              { x: 40, y: -85, rotate: 4 },      // mid-right
             ];
             const pos = positions[i % positions.length];
 
@@ -288,7 +288,7 @@ export const GiftOpeningScreen = ({
                 className="absolute left-1/2 flex flex-col items-center"
                 style={{
                   marginLeft: -28,
-                  top: 80, // starts inside the box body (lid=32 + half body)
+                  top: 110, // deep inside the box body
                   zIndex: 10,
                 }}
                 initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }}
