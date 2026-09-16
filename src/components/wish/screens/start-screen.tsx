@@ -153,7 +153,7 @@ export const StartScreen = ({
 
         {/* Occasion-specific interaction */}
         <motion.div
-          className="mt-6"
+          className="mt-10"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}

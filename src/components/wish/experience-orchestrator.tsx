@@ -164,6 +164,9 @@ export const ExperienceOrchestrator = ({
           <GiftOpeningScreen
             onNext={actions.next}
             onBack={actions.back}
+            recipientName={recipientName}
+            occasion={occasion}
+            senderName={senderName}
             primaryColor={theme.colors.primary}
             secondaryColor={theme.colors.secondary}
             backgroundColor={theme.colors.background}

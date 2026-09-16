@@ -5,12 +5,12 @@ import { motion } from "motion/react";
 import type { DecorationConfig } from "@/types/wish";
 
 const ELEMENT_EMOJIS: Record<string, string[]> = {
-  flowers: ["🌸", "🌸", "🌸", "🌸", "🌸"],
-  sparkles: ["❤️", "❤️", "❤️", "❤️"],
-  confetti: ["❤️", "🌸", "❤️", "🌸"],
-  balloons: ["❤️", "❤️", "❤️", "❤️"],
-  stars: ["❤️", "❤️", "❤️", "❤️"],
-  hearts: ["❤️", "❤️", "❤️", "❤️", "❤️"],
+  flowers: ["🌸", "🌸", "🌸", "🌸"],
+  sparkles: ["🌸", "❤️", "🌸", "❤️"],
+  confetti: ["🌸", "❤️", "🌸", "❤️"],
+  balloons: ["🌸", "❤️", "🌸", "❤️"],
+  stars: ["🌸", "❤️", "🌸", "❤️"],
+  hearts: ["❤️", "❤️", "❤️", "❤️"],
 };
 
 const DENSITY_COUNT: Record<DecorationConfig["density"], number> = {
