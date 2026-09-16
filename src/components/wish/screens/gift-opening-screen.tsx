@@ -244,67 +244,8 @@ export const GiftOpeningScreen = ({
             : "You've received a gift"}
         </motion.p>
 
-        {/* ── Items flying out — positioned above the box ── */}
-        <div className="relative h-[140px] w-full max-w-sm">
-          {opening && copy.contents.map((item, i) => {
-            const arcs = [
-              { x: -72, y: -110, rotate: -10 },
-              { x: 72, y: -110, rotate: 10 },
-              { x: -45, y: -60, rotate: -5 },
-              { x: 45, y: -60, rotate: 5 },
-            ];
-            const arc = arcs[i % arcs.length];
-
-            return (
-              <motion.div
-                key={i}
-                className="absolute left-1/2 bottom-0 flex flex-col items-center"
-                style={{ marginLeft: -22 }}
-                initial={{ x: 0, y: 30, scale: 0.15, opacity: 0, rotate: 0 }}
-                animate={{
-                  x: arc.x,
-                  y: arc.y,
-                  scale: 1,
-                  opacity: 1,
-                  rotate: arc.rotate,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 60,
-                  damping: 12,
-                  mass: 1,
-                  delay: 0.08 + i * 0.08,
-                }}
-              >
-                <div
-                  className="relative flex h-11 w-11 items-center justify-center rounded-xl text-xl"
-                  style={{
-                    background: "rgba(255,255,255,0.88)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    boxShadow: `0 4px 14px ${primaryColor}18, 0 1px 4px rgba(0,0,0,0.05)`,
-                    border: `1px solid rgba(255,255,255,0.7)`,
-                  }}
-                >
-                  {item.emoji}
-                  <span
-                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-1.5 py-px text-[9px] font-semibold"
-                    style={{
-                      background: `${primaryColor}12`,
-                      color: primaryColor,
-                      border: `1px solid ${primaryColor}15`,
-                      lineHeight: "14px",
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
         {/* ── Gift Box — stays visible the whole time ── */}
+        {/* Items emerge from inside the box — container overlaps the box body */}
         <div className="relative" style={{ perspective: 400, transformStyle: "preserve-3d" }}>
           {/* Transparent tap target */}
           {!opening && (
@@ -329,6 +270,65 @@ export const GiftOpeningScreen = ({
             }
             transition={{ duration: opening ? 0.3 : 2.5, repeat: opening ? 0 : Infinity, ease: "easeInOut" }}
           />
+
+          {/* ── Items emerging from inside the box ── */}
+          {opening && copy.contents.map((item, i) => {
+            // Items start from inside the box body and float just above it
+            const positions = [
+              { x: -60, y: -80, rotate: -8 },   // top-left, just above box
+              { x: 60, y: -80, rotate: 8 },     // top-right, just above box
+              { x: -35, y: -45, rotate: -4 },   // mid-left, near box rim
+              { x: 35, y: -45, rotate: 4 },     // mid-right, near box rim
+            ];
+            const pos = positions[i % positions.length];
+
+            return (
+              <motion.div
+                key={i}
+                className="absolute left-1/2 flex flex-col items-center"
+                style={{
+                  marginLeft: -28,
+                  top: 80, // starts inside the box body (lid=32 + half body)
+                  zIndex: 10,
+                }}
+                initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }}
+                animate={{
+                  x: pos.x,
+                  y: pos.y,
+                  scale: 1,
+                  opacity: 1,
+                  rotate: pos.rotate,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 55,
+                  damping: 14,
+                  mass: 1.1,
+                  delay: 0.05 + i * 0.09,
+                }}
+              >
+                <div
+                  className="flex flex-col items-center rounded-2xl px-3 py-2.5"
+                  style={{
+                    background: "rgba(255,255,255,0.92)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                    boxShadow: `0 6px 20px ${primaryColor}15, 0 2px 6px rgba(0,0,0,0.06)`,
+                    border: `1px solid rgba(255,255,255,0.8)`,
+                    width: 56,
+                  }}
+                >
+                  <span className="text-xl leading-none">{item.emoji}</span>
+                  <span
+                    className="mt-1 text-center text-[8px] font-semibold leading-tight"
+                    style={{ color: primaryColor, opacity: 0.7 }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
 
           {/* Light beam on open */}
           <AnimatePresence>
