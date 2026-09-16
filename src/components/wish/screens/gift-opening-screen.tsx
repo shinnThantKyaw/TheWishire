@@ -226,13 +226,13 @@ export const GiftOpeningScreen = ({
       </div>
 
       <motion.div
-        className="relative z-10 flex w-full max-w-md flex-col items-center px-5 pb-24 text-center"
+        className="relative z-10 flex w-full max-w-md flex-col items-center px-5 pb-12 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Spacer pushes box to lower half of screen */}
-        <div className="h-16 flex-shrink-0" />
+        {/* Spacer pushes box to lower part of screen */}
+        <div className="flex-1" />
         {/* ── Hint text — fades on open ── */}
         <motion.p
           className="mb-6 text-sm"
@@ -346,7 +346,7 @@ export const GiftOpeningScreen = ({
                   />
                   <span className="relative text-2xl leading-none">{item.emoji}</span>
                   <span
-                    className="relative mt-1.5 text-center text-[9px] font-bold leading-tight tracking-wide"
+                    className="relative mt-1.5 text-center text-[9px] font-bold leading-tight tracking-wide whitespace-nowrap"
                     style={{ color: primaryColor }}
                   >
                     {item.label}
