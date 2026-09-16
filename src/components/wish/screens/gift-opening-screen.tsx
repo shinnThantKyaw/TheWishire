@@ -275,10 +275,10 @@ export const GiftOpeningScreen = ({
           {opening && copy.contents.map((item, i) => {
             // Items start deep inside the box and float well above it
             const positions = [
-              { x: -65, y: -170, rotate: -8 },   // top-left
-              { x: 65, y: -170, rotate: 8 },     // top-right
-              { x: -40, y: -115, rotate: -4 },   // mid-left
-              { x: 40, y: -115, rotate: 4 },     // mid-right
+              { x: -65, y: -210, rotate: -8 },   // top-left
+              { x: 65, y: -210, rotate: 8 },     // top-right
+              { x: -40, y: -150, rotate: -4 },   // mid-left
+              { x: 40, y: -150, rotate: 4 },     // mid-right
             ];
             const pos = positions[i % positions.length];
 
