@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface GiftOpeningScreenProps {
@@ -137,21 +137,12 @@ export const GiftOpeningScreen = ({
   const [opening, setOpening] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const hasConfetti = useRef(false);
+  const openingRef = useRef(false);
 
   const copy =
     OCCASION_COPY[occasion?.toLowerCase() ?? ""] ?? FALLBACK_COPY;
 
-  const handleOpen = useCallback(() => {
-    if (opening) return;
-    setOpening(true);
-
-    // After lid lifts, reveal contents
-    setTimeout(() => setRevealed(true), 600);
-    // Fire confetti just after lid opens
-    setTimeout(() => fireConfetti(), 400);
-  }, [opening]);
-
-  const fireConfetti = async () => {
+  const fireConfetti = useCallback(async () => {
     if (hasConfetti.current) return;
     hasConfetti.current = true;
 
@@ -163,10 +154,8 @@ export const GiftOpeningScreen = ({
       zIndex: 100,
     };
 
-    // Initial burst from center
     confetti({ ...defaults, particleCount: 80, origin: { x: 0.5, y: 0.45 } });
 
-    // Side bursts
     setTimeout(() => {
       confetti({
         ...defaults,
@@ -182,7 +171,6 @@ export const GiftOpeningScreen = ({
       });
     }, 200);
 
-    // Top shower
     setTimeout(() => {
       confetti({
         ...defaults,
@@ -192,14 +180,16 @@ export const GiftOpeningScreen = ({
         scalar: 1.2,
       });
     }, 500);
-  };
+  }, [primaryColor, secondaryColor]);
 
-  // Auto-advance after celebration
-  useEffect(() => {
-    if (!revealed) return;
-    const timer = setTimeout(onNext, 3500);
-    return () => clearTimeout(timer);
-  }, [revealed, onNext]);
+  const handleOpen = useCallback(() => {
+    if (openingRef.current) return;
+    openingRef.current = true;
+    setOpening(true);
+
+    setTimeout(() => setRevealed(true), 600);
+    setTimeout(() => fireConfetti(), 400);
+  }, [fireConfetti]);
 
   return (
     <div
@@ -272,9 +262,10 @@ export const GiftOpeningScreen = ({
                 whileHover={!opening ? { scale: 1.04 } : {}}
                 whileTap={!opening ? { scale: 0.96 } : {}}
                 aria-label="Open the gift"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 150, damping: 15, delay: 0.2 }}
+                transition={{ duration: 0.35, delay: 0.15 }}
+                style={{ pointerEvents: opening ? "none" : "auto" }}
               >
                 {/* Glow pulse behind box */}
                 {!opening && (
