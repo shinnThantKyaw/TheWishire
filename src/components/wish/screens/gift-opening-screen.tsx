@@ -388,7 +388,7 @@ export const GiftOpeningScreen = ({
             <motion.div
               className="relative mx-auto rounded-t-xl"
               style={{ width: 180, height: 32, background: `linear-gradient(180deg, ${secondaryColor}, ${primaryColor}dd)`, boxShadow: `0 -2px 8px ${primaryColor}15`, transformOrigin: "bottom center", zIndex: 2 }}
-              animate={opening ? { rotateX: -70, y: -50, opacity: 0 } : { rotateX: 0, y: 0, opacity: 1 }}
+              animate={opening ? { rotateX: -70, opacity: 0 } : { rotateX: 0, y: 0, opacity: 1 }}
               transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
             >
               <div className="absolute inset-0 rounded-t-xl" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.25), transparent)" }} />
@@ -417,7 +417,7 @@ export const GiftOpeningScreen = ({
             <motion.div
               className="absolute -top-4 left-1/2 -translate-x-1/2"
               style={{ zIndex: 3 }}
-              animate={opening ? { y: -50, opacity: 0, rotate: 25, scale: 0.3 } : {}}
+              animate={opening ? { opacity: 0, rotate: 25, scale: 0.3 } : {}}
               transition={{ type: "spring", stiffness: 120, damping: 8, delay: 0.1 }}
             >
               <div className="relative">
