@@ -245,13 +245,13 @@ export const GiftOpeningScreen = ({
         </motion.p>
 
         {/* ── Items flying out — positioned above the box ── */}
-        <div className="relative h-[160px] w-full max-w-sm">
+        <div className="relative h-[140px] w-full max-w-sm">
           {opening && copy.contents.map((item, i) => {
             const arcs = [
-              { x: -105, y: -145, rotate: -15 },
-              { x: 105, y: -145, rotate: 15 },
-              { x: -65, y: -80, rotate: -8 },
-              { x: 65, y: -80, rotate: 8 },
+              { x: -72, y: -110, rotate: -10 },
+              { x: 72, y: -110, rotate: 10 },
+              { x: -45, y: -60, rotate: -5 },
+              { x: 45, y: -60, rotate: 5 },
             ];
             const arc = arcs[i % arcs.length];
 
@@ -260,7 +260,7 @@ export const GiftOpeningScreen = ({
                 key={i}
                 className="absolute left-1/2 bottom-0 flex flex-col items-center"
                 style={{ marginLeft: -22 }}
-                initial={{ x: 0, y: 40, scale: 0.1, opacity: 0, rotate: 0 }}
+                initial={{ x: 0, y: 30, scale: 0.15, opacity: 0, rotate: 0 }}
                 animate={{
                   x: arc.x,
                   y: arc.y,
@@ -270,10 +270,10 @@ export const GiftOpeningScreen = ({
                 }}
                 transition={{
                   type: "spring",
-                  stiffness: 100,
-                  damping: 8,
-                  mass: 0.8,
-                  delay: 0.1 + i * 0.1,
+                  stiffness: 60,
+                  damping: 12,
+                  mass: 1,
+                  delay: 0.08 + i * 0.08,
                 }}
               >
                 <div
