@@ -105,6 +105,13 @@ export const ExperienceOrchestrator = ({
   const { state, actions } = useExperienceState(normalizedFlowMode);
   const primaryColor = theme.colors.primary;
 
+  // ── DEBUG: ?debug=gift skips to gift-opening screen for testing ──
+  const debugPhase =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("debug")
+      : null;
+  const activePhase = debugPhase === "gift" ? "gift-opening" : state.phase;
+
   // Resolve defaults
   const resolvedStartAction = useMemo(
     () => startAction ?? getDefaultStartAction(occasion),
@@ -114,7 +121,7 @@ export const ExperienceOrchestrator = ({
   // ── Render current screen ───────────────────────
 
   const renderScreen = () => {
-    switch (state.phase) {
+    switch (activePhase) {
       // ── Common Beginning (Screens 1-5) ──
 
       case "introduction":
@@ -226,14 +233,14 @@ export const ExperienceOrchestrator = ({
       {musicUrl && (
         <MusicPlayer
           src={musicUrl}
-          startPlaying={state.phase !== "introduction"}
-          hasBottomNav={state.phase === "chapters" && normalizedFlowMode === "click-through"}
+          startPlaying={activePhase !== "introduction"}
+          hasBottomNav={activePhase === "chapters" && normalizedFlowMode === "click-through"}
         />
       )}
-      {characterGif && state.phase !== "introduction" && (
+      {characterGif && activePhase !== "introduction" && (
         <CharacterGif {...characterGif} />
       )}
-      {decorations && decorations.elements.length > 0 && state.phase !== "introduction" && (
+      {decorations && decorations.elements.length > 0 && activePhase !== "introduction" && (
         <Decorations config={decorations} />
       )}
 
@@ -255,7 +262,7 @@ export const ExperienceOrchestrator = ({
       {/* ── Screen Content ────────────────────────── */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`${state.phase}-${state.chapterIndex}-${state.giftSubScreen}`}
+          key={`${activePhase}-${state.chapterIndex}-${state.giftSubScreen}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
