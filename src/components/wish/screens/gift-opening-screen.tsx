@@ -307,7 +307,7 @@ export const GiftOpeningScreen = ({
           </div>
           {/* Frosted glass pill */}
           <div
-            className="mx-auto rounded-full px-7 py-3 backdrop-blur-md"
+            className="mx-auto max-w-[200px] rounded-full px-5 py-2.5 backdrop-blur-md"
             style={{
               background: `linear-gradient(135deg, rgba(255,255,255,0.75), rgba(255,255,255,0.4))`,
               boxShadow: `0 4px 24px ${primaryColor}12, 0 1px 4px rgba(0,0,0,0.04)`,
@@ -357,36 +357,6 @@ export const GiftOpeningScreen = ({
                 aria-label="Open the gift"
               />
             )}
-
-            {/* Animated dashed orbit ring — tap prompt */}
-            <AnimatePresence>
-              {!opening && (
-                <motion.div
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                  style={{ width: 236, height: 236, zIndex: 5 }}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.08 }}
-                  transition={{ delay: 0.8, duration: 0.6 }}
-                >
-                  <div
-                    className="h-full w-full rounded-full"
-                    style={{
-                      border: `2px dashed ${primaryColor}25`,
-                      animation: "spin 14s linear infinite",
-                    }}
-                  />
-                  <motion.div
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      boxShadow: `0 0 24px ${primaryColor}10, inset 0 0 24px ${primaryColor}05`,
-                    }}
-                    animate={{ scale: [1, 1.04, 1], opacity: [0.4, 0.7, 0.4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Outer glow pulse */}
             <motion.div
@@ -881,10 +851,6 @@ export const GiftOpeningScreen = ({
 
       {/* Keyframes for dashed ring rotation */}
       <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
         :root {
           --gift-post-bottom: 48px;
         }
