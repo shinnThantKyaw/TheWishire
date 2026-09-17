@@ -495,12 +495,12 @@ export const GiftOpeningScreen = ({
               }}
               animate={
                 opening
-                  ? { rotateX: -70, opacity: 0 }
-                  : { rotateX: 0, y: 0, opacity: 1 }
+                  ? { x: 110, y: 30, rotateZ: 12, opacity: 0.3 }
+                  : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
               }
               transition={{
-                duration: 1.0,
-                ease: [0.34, 1.56, 0.64, 1],
+                duration: 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
               {/* Lid shine */}
@@ -613,8 +613,8 @@ export const GiftOpeningScreen = ({
                 style={{ background: `rgba(255,255,255,0.15)` }}
               />
 
-              {/* Gift tag — hangs from the ribbon on the front of the box */}
-              {!opening && senderName && (
+              {/* Gift tag — stays visible after opening */}
+              {senderName && (
                 <motion.div
                   className="absolute left-1/2 z-20"
                   style={{ top: 30, translate: "-50% 0", rotate: "5deg" }}
@@ -748,18 +748,18 @@ export const GiftOpeningScreen = ({
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              {/* Downward chevron pointing at the box */}
+              {/* Upward chevron pointing at the box */}
               <motion.svg
                 width="16"
                 height="10"
                 viewBox="0 0 16 10"
                 fill="none"
                 className="mb-1"
-                animate={{ opacity: [0.3, 0.7, 0.3], y: [0, 2, 0] }}
+                animate={{ opacity: [0.3, 0.7, 0.3], y: [0, -2, 0] }}
                 transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
               >
                 <path
-                  d="M1 1L8 8L15 1"
+                  d="M1 9L8 2L15 9"
                   stroke={primaryColor}
                   strokeWidth="1.5"
                   strokeLinecap="round"
