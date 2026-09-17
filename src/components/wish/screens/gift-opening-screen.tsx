@@ -642,6 +642,31 @@ export const GiftOpeningScreen = ({
                 className="absolute right-7 top-6 h-1 w-1 rounded-full"
                 style={{ background: `rgba(255,255,255,0.15)` }}
               />
+
+              {/* Sender card on the box */}
+              {!opening && senderName && (
+                <motion.div
+                  className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6, duration: 0.4 }}
+                >
+                  <div
+                    className="rounded-full px-3 py-1 backdrop-blur-sm"
+                    style={{
+                      background: `linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15))`,
+                      border: `1px solid rgba(255,255,255,0.3)`,
+                    }}
+                  >
+                    <p
+                      className="text-center text-[10px] font-medium tracking-wider"
+                      style={{ color: "rgba(255,255,255,0.85)" }}
+                    >
+                      from {senderName}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Bow */}
@@ -690,13 +715,41 @@ export const GiftOpeningScreen = ({
         </div>
       </div>
 
+      {/* ── Tap instruction (below the box) ── */}
+      <AnimatePresence>
+        {!opening && (
+          <motion.div
+            className="absolute inset-x-0 z-20 flex flex-col items-center"
+            style={{ top: "55%" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ delay: 1.2, duration: 0.5 }}
+          >
+            <p
+              className="text-xs font-medium italic tracking-widest uppercase"
+              style={{ color: `${primaryColor}70` }}
+            >
+              Tap to open
+            </p>
+            <motion.div
+              className="mt-1.5 h-px w-6 rounded-full"
+              style={{ background: `${primaryColor}30` }}
+              animate={{ scaleX: [1, 1.4, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ══════════════════════════════════════════════════
-          LAYER 3: Post-open text + button (absolute bottom — no layout shift)
+          LAYER 3: Post-open text + button (absolute — no layout shift)
           ══════════════════════════════════════════════════ */}
       <AnimatePresence>
         {opening && (
           <motion.div
-            className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center px-6 pb-12"
+            className="absolute inset-x-0 z-20 flex flex-col items-center px-6"
+            style={{ bottom: "var(--gift-post-bottom, 48px)" }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.7, ease: "easeOut" }}
@@ -785,6 +838,15 @@ export const GiftOpeningScreen = ({
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
+        }
+        :root {
+          --gift-post-bottom: 48px;
+        }
+        @media (max-height: 700px) {
+          :root { --gift-post-bottom: 20px; }
+        }
+        @media (max-height: 600px) {
+          :root { --gift-post-bottom: 10px; }
         }
       `}</style>
     </div>
