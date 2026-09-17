@@ -497,7 +497,7 @@ export const GiftOpeningScreen = ({
               }}
               animate={
                 opening
-                  ? { x: 200, y: 145, rotateZ: 40, opacity: 1 }
+                  ? { x: 200, y: 20, rotateZ: 35, opacity: 1 }
                   : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
               }
               transition={{
