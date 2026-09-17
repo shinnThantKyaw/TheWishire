@@ -737,10 +737,10 @@ export const GiftOpeningScreen = ({
           <motion.div
             className="absolute inset-x-0 z-20 flex flex-col items-center"
             style={{ top: "calc(var(--gift-box-top, 42%) + 100px)" }}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
           >
             {/* Gentle floating container */}
             <motion.div
