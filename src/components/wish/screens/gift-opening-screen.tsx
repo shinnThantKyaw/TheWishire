@@ -647,7 +647,7 @@ export const GiftOpeningScreen = ({
               {!opening && senderName && (
                 <motion.div
                   className="absolute left-1/2 z-20"
-                  style={{ top: 8, marginLeft: 8, rotate: "5deg" }}
+                  style={{ top: 30, translate: "-50% 0", rotate: "5deg" }}
                   initial={{ opacity: 0, y: -10, rotate: 15 }}
                   animate={{ opacity: 1, y: 0, rotate: 5 }}
                   transition={{
