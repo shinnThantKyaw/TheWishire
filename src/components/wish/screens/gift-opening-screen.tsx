@@ -482,21 +482,23 @@ export const GiftOpeningScreen = ({
               )}
             </AnimatePresence>
 
-            {/* Lid — pivots from left edge, leans against box */}
+            {/* Lid — slides right, leans against the side of the box */}
             <motion.div
-              className="relative mx-auto rounded-t-2xl"
+              className="absolute rounded-t-2xl"
               style={{
                 width: 200,
                 height: 36,
                 background: `linear-gradient(180deg, ${secondaryColor}, ${primaryColor}dd)`,
                 boxShadow: `0 -2px 8px ${primaryColor}15, 0 4px 12px ${primaryColor}10`,
                 transformOrigin: "left bottom",
+                left: 0,
+                top: 0,
                 zIndex: 2,
               }}
               animate={
                 opening
-                  ? { rotateZ: 65, y: 6, opacity: 1 }
-                  : { rotateZ: 0, y: 0, opacity: 1 }
+                  ? { x: 200, y: 145, rotateZ: 40, opacity: 1 }
+                  : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
               }
               transition={{
                 duration: 1.2,
