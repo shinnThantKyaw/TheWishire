@@ -482,7 +482,7 @@ export const GiftOpeningScreen = ({
               )}
             </AnimatePresence>
 
-            {/* Lid */}
+            {/* Lid — pivots from left edge, leans against box */}
             <motion.div
               className="relative mx-auto rounded-t-2xl"
               style={{
@@ -490,17 +490,17 @@ export const GiftOpeningScreen = ({
                 height: 36,
                 background: `linear-gradient(180deg, ${secondaryColor}, ${primaryColor}dd)`,
                 boxShadow: `0 -2px 8px ${primaryColor}15, 0 4px 12px ${primaryColor}10`,
-                transformOrigin: "bottom center",
+                transformOrigin: "left bottom",
                 zIndex: 2,
               }}
               animate={
                 opening
-                  ? { x: 120, y: 155, rotateZ: 25, opacity: 1 }
-                  : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
+                  ? { rotateZ: 65, y: 6, opacity: 1 }
+                  : { rotateZ: 0, y: 0, opacity: 1 }
               }
               transition={{
-                duration: 1.4,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                duration: 1.2,
+                ease: [0.34, 1.56, 0.64, 1],
               }}
             >
               {/* Lid shine */}
@@ -527,6 +527,49 @@ export const GiftOpeningScreen = ({
                   background: `linear-gradient(180deg, ${secondaryColor}90, ${secondaryColor}70)`,
                 }}
               />
+
+              {/* ── Bow — inside lid, moves with it ── */}
+              <motion.div
+                className="absolute -top-5 left-1/2 -translate-x-1/2"
+                style={{ zIndex: 3 }}
+                initial={{}}
+                animate={
+                  opening
+                    ? { rotate: -10, scale: 0.85 }
+                    : {}
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 10,
+                }}
+              >
+                <div className="relative">
+                  <div
+                    className="absolute -left-5 -top-1.5 h-6 w-7 rounded-full"
+                    style={{
+                      background: `linear-gradient(135deg, ${secondaryColor}, ${secondaryColor}cc)`,
+                      transform: "rotate(-20deg)",
+                      boxShadow: `inset 0 -2px 4px ${primaryColor}20`,
+                    }}
+                  />
+                  <div
+                    className="absolute -right-5 -top-1.5 h-6 w-7 rounded-full"
+                    style={{
+                      background: `linear-gradient(225deg, ${secondaryColor}, ${secondaryColor}cc)`,
+                      transform: "rotate(20deg)",
+                      boxShadow: `inset 0 -2px 4px ${primaryColor}20`,
+                    }}
+                  />
+                  <div
+                    className="relative z-10 mx-auto h-5 w-5 rounded-full"
+                    style={{
+                      background: `radial-gradient(circle at 35% 35%, ${secondaryColor}, ${secondaryColor}aa)`,
+                      boxShadow: `0 2px 6px ${primaryColor}25`,
+                    }}
+                  />
+                </div>
+              </motion.div>
             </motion.div>
 
             {/* Body */}
@@ -684,49 +727,6 @@ export const GiftOpeningScreen = ({
                 </motion.div>
               )}
             </div>
-
-            {/* Bow */}
-            <motion.div
-              className="absolute -top-5 left-1/2 -translate-x-1/2"
-              style={{ zIndex: 3 }}
-              animate={
-                opening
-                  ? { rotate: 25, scale: 0.8 }
-                  : {}
-              }
-              transition={{
-                type: "spring",
-                stiffness: 120,
-                damping: 8,
-                delay: 0.1,
-              }}
-            >
-              <div className="relative">
-                <div
-                  className="absolute -left-5 -top-1.5 h-6 w-7 rounded-full"
-                  style={{
-                    background: `linear-gradient(135deg, ${secondaryColor}, ${secondaryColor}cc)`,
-                    transform: "rotate(-20deg)",
-                    boxShadow: `inset 0 -2px 4px ${primaryColor}20`,
-                  }}
-                />
-                <div
-                  className="absolute -right-5 -top-1.5 h-6 w-7 rounded-full"
-                  style={{
-                    background: `linear-gradient(225deg, ${secondaryColor}, ${secondaryColor}cc)`,
-                    transform: "rotate(20deg)",
-                    boxShadow: `inset 0 -2px 4px ${primaryColor}20`,
-                  }}
-                />
-                <div
-                  className="relative z-10 mx-auto h-5 w-5 rounded-full"
-                  style={{
-                    background: `radial-gradient(circle at 35% 35%, ${secondaryColor}, ${secondaryColor}aa)`,
-                    boxShadow: `0 2px 6px ${primaryColor}25`,
-                  }}
-                />
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>
