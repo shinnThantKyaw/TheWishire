@@ -746,7 +746,7 @@ export const GiftOpeningScreen = ({
             <motion.div
               className="flex flex-col items-center"
               animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
               {/* Upward chevron pointing at the box */}
               <motion.svg
@@ -756,7 +756,7 @@ export const GiftOpeningScreen = ({
                 fill="none"
                 className="mb-1"
                 animate={{ opacity: [0.3, 0.7, 0.3], y: [0, -2, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
               >
                 <path
                   d="M1 9L8 2L15 9"
