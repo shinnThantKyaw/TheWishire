@@ -240,7 +240,7 @@ export const GiftOpeningScreen = ({
 
   return (
     <div
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 py-12"
+      className="relative h-screen overflow-hidden"
       style={{ backgroundColor }}
     >
       {/* ── Background atmosphere ──────────────────── */}
@@ -286,60 +286,61 @@ export const GiftOpeningScreen = ({
         ))}
       </div>
 
-      <motion.div
-        className="relative z-10 flex h-full w-full max-w-md flex-col items-center px-5 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* ═══ TOP: Pre-open badge (absolute — never shifts the box) ═══ */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: opening ? 0 : 1, y: opening ? -10 : 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="mt-16"
+      {/* ══════════════════════════════════════════════════
+          LAYER 1: Pre-open text (absolute top — no layout shift)
+          ══════════════════════════════════════════════════ */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
+        <motion.div
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: opening ? 0 : 1, y: opening ? -12 : 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+        >
+          {/* Decorative sparkle */}
+          <div className="mb-3">
+            <span
+              className="text-sm"
+              style={{ color: primaryColor, opacity: 0.5 }}
+            >
+              ✦
+            </span>
+          </div>
+          {/* Frosted glass pill */}
+          <div
+            className="mx-auto rounded-full px-7 py-3 backdrop-blur-md"
+            style={{
+              background: `linear-gradient(135deg, rgba(255,255,255,0.75), rgba(255,255,255,0.4))`,
+              boxShadow: `0 4px 24px ${primaryColor}12, 0 1px 4px rgba(0,0,0,0.04)`,
+              border: `1px solid rgba(255,255,255,0.6)`,
+            }}
           >
-            {/* Sparkle connector */}
-            <div className="mb-2 text-center">
-              <span
-                className="text-xs"
-                style={{ color: primaryColor, opacity: 0.6 }}
-              >
-                ✦
-              </span>
-            </div>
-            {/* Frosted glass pill badge */}
-            <div
-              className="rounded-full px-6 py-2.5 backdrop-blur-sm"
+            <p
+              className="text-sm font-semibold tracking-wide"
               style={{
-                background: `linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.4))`,
-                boxShadow: `0 4px 20px ${primaryColor}12, 0 1px 3px rgba(0,0,0,0.04)`,
-                border: `1px solid rgba(255,255,255,0.5)`,
+                background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
-              <p
-                className="text-sm font-medium tracking-wide"
-                style={{
-                  background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                {senderName
-                  ? `${senderName} has left you a gift`
-                  : "You've received a gift"}
-              </p>
-            </div>
-          </motion.div>
-        </div>
+              {senderName
+                ? `${senderName} has left you a gift`
+                : "You've received a gift"}
+            </p>
+          </div>
+        </motion.div>
+      </div>
 
-        {/* ═══ BOTTOM: Box + content (box stays in same position always) ═══ */}
-        <div className="flex-shrink-0 pb-8">
-          {/* ── Gift Box Container ── */}
+      {/* ══════════════════════════════════════════════════
+          LAYER 2: Gift box (absolute center — NEVER moves)
+          ══════════════════════════════════════════════════ */}
+      <div
+        className="absolute inset-x-0 z-10"
+        style={{ top: "42%", transform: "translateY(-50%)" }}
+      >
+        <div className="flex justify-center px-5">
           <div
-            className="relative mx-auto"
+            className="relative"
             style={{
               perspective: 400,
               transformStyle: "preserve-3d",
@@ -362,28 +363,26 @@ export const GiftOpeningScreen = ({
               {!opening && (
                 <motion.div
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                  style={{ width: 232, height: 232, zIndex: 5 }}
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  style={{ width: 236, height: 236, zIndex: 5 }}
+                  initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.1 }}
-                  transition={{ delay: 0.8, duration: 0.5 }}
+                  exit={{ opacity: 0, scale: 1.08 }}
+                  transition={{ delay: 0.8, duration: 0.6 }}
                 >
-                  {/* Rotating dashed circle */}
                   <div
                     className="h-full w-full rounded-full"
                     style={{
-                      border: `2px dashed ${primaryColor}30`,
-                      animation: "spin 12s linear infinite",
+                      border: `2px dashed ${primaryColor}25`,
+                      animation: "spin 14s linear infinite",
                     }}
                   />
-                  {/* Pulsing glow */}
                   <motion.div
                     className="absolute inset-0 rounded-full"
                     style={{
-                      boxShadow: `0 0 20px ${primaryColor}10, inset 0 0 20px ${primaryColor}05`,
+                      boxShadow: `0 0 24px ${primaryColor}10, inset 0 0 24px ${primaryColor}05`,
                     }}
-                    animate={{ scale: [1, 1.04, 1], opacity: [0.5, 0.8, 0.5] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ scale: [1, 1.04, 1], opacity: [0.4, 0.7, 0.4] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   />
                 </motion.div>
               )}
@@ -400,10 +399,10 @@ export const GiftOpeningScreen = ({
               animate={
                 opening
                   ? { opacity: 0, scale: 0.8 }
-                  : { scale: [1, 1.08, 1], opacity: [0.5, 0.8, 0.5] }
+                  : { scale: [1, 1.06, 1], opacity: [0.4, 0.7, 0.4] }
               }
               transition={{
-                duration: opening ? 0.3 : 3,
+                duration: opening ? 0.4 : 3.5,
                 repeat: opening ? 0 : Infinity,
                 ease: "easeInOut",
               }}
@@ -413,10 +412,10 @@ export const GiftOpeningScreen = ({
             {opening &&
               copy.contents.map((item, i) => {
                 const positions = [
-                  { x: -75, y: -200, rotate: -12 },
-                  { x: 75, y: -200, rotate: 12 },
-                  { x: -48, y: -140, rotate: -5 },
-                  { x: 48, y: -140, rotate: 5 },
+                  { x: -75, y: -210, rotate: -12 },
+                  { x: 75, y: -210, rotate: 12 },
+                  { x: -48, y: -150, rotate: -5 },
+                  { x: 48, y: -150, rotate: 5 },
                 ];
                 const pos = positions[i % positions.length];
                 const tints = [
@@ -441,18 +440,18 @@ export const GiftOpeningScreen = ({
                       rotate: pos.rotate,
                     }}
                     transition={{
-                      duration: 0.9,
-                      delay: 0.3 + i * 0.15,
+                      duration: 1.1,
+                      delay: 0.4 + i * 0.18,
                       ease: [0.34, 1.56, 0.64, 1],
                       scale: {
                         times: [0, 0.5, 0.75, 1],
-                        duration: 0.9,
-                        delay: 0.3 + i * 0.15,
+                        duration: 1.1,
+                        delay: 0.4 + i * 0.18,
                       },
                       opacity: {
                         times: [0, 0.2, 1, 1],
-                        duration: 0.9,
-                        delay: 0.3 + i * 0.15,
+                        duration: 1.1,
+                        delay: 0.4 + i * 0.18,
                       },
                     }}
                   >
@@ -474,8 +473,8 @@ export const GiftOpeningScreen = ({
                         initial={{ x: "-100%" }}
                         animate={{ x: "200%" }}
                         transition={{
-                          duration: 0.6,
-                          delay: 0.5 + i * 0.15,
+                          duration: 0.7,
+                          delay: 0.6 + i * 0.18,
                           ease: "easeInOut",
                         }}
                       />
@@ -508,7 +507,7 @@ export const GiftOpeningScreen = ({
                   initial={{ opacity: 0, scaleY: 0, y: 30 }}
                   animate={{ opacity: 1, scaleY: 1, y: -40 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                 />
               )}
             </AnimatePresence>
@@ -530,7 +529,7 @@ export const GiftOpeningScreen = ({
                   : { rotateX: 0, y: 0, opacity: 1 }
               }
               transition={{
-                duration: 0.8,
+                duration: 1.0,
                 ease: [0.34, 1.56, 0.64, 1],
               }}
             >
@@ -688,109 +687,98 @@ export const GiftOpeningScreen = ({
               </div>
             </motion.div>
           </div>
-
-          {/* ── Tap prompt text ── */}
-          <AnimatePresence>
-            {!opening && (
-              <motion.p
-                className="mt-5 text-xs font-medium italic tracking-wider"
-                style={{ color: `${primaryColor}80` }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 1, duration: 0.4 }}
-              >
-                {copy.openPrompt}
-              </motion.p>
-            )}
-          </AnimatePresence>
-
-          {/* ── Post-open content (below the box) ── */}
-          <AnimatePresence>
-            {opening && (
-              <motion.div
-                className="mt-8 flex flex-col items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-              >
-                {/* Decorative divider */}
-                <div className="mb-5 flex items-center gap-2.5">
-                  <div
-                    className="h-px w-8"
-                    style={{
-                      background: `linear-gradient(90deg, transparent, ${primaryColor}40)`,
-                    }}
-                  />
-                  <span className="text-xs" style={{ color: `${primaryColor}50` }}>
-                    ✦
-                  </span>
-                  <div
-                    className="h-px w-8"
-                    style={{
-                      background: `linear-gradient(90deg, ${primaryColor}40, transparent)`,
-                    }}
-                  />
-                </div>
-
-                {/* Main text */}
-                <p
-                  className="text-lg font-bold tracking-wide sm:text-xl"
-                  style={{
-                    fontFamily: "var(--wish-font-heading), Georgia, serif",
-                    background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Here are gifts for you!
-                </p>
-
-                {/* Sender */}
-                {senderName && (
-                  <p
-                    className="mt-2 text-sm italic"
-                    style={{
-                      fontFamily: "var(--wish-font-heading), Georgia, serif",
-                      color: foregroundColor,
-                      opacity: 0.5,
-                    }}
-                  >
-                    with love,{" "}
-                    <span
-                      style={{
-                        color: primaryColor,
-                        fontWeight: 600,
-                        fontStyle: "normal",
-                      }}
-                    >
-                      {senderName}
-                    </span>
-                  </p>
-                )}
-
-                {/* Button */}
-                <motion.button
-                  onClick={onNext}
-                  className="mt-7 rounded-full px-10 py-3.5 text-sm font-semibold tracking-wide text-white"
-                  style={{
-                    background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
-                    boxShadow: `0 8px 28px ${primaryColor}30, 0 2px 8px ${primaryColor}15`,
-                  }}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.5, duration: 0.5 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  See the gifts →
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          LAYER 3: Post-open text + button (absolute bottom — no layout shift)
+          ══════════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {opening && (
+          <motion.div
+            className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center px-6 pb-12"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 0.7, ease: "easeOut" }}
+          >
+            {/* Decorative divider */}
+            <div className="mb-4 flex items-center gap-3">
+              <div
+                className="h-px w-10"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${primaryColor}35)`,
+                }}
+              />
+              <span
+                className="text-xs"
+                style={{ color: `${primaryColor}45` }}
+              >
+                ✦
+              </span>
+              <div
+                className="h-px w-10"
+                style={{
+                  background: `linear-gradient(90deg, ${primaryColor}35, transparent)`,
+                }}
+              />
+            </div>
+
+            {/* Main heading */}
+            <p
+              className="text-xl font-bold tracking-wide sm:text-2xl"
+              style={{
+                fontFamily: "var(--wish-font-heading), Georgia, serif",
+                background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Here are gifts for you!
+            </p>
+
+            {/* Sender attribution */}
+            {senderName && (
+              <p
+                className="mt-2.5 text-sm italic"
+                style={{
+                  fontFamily: "var(--wish-font-heading), Georgia, serif",
+                  color: foregroundColor,
+                  opacity: 0.45,
+                }}
+              >
+                with love,{" "}
+                <span
+                  style={{
+                    color: primaryColor,
+                    fontWeight: 600,
+                    fontStyle: "normal",
+                  }}
+                >
+                  {senderName}
+                </span>
+              </p>
+            )}
+
+            {/* Button */}
+            <motion.button
+              onClick={onNext}
+              className="mt-8 rounded-full px-10 py-3.5 text-sm font-semibold tracking-wide text-white"
+              style={{
+                background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+                boxShadow: `0 8px 28px ${primaryColor}30, 0 2px 8px ${primaryColor}15`,
+              }}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.8, duration: 0.5 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              See the gifts →
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Keyframes for dashed ring rotation */}
       <style>{`
