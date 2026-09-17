@@ -761,26 +761,26 @@ export const GiftOpeningScreen = ({
         </div>
       </div>
 
-      {/* ── Tap instruction (below the box) ── */}
+      {/* ── Tap instruction (directly below the box) ── */}
       <AnimatePresence>
         {!opening && (
           <motion.div
             className="absolute inset-x-0 z-20 flex flex-col items-center"
-            style={{ top: "55%" }}
+            style={{ top: "calc(var(--gift-box-top, 42%) + 100px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ delay: 1.2, duration: 0.5 }}
           >
             <p
-              className="text-xs font-medium italic tracking-widest uppercase"
-              style={{ color: `${primaryColor}70` }}
+              className="text-xs font-medium italic"
+              style={{ color: `${primaryColor}65` }}
             >
               Tap to open
             </p>
             <motion.div
-              className="mt-1.5 h-px w-6 rounded-full"
-              style={{ background: `${primaryColor}30` }}
+              className="mt-1 h-px w-5 rounded-full"
+              style={{ background: `${primaryColor}25` }}
               animate={{ scaleX: [1, 1.4, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
