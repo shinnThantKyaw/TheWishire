@@ -291,7 +291,7 @@ export const GiftOpeningScreen = ({
           ══════════════════════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
         <motion.div
-          className="mt-8 text-center"
+          className="mt-16 text-center sm:mt-8"
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: opening ? 0 : 1, y: opening ? -12 : 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
