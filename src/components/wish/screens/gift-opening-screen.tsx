@@ -495,11 +495,11 @@ export const GiftOpeningScreen = ({
               }}
               animate={
                 opening
-                  ? { x: 110, y: 30, rotateZ: 12, opacity: 0.3 }
+                  ? { x: 120, y: 155, rotateZ: 25, opacity: 1 }
                   : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
               }
               transition={{
-                duration: 1.2,
+                duration: 1.4,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
@@ -691,7 +691,7 @@ export const GiftOpeningScreen = ({
               style={{ zIndex: 3 }}
               animate={
                 opening
-                  ? { opacity: 0, rotate: 25, scale: 0.3 }
+                  ? { rotate: 25, scale: 0.8 }
                   : {}
               }
               transition={{
