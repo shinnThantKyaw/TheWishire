@@ -643,58 +643,58 @@ export const GiftOpeningScreen = ({
                 style={{ background: `rgba(255,255,255,0.15)` }}
               />
 
-              {/* Gift tag — like a real present */}
+              {/* Gift tag — hangs from the ribbon on the front of the box */}
               {!opening && senderName && (
                 <motion.div
-                  className="absolute z-20"
-                  style={{ top: -6, right: -14, transform: "rotate(10deg)" }}
-                  initial={{ opacity: 0, rotate: 25, scale: 0.7 }}
-                  animate={{ opacity: 1, rotate: 10, scale: 1 }}
+                  className="absolute left-1/2 z-20"
+                  style={{ top: 8, marginLeft: 8, rotate: "5deg" }}
+                  initial={{ opacity: 0, y: -10, rotate: 15 }}
+                  animate={{ opacity: 1, y: 0, rotate: 5 }}
                   transition={{
                     delay: 0.5,
-                    duration: 0.6,
+                    duration: 0.7,
                     type: "spring",
-                    stiffness: 120,
-                    damping: 10,
+                    stiffness: 100,
+                    damping: 12,
                   }}
                 >
-                  {/* String going up to the ribbon */}
+                  {/* String connecting to the bow */}
                   <div
-                    className="absolute -left-0.5 -top-3 h-3 w-px"
+                    className="absolute left-1/2 -top-4 h-4 -translate-x-1/2"
                     style={{
-                      background: `linear-gradient(180deg, ${secondaryColor}90, ${secondaryColor}40)`,
-                      transform: "rotate(-8deg)",
+                      width: 1,
+                      background: `linear-gradient(180deg, ${secondaryColor}, ${secondaryColor}60)`,
                     }}
                   />
-                  {/* Tag body — cream paper with folded corner */}
+                  {/* Tag body — cream paper cardstock */}
                   <div
-                    className="relative overflow-hidden rounded-sm px-2.5 py-1.5"
+                    className="relative overflow-hidden rounded-[3px] px-3 py-2"
                     style={{
-                      background: "linear-gradient(155deg, #FFF9EE 0%, #F5E6C8 60%, #EED9B0 100%)",
-                      boxShadow: "1px 2px 5px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9)",
-                      minWidth: 46,
+                      background: "linear-gradient(160deg, #FFFBF0 0%, #F7E8CE 50%, #EDDBB5 100%)",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.18), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
+                      minWidth: 52,
                     }}
                   >
-                    {/* Paper grain texture */}
+                    {/* Subtle paper texture */}
                     <div
-                      className="pointer-events-none absolute inset-0 opacity-[0.03]"
+                      className="pointer-events-none absolute inset-0 opacity-[0.04]"
                       style={{
-                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0z' fill='%23000' fill-opacity='.4'/%3E%3C/svg%3E\")",
+                        backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px)",
                       }}
                     />
-                    {/* Punched hole */}
+                    {/* Punched hole at top center */}
                     <div
-                      className="absolute left-1.5 top-1.5 h-[5px] w-[5px] rounded-full"
+                      className="absolute left-1/2 top-1.5 h-[5px] w-[5px] -translate-x-1/2 rounded-full"
                       style={{
-                        background: `radial-gradient(circle, ${primaryColor}25, ${primaryColor}10)`,
-                        boxShadow: `inset 0 0.5px 1px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,0,0,0.06)`,
+                        background: `radial-gradient(circle, ${primaryColor}20, transparent)`,
+                        boxShadow: `inset 0 0.5px 1.5px rgba(0,0,0,0.2), 0 0 0 0.5px rgba(0,0,0,0.08)`,
                       }}
                     />
-                    {/* "from" label */}
+                    {/* "from" in small elegant caps */}
                     <p
-                      className="mt-0.5 text-center text-[7px] uppercase tracking-[0.08em]"
+                      className="mt-1 text-center text-[7px] uppercase tracking-[0.1em]"
                       style={{
-                        color: "#9B8B6E",
+                        color: "#A09078",
                         fontFamily: "Georgia, 'Times New Roman', serif",
                       }}
                     >
@@ -702,9 +702,9 @@ export const GiftOpeningScreen = ({
                     </p>
                     {/* Sender name */}
                     <p
-                      className="text-center text-[9px] font-bold leading-tight"
+                      className="text-center text-[10px] font-bold leading-tight"
                       style={{
-                        color: "#5D4E37",
+                        color: "#5C4A30",
                         fontFamily: "Georgia, 'Times New Roman', serif",
                       }}
                     >
