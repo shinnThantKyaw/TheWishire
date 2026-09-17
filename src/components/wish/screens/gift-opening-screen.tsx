@@ -737,23 +737,51 @@ export const GiftOpeningScreen = ({
           <motion.div
             className="absolute inset-x-0 z-20 flex flex-col items-center"
             style={{ top: "calc(var(--gift-box-top, 42%) + 100px)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
           >
-            <p
-              className="text-xs font-medium italic"
-              style={{ color: `${primaryColor}65` }}
-            >
-              Tap to open
-            </p>
+            {/* Gentle floating container */}
             <motion.div
-              className="mt-1 h-px w-5 rounded-full"
-              style={{ background: `${primaryColor}25` }}
-              animate={{ scaleX: [1, 1.4, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
+              className="flex flex-col items-center"
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {/* Downward chevron pointing at the box */}
+              <motion.svg
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+                className="mb-1"
+                animate={{ opacity: [0.3, 0.7, 0.3], y: [0, 2, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <path
+                  d="M1 1L8 8L15 1"
+                  stroke={primaryColor}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  opacity="0.6"
+                />
+              </motion.svg>
+              {/* Text */}
+              <p
+                className="text-xs font-medium italic tracking-wide"
+                style={{ color: primaryColor, opacity: 0.7 }}
+              >
+                Tap to open
+              </p>
+              {/* Animated underline */}
+              <motion.div
+                className="mt-1 h-px rounded-full"
+                style={{ background: `linear-gradient(90deg, transparent, ${primaryColor}50, transparent)` }}
+                animate={{ width: [20, 40, 20], opacity: [0.4, 0.8, 0.4] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
