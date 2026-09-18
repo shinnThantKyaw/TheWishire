@@ -9,12 +9,17 @@ interface LetterChapterProps {
   foregroundColor?: string;
 }
 
-/**
- * LetterChapter - Chapter 1 of 5: "The Letter"
+/*
+ * LetterChapter - Chapter 1 of 5
  *
- * A realistic sealed envelope sits centered on screen.
- * Tap to open: wax seal breaks, flap flips open, letter rises out.
- * Fold back: letter slides back inside, flap reseals.
+ * Realistic sealed envelope. Tap to open: seal breaks, flap flips,
+ * letter rises out. Fold back: letter tucks in, flap reseals.
+ *
+ * Geometry (300 x 240 container):
+ *   Envelope body: bottom-0, h=170, top edge at y=70
+ *   V-flap apex: y=100 (in 170-tall SVG) = y=170 in container
+ *   Top flap: top=70, h=100, tip at y=170 (meets V-flap apex)
+ *   Wax seal: centered at the junction (~y=150)
  */
 export const LetterChapter = ({
   letter,
@@ -55,7 +60,7 @@ export const LetterChapter = ({
       {/* Envelope + letter assembly */}
       <div className="relative" style={{ perspective: 900 }}>
         <div className="relative" style={{ width: 300, height: 240 }}>
-          {/* Tap target (closed state only) */}
+          {/* Tap target (closed state) */}
           {!isOpen && (
             <button
               onClick={handleToggle}
@@ -110,7 +115,7 @@ export const LetterChapter = ({
               }}
             />
 
-            {/* Letter content - fades in after letter slides up */}
+            {/* Letter content */}
             <div className="relative px-5 pt-4 pb-3 sm:px-6">
               <motion.div
                 animate={{ opacity: isOpen ? 1 : 0 }}
@@ -137,7 +142,7 @@ export const LetterChapter = ({
                     }}
                   >
                     <span className="text-[12px] sm:text-[13px]">
-                      {line || " "}
+                      {line || " "}
                     </span>
                   </motion.p>
                 ))}
@@ -145,7 +150,7 @@ export const LetterChapter = ({
             </div>
           </motion.div>
 
-          {/* ENVELOPE BODY - back panel (opaque, hides letter when inside) */}
+          {/* ENVELOPE BODY - back panel */}
           <div
             className="absolute inset-x-0 bottom-0 z-[2] overflow-hidden"
             style={{ height: 170, borderRadius: "12px 12px 14px 14px" }}
@@ -191,7 +196,7 @@ export const LetterChapter = ({
             />
           </div>
 
-          {/* FRONT V-FLAP - covers letter when it is inside the envelope */}
+          {/* FRONT V-FLAP - apex at y=100 meets the top flap's tip */}
           <div
             className="absolute inset-x-0 bottom-0 z-[3] pointer-events-none overflow-hidden"
             style={{ height: 170, borderRadius: "0 0 14px 14px" }}
@@ -236,19 +241,22 @@ export const LetterChapter = ({
                   <stop offset="100%" stopColor="white" stopOpacity="0.05" />
                 </linearGradient>
               </defs>
+              {/* Left triangle - apex at y=100 */}
               <polygon
-                points="0,0 150,150 0,170"
+                points="0,0 150,100 0,170"
                 fill={`url(#leftV-${uid})`}
               />
+              {/* Right triangle - apex at y=100 */}
               <polygon
-                points="300,0 150,150 300,170"
+                points="300,0 150,100 300,170"
                 fill={`url(#rightV-${uid})`}
               />
+              {/* Crease shadows along folds */}
               <line
                 x1="2"
                 y1="2"
                 x2="148"
-                y2="148"
+                y2="98"
                 stroke="rgba(0,0,0,0.04)"
                 strokeWidth="1"
               />
@@ -256,10 +264,11 @@ export const LetterChapter = ({
                 x1="298"
                 y1="2"
                 x2="152"
-                y2="148"
+                y2="98"
                 stroke="rgba(0,0,0,0.03)"
                 strokeWidth="1"
               />
+              {/* Top edge highlight */}
               <line
                 x1="4"
                 y1="0.5"
@@ -271,21 +280,26 @@ export const LetterChapter = ({
             </svg>
           </div>
 
-          {/* ENVELOPE FLAP (top triangle) */}
+          {/* TOP FLAP - sits at envelope body top (y=70), tip meets V-flap at y=170 */}
           <motion.div
-            className="absolute inset-x-0 top-0 z-[5] origin-top"
+            className="absolute inset-x-0 z-[5] origin-top"
+            style={{
+              top: 70,
+              height: 100,
+              transformStyle: "preserve-3d",
+            }}
             animate={
               isOpen
                 ? { rotateX: 180, opacity: 0 }
                 : { rotateX: 0, opacity: 1 }
             }
             transition={{ duration: 0.6, ease: [0.4, 0, 0.15, 1] }}
-            style={{ transformStyle: "preserve-3d" }}
           >
             <svg
-              viewBox="0 0 300 90"
-              className="w-full"
+              viewBox="0 0 300 100"
+              className="w-full h-full"
               style={{ filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.07))" }}
+              preserveAspectRatio="none"
             >
               <defs>
                 <linearGradient
@@ -302,43 +316,47 @@ export const LetterChapter = ({
                   <stop offset="100%" stopColor="#E3C5B0" />
                 </linearGradient>
               </defs>
+              {/* Triangle: top-left, tip at center-bottom, top-right */}
               <polygon
-                points="0,0 150,86 300,0"
+                points="0,0 150,96 300,0"
                 fill={`url(#flap-${uid})`}
               />
+              {/* Left fold highlight */}
               <line
                 x1="6"
                 y1="2"
                 x2="148"
-                y2="83"
+                y2="93"
                 stroke="white"
                 strokeWidth="0.7"
                 opacity="0.40"
               />
+              {/* Right fold highlight */}
               <line
                 x1="294"
                 y1="2"
                 x2="152"
-                y2="83"
+                y2="93"
                 stroke="white"
                 strokeWidth="0.7"
                 opacity="0.30"
               />
+              {/* Bottom tip shadow */}
               <line
-                x1="10"
-                y1="84"
-                x2="290"
-                y2="84"
+                x1="120"
+                y1="95"
+                x2="180"
+                y2="95"
                 stroke="rgba(0,0,0,0.06)"
                 strokeWidth="1"
               />
             </svg>
           </motion.div>
 
-          {/* WAX SEAL - premium 3D with gold rim */}
+          {/* WAX SEAL - sits at the junction where flap meets V-flap */}
           <motion.div
             className="absolute left-1/2 z-[7] -translate-x-1/2"
-            style={{ top: 16 }}
+            style={{ top: 136 }}
             animate={
               isOpen
                 ? { scale: 1.2, opacity: 0, rotate: 15, y: -10 }
@@ -346,12 +364,14 @@ export const LetterChapter = ({
             }
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
+            {/* Outer glow */}
             <div
               className="absolute -inset-2 rounded-full"
               style={{
                 background: `radial-gradient(circle, ${primaryColor}15, transparent 70%)`,
               }}
             />
+            {/* Gold rim */}
             <div
               className="relative flex h-14 w-14 items-center justify-center rounded-full sm:h-16 sm:w-16"
               style={{
