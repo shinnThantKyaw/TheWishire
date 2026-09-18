@@ -10,11 +10,11 @@ interface LetterChapterProps {
 }
 
 /**
- * LetterChapter — Chapter 1 of 5: "The Letter"
+ * LetterChapter - Chapter 1 of 5: "The Letter"
  *
- * A premium envelope with the letter peeking above the top edge.
- * Tap to open → flap flips, letter slides up to reveal full text.
- * Fold back → letter tucks back in, flap reseals.
+ * A realistic sealed envelope sits centered on screen.
+ * Tap to open: wax seal breaks, flap flips open, letter rises out.
+ * Fold back: letter slides back inside, flap reseals.
  */
 export const LetterChapter = ({
   letter,
@@ -40,13 +40,11 @@ export const LetterChapter = ({
   }
 
   const letterLines = letter.split("\n").filter((line) => line.trim());
-
-  // Unique ID for SVG gradients to avoid conflicts
   const uid = useMemo(() => Math.random().toString(36).slice(2, 8), []);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
-      {/* ── Soft background glow ── */}
+      {/* Soft background glow */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -54,13 +52,10 @@ export const LetterChapter = ({
         }}
       />
 
-      {/* ── Envelope + letter assembly ───────────── */}
+      {/* Envelope + letter assembly */}
       <div className="relative" style={{ perspective: 900 }}>
-        <div
-          className="relative"
-          style={{ width: 300, height: 240 }}
-        >
-          {/* Tap target */}
+        <div className="relative" style={{ width: 300, height: 240 }}>
+          {/* Tap target (closed state only) */}
           {!isOpen && (
             <button
               onClick={handleToggle}
@@ -70,18 +65,17 @@ export const LetterChapter = ({
             />
           )}
 
-          {/* ── Drop shadow on surface ── */}
+          {/* Drop shadow on surface */}
           <div
             className="absolute -bottom-5 left-8 right-8 h-6 rounded-full"
             style={{
-              background: `radial-gradient(ellipse, rgba(0,0,0,0.10), transparent 70%)`,
+              background:
+                "radial-gradient(ellipse, rgba(0,0,0,0.10), transparent 70%)",
               filter: "blur(10px)",
             }}
           />
 
-          {/* ═══════════════════════════════════════
-              LETTER PAPER — peeks above envelope
-              ═══════════════════════════════════════ */}
+          {/* LETTER PAPER - hidden inside, slides up on open */}
           <motion.div
             className="absolute left-[14px] right-[14px] z-[2] overflow-hidden"
             style={{
@@ -97,16 +91,15 @@ export const LetterChapter = ({
               transformOrigin: "bottom center",
             }}
             animate={{
-              // Closed: letter peeks above the envelope (top sticks out ~40px)
-              // Open: slides up higher so full letter is visible
-              height: isOpen ? 230 : 95,
-              top: isOpen ? -205 : -30,
+              height: isOpen ? 220 : 130,
+              top: isOpen ? -195 : 85,
             }}
             transition={{
               type: "spring",
-              stiffness: 95,
-              damping: 16,
-              mass: 0.9,
+              stiffness: 80,
+              damping: 15,
+              mass: 1,
+              delay: isOpen ? 0.35 : 0,
             }}
           >
             {/* Paper grain texture */}
@@ -117,164 +110,128 @@ export const LetterChapter = ({
               }}
             />
 
-            {/* Fold crease (visible when tucked inside) */}
-            <AnimatePresence>
-              {!isOpen && (
-                <motion.div
-                  className="absolute inset-x-0 z-10"
-                  style={{ top: "75%" }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div
-                    className="h-px w-full"
-                    style={{
-                      background: `linear-gradient(90deg, transparent 5%, rgba(0,0,0,0.04) 30%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.04) 70%, transparent 95%)`,
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* ── Letter content ── */}
+            {/* Letter content - fades in after letter slides up */}
             <div className="relative px-5 pt-4 pb-3 sm:px-6">
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="full"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
+              <motion.div
+                animate={{ opacity: isOpen ? 1 : 0 }}
+                transition={{ duration: 0.4, delay: isOpen ? 0.5 : 0 }}
+              >
+                {letterLines.map((line, i) => (
+                  <motion.p
+                    key={i}
+                    className="leading-[1.7]"
+                    style={{
+                      color: "#3E2723",
+                      fontFamily:
+                        "'Playfair Display', Georgia, 'Times New Roman', serif",
+                      textAlign: "left",
+                    }}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{
+                      opacity: isOpen ? 1 : 0,
+                      y: isOpen ? 0 : 6,
+                    }}
+                    transition={{
+                      delay: isOpen ? 0.55 + i * 0.04 : 0,
+                      duration: 0.4,
+                    }}
                   >
-                    {letterLines.map((line, i) => (
-                      <motion.p
-                        key={i}
-                        className="leading-[1.7]"
-                        style={{
-                          color: "#3E2723",
-                          fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif",
-                          textAlign: "left",
-                        }}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: 0.3 + i * 0.04,
-                          duration: 0.4,
-                        }}
-                      >
-                        <span className="text-[12px] sm:text-[13px]">
-                          {line || " "}
-                        </span>
-                      </motion.p>
-                    ))}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="peek"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {/* The "Dear ___" greeting is always visible peeking out */}
-                    {letterLines.length > 0 && (
-                      <p
-                        className="text-[13px] font-semibold sm:text-sm"
-                        style={{
-                          color: "#3E2723",
-                          fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif",
-                        }}
-                      >
-                        {letterLines[0]}
-                      </p>
-                    )}
-                    {/* Second line peek */}
-                    {letterLines.length > 1 && (
-                      <p
-                        className="mt-0.5 text-[11px] sm:text-xs"
-                        style={{
-                          color: "#5D4037",
-                          fontFamily: "'Playfair Display', Georgia, 'Times New Roman', serif",
-                          opacity: 0.7,
-                        }}
-                      >
-                        {letterLines[1].length > 40
-                          ? letterLines[1].slice(0, 40) + "…"
-                          : letterLines[1]}
-                      </p>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <span className="text-[12px] sm:text-[13px]">
+                      {line || " "}
+                    </span>
+                  </motion.p>
+                ))}
+              </motion.div>
             </div>
           </motion.div>
 
-          {/* ═══════════════════════════════════════
-              ENVELOPE BODY
-              ═══════════════════════════════════════ */}
+          {/* ENVELOPE BODY - back panel (opaque, hides letter when inside) */}
           <div
-            className="absolute inset-x-0 bottom-0 z-[3] overflow-hidden"
-            style={{
-              height: 170,
-              borderRadius: "12px 12px 14px 14px",
-            }}
+            className="absolute inset-x-0 bottom-0 z-[2] overflow-hidden"
+            style={{ height: 170, borderRadius: "12px 12px 14px 14px" }}
           >
-            {/* Multi-layer envelope gradient (skeuomorphic 8+ stops) */}
             <div
               className="absolute inset-0"
               style={{
-                background: `
-                  linear-gradient(180deg,
-                    #F9EDE5 0%,
-                    #F5E6DC 12%,
-                    #F0DDD0 25%,
-                    #EDD5C6 40%,
-                    #E8CCBC 55%,
-                    #E3C4B2 70%,
-                    #DFBCA8 85%,
-                    #D8B09C 100%
-                  )
-                `,
+                background: `linear-gradient(180deg,
+                  #F9EDE5 0%, #F5E6DC 12%, #F0DDD0 25%, #EDD5C6 40%,
+                  #E8CCBC 55%, #E3C4B2 70%, #DFBCA8 85%, #D8B09C 100%)`,
               }}
             />
-
-            {/* Paper grain overlay */}
             <div
               className="pointer-events-none absolute inset-0 opacity-[0.04]"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='1'/%3E%3C/svg%3E")`,
               }}
             />
-
-            {/* Inner subtle border */}
             <div
               className="absolute inset-[4px] rounded-[10px]"
-              style={{
-                border: "1px solid rgba(255,255,255,0.35)",
-              }}
+              style={{ border: "1px solid rgba(255,255,255,0.35)" }}
             />
-
-            {/* Top inner shadow (depth illusion) */}
             <div
               className="absolute inset-x-0 top-0 h-8"
               style={{
-                background: `linear-gradient(180deg, rgba(0,0,0,0.04), transparent)`,
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.04), transparent)",
               }}
             />
+            <div
+              className="absolute inset-x-0 bottom-0 h-px"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 5%, rgba(0,0,0,0.08) 50%, transparent 95%)",
+              }}
+            />
+            <div
+              className="absolute bottom-0 left-0 top-0 w-px"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1))",
+              }}
+            />
+          </div>
 
-            {/* ── Front V-flap overlay (triangles) ── */}
+          {/* FRONT V-FLAP - covers letter when it is inside the envelope */}
+          <div
+            className="absolute inset-x-0 bottom-0 z-[3] pointer-events-none overflow-hidden"
+            style={{ height: 170, borderRadius: "0 0 14px 14px" }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, #E8CCBC 0%, #DFBCA8 50%, #D8B09C 100%)",
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p2)' opacity='1'/%3E%3C/svg%3E")`,
+              }}
+            />
             <svg
               className="absolute inset-0 h-full w-full"
               viewBox="0 0 300 170"
               fill="none"
             >
               <defs>
-                <linearGradient id={`leftV-${uid}`} x1="0" y1="0" x2="1" y2="1">
+                <linearGradient
+                  id={`leftV-${uid}`}
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="1"
+                >
                   <stop offset="0%" stopColor="white" stopOpacity="0.40" />
                   <stop offset="100%" stopColor="white" stopOpacity="0.08" />
                 </linearGradient>
-                <linearGradient id={`rightV-${uid}`} x1="1" y1="0" x2="0" y2="1">
+                <linearGradient
+                  id={`rightV-${uid}`}
+                  x1="1"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
                   <stop offset="0%" stopColor="white" stopOpacity="0.30" />
                   <stop offset="100%" stopColor="white" stopOpacity="0.05" />
                 </linearGradient>
@@ -287,32 +244,34 @@ export const LetterChapter = ({
                 points="300,0 150,150 300,170"
                 fill={`url(#rightV-${uid})`}
               />
-              {/* Crease shadows */}
-              <line x1="2" y1="2" x2="148" y2="148" stroke="rgba(0,0,0,0.04)" strokeWidth="1" />
-              <line x1="298" y1="2" x2="152" y2="148" stroke="rgba(0,0,0,0.03)" strokeWidth="1" />
-              {/* Top edge highlight */}
-              <line x1="4" y1="0.5" x2="296" y2="0.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+              <line
+                x1="2"
+                y1="2"
+                x2="148"
+                y2="148"
+                stroke="rgba(0,0,0,0.04)"
+                strokeWidth="1"
+              />
+              <line
+                x1="298"
+                y1="2"
+                x2="152"
+                y2="148"
+                stroke="rgba(0,0,0,0.03)"
+                strokeWidth="1"
+              />
+              <line
+                x1="4"
+                y1="0.5"
+                x2="296"
+                y2="0.5"
+                stroke="rgba(255,255,255,0.5)"
+                strokeWidth="1"
+              />
             </svg>
-
-            {/* Bottom edge shadow */}
-            <div
-              className="absolute inset-x-0 bottom-0 h-px"
-              style={{
-                background: "linear-gradient(90deg, transparent 5%, rgba(0,0,0,0.08) 50%, transparent 95%)",
-              }}
-            />
-            {/* Left edge highlight */}
-            <div
-              className="absolute bottom-0 left-0 top-0 w-px"
-              style={{
-                background: "linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1))",
-              }}
-            />
           </div>
 
-          {/* ═══════════════════════════════════════
-              ENVELOPE FLAP (top triangle)
-              ═══════════════════════════════════════ */}
+          {/* ENVELOPE FLAP (top triangle) */}
           <motion.div
             className="absolute inset-x-0 top-0 z-[5] origin-top"
             animate={
@@ -320,21 +279,22 @@ export const LetterChapter = ({
                 ? { rotateX: 180, opacity: 0 }
                 : { rotateX: 0, opacity: 1 }
             }
-            transition={{
-              duration: 0.6,
-              ease: [0.4, 0, 0.15, 1],
-            }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.15, 1] }}
             style={{ transformStyle: "preserve-3d" }}
           >
             <svg
               viewBox="0 0 300 90"
               className="w-full"
-              style={{
-                filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.07))",
-              }}
+              style={{ filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.07))" }}
             >
               <defs>
-                <linearGradient id={`flap-${uid}`} x1="0" y1="0" x2="0" y2="1">
+                <linearGradient
+                  id={`flap-${uid}`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
                   <stop offset="0%" stopColor="#F6E8DE" />
                   <stop offset="25%" stopColor="#F2E0D3" />
                   <stop offset="50%" stopColor="#EDD7C8" />
@@ -346,27 +306,36 @@ export const LetterChapter = ({
                 points="0,0 150,86 300,0"
                 fill={`url(#flap-${uid})`}
               />
-              {/* Left fold highlight */}
               <line
-                x1="6" y1="2" x2="148" y2="83"
-                stroke="white" strokeWidth="0.7" opacity="0.40"
+                x1="6"
+                y1="2"
+                x2="148"
+                y2="83"
+                stroke="white"
+                strokeWidth="0.7"
+                opacity="0.40"
               />
-              {/* Right fold highlight */}
               <line
-                x1="294" y1="2" x2="152" y2="83"
-                stroke="white" strokeWidth="0.7" opacity="0.30"
+                x1="294"
+                y1="2"
+                x2="152"
+                y2="83"
+                stroke="white"
+                strokeWidth="0.7"
+                opacity="0.30"
               />
-              {/* Bottom edge shadow */}
               <line
-                x1="10" y1="84" x2="290" y2="84"
-                stroke="rgba(0,0,0,0.06)" strokeWidth="1"
+                x1="10"
+                y1="84"
+                x2="290"
+                y2="84"
+                stroke="rgba(0,0,0,0.06)"
+                strokeWidth="1"
               />
             </svg>
           </motion.div>
 
-          {/* ═══════════════════════════════════════
-              WAX SEAL — premium 3D with gold rim
-              ═══════════════════════════════════════ */}
+          {/* WAX SEAL - premium 3D with gold rim */}
           <motion.div
             className="absolute left-1/2 z-[7] -translate-x-1/2"
             style={{ top: 16 }}
@@ -377,18 +346,17 @@ export const LetterChapter = ({
             }
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            {/* Outer glow */}
             <div
               className="absolute -inset-2 rounded-full"
               style={{
                 background: `radial-gradient(circle, ${primaryColor}15, transparent 70%)`,
               }}
             />
-            {/* Gold rim */}
             <div
               className="relative flex h-14 w-14 items-center justify-center rounded-full sm:h-16 sm:w-16"
               style={{
-                background: `linear-gradient(145deg, #D4A574, #C09060, #B8864A, #D4A574)`,
+                background:
+                  "linear-gradient(145deg, #D4A574, #C09060, #B8864A, #D4A574)",
                 boxShadow: `
                   0 1px 0 #E8C89C,
                   0 2px 0 #C09060,
@@ -399,7 +367,6 @@ export const LetterChapter = ({
                 padding: 2,
               }}
             >
-              {/* Inner seal face */}
               <div
                 className="flex h-full w-full items-center justify-center rounded-full"
                 style={{
@@ -411,13 +378,14 @@ export const LetterChapter = ({
                   `,
                 }}
               >
-                {/* Heart emboss */}
                 <svg
                   width="20"
                   height="18"
                   viewBox="0 0 24 22"
                   fill="none"
-                  style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.15))" }}
+                  style={{
+                    filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.15))",
+                  }}
                 >
                   <path
                     d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -429,11 +397,9 @@ export const LetterChapter = ({
             </div>
           </motion.div>
 
-          {/* ═══════════════════════════════════════
-              ENVELOPE multi-layer shadow
-              ═══════════════════════════════════════ */}
+          {/* ENVELOPE multi-layer shadow */}
           <div
-            className="absolute inset-x-0 bottom-0 z-[4] pointer-events-none"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
             style={{
               height: 170,
               borderRadius: "12px 12px 14px 14px",
@@ -447,7 +413,7 @@ export const LetterChapter = ({
         </div>
       </div>
 
-      {/* ── Action button ── */}
+      {/* Action button */}
       <div className="relative z-10 mt-6 flex justify-center">
         <AnimatePresence mode="wait">
           {!isOpen ? (
@@ -464,7 +430,10 @@ export const LetterChapter = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ delay: 0.4, duration: 0.4 }}
-              whileHover={{ scale: 1.05, boxShadow: `0 6px 28px ${primaryColor}40` }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: `0 6px 28px ${primaryColor}40`,
+              }}
               whileTap={{ scale: 0.95 }}
             >
               <svg
@@ -490,7 +459,7 @@ export const LetterChapter = ({
               style={{
                 borderColor: `${primaryColor}25`,
                 color: primaryColor,
-                background: `rgba(255,255,255,0.65)`,
+                background: "rgba(255,255,255,0.65)",
               }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
