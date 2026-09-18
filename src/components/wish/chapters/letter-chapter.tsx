@@ -220,51 +220,32 @@ export const LetterChapter = ({
               fill="none"
             >
               <defs>
+                {/* Single shared gradient for all 3 body triangles (left, right, bottom) */}
                 <linearGradient
-                  id={`leftV-${uid}`}
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="white" stopOpacity="0.40" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0.08" />
-                </linearGradient>
-                <linearGradient
-                  id={`rightV-${uid}`}
-                  x1="1"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="white" stopOpacity="0.30" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0.05" />
-                </linearGradient>
-                <linearGradient
-                  id={`bottomV-${uid}`}
+                  id={`bodyV-${uid}`}
                   x1="0.5"
-                  y1="1"
+                  y1="0"
                   x2="0.5"
-                  y2="0"
+                  y2="1"
                 >
-                  <stop offset="0%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0.06" />
+                  <stop offset="0%" stopColor="#F5E8DD" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#ECDCCF" stopOpacity="0.35" />
                 </linearGradient>
               </defs>
-              {/* Bottom center triangle - matches the side triangles */}
+              {/* Bottom center triangle */}
               <polygon
                 points="0,170 150,100 300,170"
-                fill={`url(#bottomV-${uid})`}
+                fill={`url(#bodyV-${uid})`}
               />
-              {/* Left triangle - apex at y=100 */}
+              {/* Left triangle */}
               <polygon
                 points="0,0 150,100 0,170"
-                fill={`url(#leftV-${uid})`}
+                fill={`url(#bodyV-${uid})`}
               />
-              {/* Right triangle - apex at y=100 */}
+              {/* Right triangle */}
               <polygon
                 points="300,0 150,100 300,170"
-                fill={`url(#rightV-${uid})`}
+                fill={`url(#bodyV-${uid})`}
               />
               {/* Crease shadows along folds */}
               <line
@@ -317,6 +298,7 @@ export const LetterChapter = ({
               preserveAspectRatio="none"
             >
               <defs>
+                {/* Top flap: distinctly different from the body triangles */}
                 <linearGradient
                   id={`flap-${uid}`}
                   x1="0"
@@ -324,11 +306,10 @@ export const LetterChapter = ({
                   x2="0"
                   y2="1"
                 >
-                  <stop offset="0%" stopColor="#F6E8DE" />
-                  <stop offset="25%" stopColor="#F2E0D3" />
-                  <stop offset="50%" stopColor="#EDD7C8" />
-                  <stop offset="75%" stopColor="#E8CEBC" />
-                  <stop offset="100%" stopColor="#E3C5B0" />
+                  <stop offset="0%" stopColor="#E8C4B0" />
+                  <stop offset="30%" stopColor="#DEB5A0" />
+                  <stop offset="60%" stopColor="#D4A690" />
+                  <stop offset="100%" stopColor="#C89780" />
                 </linearGradient>
               </defs>
               {/* Triangle: top-left, tip at center-bottom, top-right */}
