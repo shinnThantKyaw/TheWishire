@@ -497,7 +497,7 @@ export const GiftOpeningScreen = ({
               }}
               animate={
                 opening
-                  ? { x: 200, y: 20, rotateZ: 35, opacity: 1 }
+                  ? { x: 178, y: -44, rotateZ: 67, opacity: 1 }
                   : { x: 0, y: 0, rotateZ: 0, opacity: 1 }
               }
               transition={{
@@ -580,6 +580,7 @@ export const GiftOpeningScreen = ({
               style={{
                 width: 200,
                 height: 144,
+                top:35,
                 background: `linear-gradient(180deg, ${primaryColor}, ${primaryColor}cc, ${primaryColor}bb)`,
                 boxShadow: `0 16px 40px ${primaryColor}30, 0 4px 12px ${primaryColor}15, inset 0 1px 0 rgba(255,255,255,0.2)`,
               }}
@@ -794,8 +795,8 @@ export const GiftOpeningScreen = ({
       <AnimatePresence>
         {opening && (
           <motion.div
-            className="absolute inset-x-0 z-20 flex flex-col items-center px-6"
-            style={{ bottom: "var(--gift-post-bottom, 48px)" }}
+            className="absolute inset-x-0 z-20 flex flex-col items-center px-6 "
+            style={{ bottom: "var(--gift-post-bottom, 100px)" }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.7, ease: "easeOut" }}
@@ -882,14 +883,19 @@ export const GiftOpeningScreen = ({
       {/* Keyframes for dashed ring rotation */}
       <style>{`
         :root {
-          --gift-post-bottom: 48px;
+          --gift-post-bottom: 60px;
         }
-        @media (max-height: 700px) {
-          :root { --gift-post-bottom: 20px; }
-        }
-        @media (max-height: 600px) {
-          :root { --gift-post-bottom: 10px; }
-        }
+         @media (max-width: 768px) {
+    :root {
+      --gift-post-bottom: 60px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    :root {
+      --gift-post-bottom: 100px;
+    }
+  }
       `}</style>
     </div>
   );
