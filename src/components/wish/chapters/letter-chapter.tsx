@@ -310,8 +310,8 @@ export const LetterChapter = ({
                 <ellipse cx="16" cy="40" rx="3.5" ry="1.8" fill="#90B890" opacity="0.25" transform="rotate(20 16 40)" />
               </g>
 
-              {/* Floral decoration - bottom right (mirrored) */}
-              <g opacity="0.55" transform="translate(255, 120) scale(-1,1) translate(-65,0)">
+              {/* Floral decoration - top right (mirrored from bottom-left) */}
+              <g opacity="0.45" transform="translate(240, 5) scale(-0.7,0.7) translate(-65,0)">
                 <path
                   d="M20,50 Q25,30 30,10"
                   stroke="#9B7DB8"
@@ -361,7 +361,7 @@ export const LetterChapter = ({
             animate={{ rotateX: isOpen ? 180 : 0 }}
             transition={{ duration: 0.72, ease: [0.4, 0, 0.15, 1] }}
           >
-            {/* CLOSED SIDE - blush pink with gold trim */}
+            {/* CLOSED SIDE - blush pink with gold trim, triangle points DOWN */}
             <div className="absolute inset-0" style={{ backfaceVisibility: "hidden" }}>
               <svg viewBox="0 0 320 110" className="h-full w-full" preserveAspectRatio="none">
                 <defs>
@@ -370,13 +370,19 @@ export const LetterChapter = ({
                     <stop offset="100%" stopColor="#edcec3" />
                   </linearGradient>
                 </defs>
-                <polygon points="0,106 160,0 320,106" fill={`url(#topFlapClosed-${uid})`} />
-                <line x1="2" y1="105" x2="159" y2="1" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
-                <line x1="318" y1="105" x2="161" y2="1" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                {/* Triangle: top-left, tip at bottom-center, top-right */}
+                <polygon points="0,0 160,106 320,0" fill={`url(#topFlapClosed-${uid})`} />
+                {/* Gold trim: left edge (top-left to tip) */}
+                <line x1="2" y1="1" x2="159" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                {/* Gold trim: right edge (top-right to tip) */}
+                <line x1="318" y1="1" x2="161" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
               </svg>
             </div>
 
-            {/* INSIDE - purple triangle, only visible after opening */}
+            {/* INSIDE - purple triangle, only visible after opening.
+                Same downward-pointing shape as the closed face.
+                After parent rotateX(180), it flips to point UP on screen
+                with gold trim now at the bottom edges. */}
             <motion.div
               className="absolute inset-0"
               style={{ transform: "rotateX(180deg)", backfaceVisibility: "hidden" }}
@@ -391,8 +397,10 @@ export const LetterChapter = ({
                     <stop offset="100%" stopColor="#7a2045" />
                   </linearGradient>
                 </defs>
-                <polygon points="0,106 160,0 320,106" fill={`url(#insideFlap-${uid})`} />
-                <polygon points="4,103 160,4 316,103" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+                {/* Same downward-pointing triangle */}
+                <polygon points="0,0 160,106 320,0" fill={`url(#insideFlap-${uid})`} />
+                {/* Inner highlight */}
+                <polygon points="4,3 160,102 316,3" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
               </svg>
             </motion.div>
           </motion.div>
