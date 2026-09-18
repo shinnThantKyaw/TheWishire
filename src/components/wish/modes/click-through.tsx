@@ -106,7 +106,6 @@ export const ClickThrough = ({
             {chapterIndex === 0 && (
               <LetterChapter
                 letter={letterStage?.content.letter}
-                photos={letterStage?.content.photos ?? []}
                 primaryColor={primaryColor}
               />
             )}

@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "motion/react";
 
 interface LetterChapterProps {
   letter?: string;
-  photos: { id: string; url: string; type: "photo" }[];
   primaryColor?: string;
   foregroundColor?: string;
 }
@@ -21,7 +20,6 @@ interface LetterChapterProps {
  */
 export const LetterChapter = ({
   letter,
-  photos,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
 }: LetterChapterProps) => {
@@ -439,31 +437,6 @@ export const LetterChapter = ({
         </div>
       </div>
 
-      {/* ── Photos below letter ── */}
-      {photos.length > 0 && (
-        <motion.div
-          className="mt-8 grid w-full max-w-sm grid-cols-2 gap-2 px-4"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          {photos.slice(0, 4).map((photo) => (
-            <div
-              key={photo.id}
-              className="aspect-square overflow-hidden rounded-xl"
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.url}
-                alt="Memory"
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </motion.div>
-      )}
     </div>
   );
 };
