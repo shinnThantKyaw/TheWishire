@@ -240,7 +240,22 @@ export const LetterChapter = ({
                   <stop offset="0%" stopColor="white" stopOpacity="0.30" />
                   <stop offset="100%" stopColor="white" stopOpacity="0.05" />
                 </linearGradient>
+                <linearGradient
+                  id={`bottomV-${uid}`}
+                  x1="0.5"
+                  y1="1"
+                  x2="0.5"
+                  y2="0"
+                >
+                  <stop offset="0%" stopColor="white" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="white" stopOpacity="0.06" />
+                </linearGradient>
               </defs>
+              {/* Bottom center triangle - matches the side triangles */}
+              <polygon
+                points="0,170 150,100 300,170"
+                fill={`url(#bottomV-${uid})`}
+              />
               {/* Left triangle - apex at y=100 */}
               <polygon
                 points="0,0 150,100 0,170"
