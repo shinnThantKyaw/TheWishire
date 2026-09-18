@@ -370,9 +370,9 @@ export const LetterChapter = ({
                     <stop offset="100%" stopColor="#edcec3" />
                   </linearGradient>
                 </defs>
-                <polygon points="0,0 160,106 320,0" fill={`url(#topFlapClosed-${uid})`} />
-                <line x1="2" y1="1" x2="159" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
-                <line x1="318" y1="1" x2="161" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                <polygon points="0,106 160,0 320,106" fill={`url(#topFlapClosed-${uid})`} />
+                <line x1="2" y1="105" x2="159" y2="1" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                <line x1="318" y1="105" x2="161" y2="1" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
               </svg>
             </div>
 
@@ -391,8 +391,8 @@ export const LetterChapter = ({
                     <stop offset="100%" stopColor="#7a2045" />
                   </linearGradient>
                 </defs>
-                <polygon points="0,0 160,106 320,0" fill={`url(#insideFlap-${uid})`} />
-                <polygon points="4,3 160,102 316,3" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+                <polygon points="0,106 160,0 320,106" fill={`url(#insideFlap-${uid})`} />
+                <polygon points="4,103 160,4 316,103" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
               </svg>
             </motion.div>
           </motion.div>
