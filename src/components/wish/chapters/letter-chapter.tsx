@@ -16,13 +16,25 @@ export const LetterChapter = ({
                               }: LetterChapterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+    const [paperVisible, setPaperVisible] = useState(false);
 
-  const handleToggle = useCallback(() => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIsOpen((prev) => !prev);
-    setTimeout(() => setIsAnimating(false), 900);
-  }, [isAnimating]);
+
+    const handleToggle = useCallback(() => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+
+        if (isOpen) {
+            // Closing: paper stays visible for ~750ms while it slides back in
+            setIsOpen(false);
+            setTimeout(() => setPaperVisible(false), 800);
+            setTimeout(() => setIsAnimating(false), 1400); // flap + paper total
+        } else {
+            // Opening: paper appears immediately so its rise animation plays
+            setIsOpen(true);
+            setPaperVisible(true);
+            setTimeout(() => setIsAnimating(false), 1400);
+        }
+    }, [isAnimating, isOpen]);
 
   if (!letter) {
     return (
@@ -82,6 +94,7 @@ export const LetterChapter = ({
               {/* LETTER PAPER - dynamic height, scrollable when long, anchored to envelope top */}
               <LetterPaper
                   isOpen={isOpen}
+                  paperVisible={paperVisible}
                   letterLines={letterLines}
                   primaryColor={primaryColor}
                   uid={uid}
@@ -90,10 +103,12 @@ export const LetterChapter = ({
             {/* ENVELOPE BODY - back panel (blush pink) */}
             <div
                 className="absolute inset-x-0 bottom-0 z-[3] overflow-hidden"
-                style={{ height: 180, borderRadius: "10px 10px 14px 14px" , boxShadow: isOpen
-                        ? "0 -10px 24px rgba(107,26,62,0.15), inset 0 1px 0 rgba(255,255,255,0.3)"
+                style={{ height: 180, borderRadius: "10px 10px 14px 14px" ,
+                    boxShadow: isOpen
+                        ? "0 -14px 30px rgba(107,26,62,0.18), inset 0 1px 0 rgba(255,255,255,0.3)"
                         : "inset 0 1px 0 rgba(255,255,255,0.3)",
-                    transition: "box-shadow 0.4s ease 0.4s",}}
+                    transition: "box-shadow 0.6s ease 0.45s",
+                    }}
             >
               <div
                   className="absolute inset-0"
@@ -295,7 +310,12 @@ export const LetterChapter = ({
                       transformStyle: "preserve-3d",
                   }}
                   animate={{ rotateX: isOpen ? 180 : 0 }}
-                  transition={{ duration: 0.72, ease: [0.4, 0, 0.15, 1] }}
+                  transition={{
+                      duration: 0.72,
+                      ease: [0.4, 0, 0.15, 1],
+                      delay: isOpen ? 0 : 0.75,   // ← wait for letter to start descending
+                  }}
+
               >
                   {/* FRONT FACE - blush pink, visible when CLOSED. Apex points DOWN. */}
                   <div
@@ -469,12 +489,13 @@ export const LetterChapter = ({
 {/* LetterPaper Component*/}
 interface LetterPaperProps {
     isOpen: boolean;
+    paperVisible: boolean;
     letterLines: string[];
     primaryColor: string;
     uid: string;
 }
 
-const LetterPaper = ({ isOpen, letterLines, primaryColor, uid }: LetterPaperProps) => {
+const LetterPaper = ({ isOpen,paperVisible, letterLines, primaryColor, uid }: LetterPaperProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -505,36 +526,59 @@ const LetterPaper = ({ isOpen, letterLines, primaryColor, uid }: LetterPaperProp
 
     return (
         <motion.div
-            className={`absolute left-[22px] right-[22px] ${isOpen ? "z-[11]" : "z-[6]"}`}
+            className={`absolute left-[22px] right-[22px] ${paperVisible ? "z-[11]" : "z-[6]"}`}
             style={{
                 bottom: OPEN_BOTTOM,
                 height: visibleHeight,
                 borderRadius: "7px",
                 background: `linear-gradient(180deg, #fffdfa 0%, #fff8f2 50%, #fff1e8 100%)`,
-                boxShadow: `0 8px 30px rgba(107,26,62,0.18), inset 0 1px 0 rgba(255,255,255,0.9)`,
+                boxShadow: isOpen
+                    ? `0 18px 40px rgba(107,26,62,0.22), 0 6px 14px rgba(107,26,62,0.10), inset 0 1px 0 rgba(255,255,255,0.9)`
+                    : `0 4px 12px rgba(107,26,62,0.10), inset 0 1px 0 rgba(255,255,255,0.9)`,
                 transformOrigin: "bottom center",
-                pointerEvents: isOpen ? "auto" : "none",
+                pointerEvents: paperVisible ? "auto" : "none",
                 overflow: "hidden",
+                willChange: "transform, opacity",
             }}
             initial={false}
-            animate={{
-                y: isOpen ? 0 : CLOSED_BOTTOM,
-                rotate: isOpen ? -1.2 : 0,
-                opacity: isOpen ? 1 : 0,
-                height: visibleHeight,
-            }}
-            transition={{
-                y: {
-                    type: "spring",
-                    stiffness: 70,
-                    damping: 14,
-                    mass: 0.95,
-                    delay: isOpen ? 0.42 : 0,
-                },
-                rotate: { duration: 0.5, delay: isOpen ? 0.5 : 0 },
-                opacity: { duration: 0.25, delay: isOpen ? 0.42 : 0 },
-                height: { duration: 0.35, ease: "easeOut" },
-            }}
+            animate={
+                isOpen
+                    ? {
+                        // Phase A: rise straight up out of envelope
+                        y: [CLOSED_BOTTOM, CLOSED_BOTTOM - 40, 0],
+                        rotate: [0, 0, -1.2],
+                        scale: [0.94, 0.97, 1],
+                        opacity: [0, 1, 1],
+                    }
+                    : {
+                        // Fold back: tilt reset → slide straight down → shrink into envelope
+                        y: [0, -20, CLOSED_BOTTOM],
+                        rotate: [-1.2, 0, 0],
+                        scale: [1, 0.97, 0.94],
+                        opacity: [1, 1, 0],
+                    }
+            }
+            transition={
+                isOpen
+                    ? {
+                        duration: 1.1,
+                        times: [0, 0.45, 1],
+                        ease: [
+                            [0.34, 1.4, 0.64, 1],   // rise: overshoot spring feel
+                            [0.22, 1, 0.36, 1],     // settle: smooth out
+                        ],
+                        delay: 0.32,
+                    }
+                    : {
+                        duration: 0.7,
+                        times: [0, 0.25, 1],
+                        ease: [
+                            [0.4, 0, 0.2, 1],
+                            [0.55, 0, 0.9, 0.4],    // accelerate down into envelope
+                        ],
+                        delay: 0.05,
+                    }
+            }
         >
             {/* Paper border */}
             <div
@@ -568,7 +612,11 @@ const LetterPaper = ({ isOpen, letterLines, primaryColor, uid }: LetterPaperProp
                 <motion.div
                     ref={contentRef}
                     animate={{ opacity: isOpen ? 1 : 0 }}
-                    transition={{ duration: 0.3, delay: isOpen ? 0.65 : 0 }}
+                    transition={{
+                        duration: 0.45,
+                        delay: isOpen ? 0.7 : 0,   // starts after paper is mostly up
+                        ease: "easeOut",
+                    }}
                 >
                     <div
                         className="mb-3 text-center text-xl"
