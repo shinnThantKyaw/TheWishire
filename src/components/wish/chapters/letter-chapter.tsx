@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import {useState, useCallback, useMemo, useRef, useEffect} from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface LetterChapterProps {
@@ -79,103 +79,21 @@ export const LetterChapter = ({
                 }}
             />
 
-            {/* LETTER PAPER - only rendered when open, clips to envelope body when closed */}
-            <motion.div
-                className="absolute left-[16px] right-[16px] z-[2]"
-                style={{
-                  bottom: "8%",
-                  height: "78%",
-                  borderRadius: "7px",
-                  background: `linear-gradient(180deg, #fffdfa 0%, #fff8f2 50%, #fff1e8 100%)`,
-                  boxShadow: `0 8px 30px rgba(107,26,62,0.12), inset 0 1px 0 rgba(255,255,255,0.9)`,
-                  transformOrigin: "bottom center",
-                  clipPath: isOpen
-                    ? "inset(-100% -10% -100% -10%)"
-                    : "inset(0 0 0 0)",
-                }}
-                initial={false}
-                animate={{
-                  y: isOpen ? "-72%" : "42%",
-                  scale: isOpen ? 1 : 0.96,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 75,
-                  damping: 15,
-                  mass: 0.9,
-                  delay: isOpen ? 0.32 : 0,
-                }}
-            >
-              {/* Paper border */}
-              <div
-                  className="absolute inset-[8px] rounded-[4px]"
-                  style={{ border: "1px solid rgba(201,169,110,0.35)" }}
+              {/* LETTER PAPER - dynamic height, scrollable when long, anchored to envelope top */}
+              <LetterPaper
+                  isOpen={isOpen}
+                  letterLines={letterLines}
+                  primaryColor={primaryColor}
+                  uid={uid}
               />
-
-              {/* Flower decoration */}
-              <svg
-                  className="absolute right-3 top-2 h-16 w-16 opacity-70"
-                  viewBox="0 0 80 80"
-                  fill="none"
-              >
-                <path d="M70 8C54 18 50 31 45 47" stroke="#9B7DB8" strokeWidth="1.2" />
-                <path d="M50 28C57 24 62 18 64 12" stroke="#A88AB9" strokeWidth="1" />
-                <path d="M47 39C38 35 34 29 33 23" stroke="#A88AB9" strokeWidth="1" />
-                <circle cx="65" cy="11" r="6" fill="#F3A1B2" opacity="0.7" />
-                <circle cx="65" cy="11" r="2.5" fill="#D47B91" />
-                <ellipse cx="55" cy="24" rx="3" ry="5" fill="#C3A1D5" transform="rotate(35 55 24)" />
-                <ellipse cx="48" cy="35" rx="3" ry="5" fill="#B58BC9" transform="rotate(-35 48 35)" />
-              </svg>
-
-              {/* Letter content */}
-              <div className="relative h-full px-7 pb-5 pt-8">
-                <motion.div
-                    animate={{ opacity: isOpen ? 1 : 0 }}
-                    transition={{ duration: 0.3, delay: isOpen ? 0.55 : 0 }}
-                >
-                  <div
-                      className="mb-3 text-center text-xl"
-                      style={{
-                        color: "#9d3c63",
-                        fontFamily: "'Playfair Display', Georgia, serif",
-                        fontStyle: "italic",
-                      }}
-                  >
-                    Just for You
-                  </div>
-                  <div className="mb-4 flex items-center justify-center gap-2">
-                    <div className="h-px w-10" style={{ background: "#d6a5b5" }} />
-                    <span className="text-xs" style={{ color: primaryColor }}>\u2665</span>
-                    <div className="h-px w-10" style={{ background: "#d6a5b5" }} />
-                  </div>
-                  <div className="space-y-2">
-                    {letterLines.map((line, index) => (
-                        <motion.p
-                            key={`${index}-${line}`}
-                            initial={{ opacity: 0, y: 7 }}
-                            animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 7 }}
-                            transition={{
-                              duration: 0.35,
-                              delay: isOpen ? 0.58 + index * 0.06 : 0,
-                            }}
-                            className="text-left text-[12px] leading-[1.65] sm:text-[13px]"
-                            style={{
-                              color: "#553847",
-                              fontFamily: "'Playfair Display', Georgia, serif",
-                            }}
-                        >
-                          {line}
-                        </motion.p>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
 
             {/* ENVELOPE BODY - back panel (blush pink) */}
             <div
                 className="absolute inset-x-0 bottom-0 z-[3] overflow-hidden"
-                style={{ height: 180, borderRadius: "10px 10px 14px 14px" }}
+                style={{ height: 180, borderRadius: "10px 10px 14px 14px" , boxShadow: isOpen
+                        ? "0 -10px 24px rgba(107,26,62,0.15), inset 0 1px 0 rgba(255,255,255,0.3)"
+                        : "inset 0 1px 0 rgba(255,255,255,0.3)",
+                    transition: "box-shadow 0.4s ease 0.4s",}}
             >
               <div
                   className="absolute inset-0"
@@ -541,4 +459,164 @@ export const LetterChapter = ({
         </div>
       </div>
   );
+};
+
+
+
+
+
+
+{/* LetterPaper Component*/}
+interface LetterPaperProps {
+    isOpen: boolean;
+    letterLines: string[];
+    primaryColor: string;
+    uid: string;
+}
+
+const LetterPaper = ({ isOpen, letterLines, primaryColor, uid }: LetterPaperProps) => {
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [contentHeight, setContentHeight] = useState(0);
+
+    // Measure natural content height
+    useEffect(() => {
+        if (!contentRef.current) return;
+        const el = contentRef.current;
+        const update = () => setContentHeight(el.scrollHeight);
+        update();
+        const ro = new ResizeObserver(update);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, [letterLines]);
+
+    // Cap visible height so long letters don't blow past the viewport
+    const MAX_HEIGHT = 420;
+    const MIN_HEIGHT = 200;
+    const visibleHeight = Math.min(
+        Math.max(contentHeight + 80, MIN_HEIGHT), // +80 for padding
+        MAX_HEIGHT
+    );
+    const needsScroll = contentHeight + 80 > MAX_HEIGHT;
+
+    // When open, paper bottom sits just inside the envelope's top edge.
+    // Envelope top edge is at y=70 of the 250px-tall container → 180px from bottom.
+    const OPEN_BOTTOM = 20;   // sit slightly inside the envelope
+    const CLOSED_BOTTOM = -60; // hidden fully inside
+
+    return (
+        <motion.div
+            className={`absolute left-[22px] right-[22px] ${isOpen ? "z-[11]" : "z-[6]"}`}
+            style={{
+                bottom: OPEN_BOTTOM,
+                height: visibleHeight,
+                borderRadius: "7px",
+                background: `linear-gradient(180deg, #fffdfa 0%, #fff8f2 50%, #fff1e8 100%)`,
+                boxShadow: `0 8px 30px rgba(107,26,62,0.18), inset 0 1px 0 rgba(255,255,255,0.9)`,
+                transformOrigin: "bottom center",
+                pointerEvents: isOpen ? "auto" : "none",
+                overflow: "hidden",
+            }}
+            initial={false}
+            animate={{
+                y: isOpen ? 0 : CLOSED_BOTTOM,
+                rotate: isOpen ? -1.2 : 0,
+                opacity: isOpen ? 1 : 0,
+                height: visibleHeight,
+            }}
+            transition={{
+                y: {
+                    type: "spring",
+                    stiffness: 70,
+                    damping: 14,
+                    mass: 0.95,
+                    delay: isOpen ? 0.42 : 0,
+                },
+                rotate: { duration: 0.5, delay: isOpen ? 0.5 : 0 },
+                opacity: { duration: 0.25, delay: isOpen ? 0.42 : 0 },
+                height: { duration: 0.35, ease: "easeOut" },
+            }}
+        >
+            {/* Paper border */}
+            <div
+                className="pointer-events-none absolute inset-[8px] rounded-[4px]"
+                style={{ border: "1px solid rgba(201,169,110,0.35)" }}
+            />
+
+            {/* Flower decoration (fixed at top-right of visible area) */}
+            <svg
+                className="pointer-events-none absolute right-3 top-2 h-16 w-16 opacity-70"
+                viewBox="0 0 80 80"
+                fill="none"
+            >
+                <path d="M70 8C54 18 50 31 45 47" stroke="#9B7DB8" strokeWidth="1.2" />
+                <path d="M50 28C57 24 62 18 64 12" stroke="#A88AB9" strokeWidth="1" />
+                <path d="M47 39C38 35 34 29 33 23" stroke="#A88AB9" strokeWidth="1" />
+                <circle cx="65" cy="11" r="6" fill="#F3A1B2" opacity="0.7" />
+                <circle cx="65" cy="11" r="2.5" fill="#D47B91" />
+                <ellipse cx="55" cy="24" rx="3" ry="5" fill="#C3A1D5" transform="rotate(35 55 24)" />
+                <ellipse cx="48" cy="35" rx="3" ry="5" fill="#B58BC9" transform="rotate(-35 48 35)" />
+            </svg>
+
+            {/* Scrollable content area */}
+            <div
+                className="relative h-full overflow-y-auto px-7 pb-5 pt-8"
+                style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(201,169,110,0.5) transparent",
+                }}
+            >
+                <motion.div
+                    ref={contentRef}
+                    animate={{ opacity: isOpen ? 1 : 0 }}
+                    transition={{ duration: 0.3, delay: isOpen ? 0.65 : 0 }}
+                >
+                    <div
+                        className="mb-3 text-center text-xl"
+                        style={{
+                            color: "#9d3c63",
+                            fontFamily: "'Playfair Display', Georgia, serif",
+                            fontStyle: "italic",
+                        }}
+                    >
+                        Just for You
+                    </div>
+                    <div className="mb-4 flex items-center justify-center gap-2">
+                        <div className="h-px w-10" style={{ background: "#d6a5b5" }} />
+                        <span className="text-xs" style={{ color: primaryColor }}>♥</span>
+                        <div className="h-px w-10" style={{ background: "#d6a5b5" }} />
+                    </div>
+                    <div className="space-y-2">
+                        {letterLines.map((line, index) => (
+                            <motion.p
+                                key={`${index}-${line}`}
+                                initial={{ opacity: 0, y: 7 }}
+                                animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 7 }}
+                                transition={{
+                                    duration: 0.35,
+                                    delay: isOpen ? 0.7 + index * 0.06 : 0,
+                                }}
+                                className="text-left text-[12px] leading-[1.65] sm:text-[13px]"
+                                style={{
+                                    color: "#553847",
+                                    fontFamily: "'Playfair Display', Georgia, serif",
+                                }}
+                            >
+                                {line}
+                            </motion.p>
+                        ))}
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Scroll hint gradient at bottom (only when scrollable) */}
+            {needsScroll && isOpen && (
+                <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-8"
+                    style={{
+                        background: "linear-gradient(180deg, transparent, rgba(255,241,232,0.9))",
+                    }}
+                />
+            )}
+        </motion.div>
+    );
 };
