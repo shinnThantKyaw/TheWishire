@@ -89,6 +89,9 @@ export const LetterChapter = ({
                   background: `linear-gradient(180deg, #fffdfa 0%, #fff8f2 50%, #fff1e8 100%)`,
                   boxShadow: `0 8px 30px rgba(107,26,62,0.12), inset 0 1px 0 rgba(255,255,255,0.9)`,
                   transformOrigin: "bottom center",
+                  clipPath: isOpen
+                    ? "inset(-100% -10% -100% -10%)"
+                    : "inset(0 0 0 0)",
                 }}
                 initial={false}
                 animate={{
@@ -193,7 +196,43 @@ export const LetterChapter = ({
                   style={{ border: "1px solid rgba(255,255,255,0.3)" }}
               />
             </div>
-
+              {/* ENVELOPE INSIDE - dark rose interior revealed when top flap opens */}
+              <motion.div
+                  className="absolute inset-x-0 z-[3] overflow-hidden"
+                  style={{ top: 70, height: 110 }}
+                  initial={false}
+                  animate={{ opacity: isOpen ? 1 : 0 }}
+                  transition={{ duration: 0.35, delay: isOpen ? 0.3 : 0 }}
+              >
+                  <div
+                      className="absolute inset-0"
+                      style={{
+                          background: `linear-gradient(180deg, #6b1a3e 0%, #7a2045 55%, #8a2a52 100%)`,
+                      }}
+                  />
+                  <div
+                      className="pointer-events-none absolute inset-x-0 top-0 h-6"
+                      style={{
+                          background: "linear-gradient(180deg, rgba(0,0,0,0.28), transparent)",
+                      }}
+                  />
+                  <div
+                      className="pointer-events-none absolute inset-0 opacity-[0.06]"
+                      style={{
+                          backgroundImage: `repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.5) 0px,
+          rgba(255,255,255,0.5) 1px,
+          transparent 1px,
+          transparent 6px
+        )`,
+                      }}
+                  />
+                  <div
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
+                      style={{ background: "rgba(201,169,110,0.35)" }}
+                  />
+              </motion.div>
             {/* FRONT V-FLAP with gold trim */}
             <div
                 className="absolute inset-x-0 bottom-0 z-[3] pointer-events-none"
@@ -328,40 +367,60 @@ export const LetterChapter = ({
               </svg>
             </div>
 
-            {/* TOP FLAP - single triangle with 3D flip */}
-            <motion.div
-                className="absolute inset-x-0 z-[10] origin-top"
-                style={{
-                  top: 70,
-                  height: 110,
-                  transformStyle: "preserve-3d",
-                }}
-                animate={{ rotateX: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.72, ease: [0.4, 0, 0.15, 1] }}
-            >
-              {/* FRONT FACE - blush pink with gold trim (visible when closed) */}
-
-
-              {/* BACK FACE - deep rose inside (visible when open/flipped) */}
-              <div
-                  className="absolute inset-0"
+            {/* TOP FLAP - blush pink outside, deep rose inside when opened */}
+              {/* TOP FLAP - blush pink outside, deep rose inside when opened */}
+              <motion.div
+                  className="absolute inset-x-0 z-[10] origin-top"
                   style={{
-                    backfaceVisibility: "hidden",
-                    transform: "rotateX(180deg)",
+                      top: 70,
+                      height: 110,
+                      transformStyle: "preserve-3d",
                   }}
+                  animate={{ rotateX: isOpen ? 180 : 0 }}
+                  transition={{ duration: 0.72, ease: [0.4, 0, 0.15, 1] }}
               >
-                <svg viewBox="0 0 320 110" className="h-full w-full" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id={`topFlapBack-${uid}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#982B57" />
-                      <stop offset="100%" stopColor="#7a2045" />
-                    </linearGradient>
-                  </defs>
-                  <polygon points="0,106 160,0 320,106" fill={`url(#topFlapBack-${uid})`} />
-                  <polygon points="4,103 160,4 316,103" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
-                </svg>
-              </div>
-            </motion.div>
+                  {/* FRONT FACE - blush pink, visible when CLOSED. Apex points DOWN. */}
+                  <div
+                      className="absolute inset-0"
+                      style={{ backfaceVisibility: "hidden" }}
+                  >
+                      <svg viewBox="0 0 320 110" className="h-full w-full" preserveAspectRatio="none">
+                          <defs>
+                              <linearGradient id={`topFlapFront-${uid}`} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor="#f8e5de" />
+                                  <stop offset="100%" stopColor="#edcec3" />
+                              </linearGradient>
+                          </defs>
+                          {/* Apex DOWN (V shape) */}
+                          <polygon points="0,0 160,106 320,0" fill={`url(#topFlapFront-${uid})`} />
+                          <line x1="2" y1="1" x2="159" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                          <line x1="318" y1="1" x2="161" y2="105" stroke="#c9a96e" strokeWidth="1.5" opacity="0.72" />
+                      </svg>
+                  </div>
+
+                  {/* BACK FACE - deep rose inside, visible when OPEN.
+      No extra rotateX here — the parent's rotateX(180) handles it.
+      Apex DOWN in SVG = apex UP on screen after parent flips. */}
+                  <div
+                      className="absolute inset-0"
+                      style={{
+                          backfaceVisibility: "hidden",
+                          transform: "rotateY(180deg)",  // mirror horizontally so backface culling works
+                      }}
+                  >
+                      <svg viewBox="0 0 320 110" className="h-full w-full" preserveAspectRatio="none">
+                          <defs>
+                              <linearGradient id={`topFlapBack-${uid}`} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor="#982B57" />
+                                  <stop offset="100%" stopColor="#7a2045" />
+                              </linearGradient>
+                          </defs>
+                          {/* Apex DOWN in SVG. Parent rotateX(180) flips it to apex UP on screen. */}
+                          <polygon points="0,0 160,106 320,0" fill={`url(#topFlapBack-${uid})`} />
+                          <polygon points="4,3 160,102 316,3" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+                      </svg>
+                  </div>
+              </motion.div>
 
             {/* WAX SEAL - deep rose/burgundy with gold rim */}
             <AnimatePresence>
