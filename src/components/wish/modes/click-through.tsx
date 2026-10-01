@@ -94,7 +94,8 @@ export const ClickThrough = ({
       </div>
 
       {/* ── Chapter Content ──────────────────────── */}
-      <div className="flex-1 pt-16">
+      {/* pb clears the fixed bottom nav so tall chapters (photo book) can scroll fully into view */}
+      <div className="flex-1 pt-16 pb-28">
         <AnimatePresence mode="wait">
           <motion.div
             key={chapterIndex}

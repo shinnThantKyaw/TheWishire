@@ -17,6 +17,7 @@ export const LetterChapter = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
     const [paperVisible, setPaperVisible] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(false);
 
 
     const handleToggle = useCallback(() => {
@@ -32,6 +33,7 @@ export const LetterChapter = ({
             // Opening: paper appears immediately so its rise animation plays
             setIsOpen(true);
             setPaperVisible(true);
+            setHasInteracted(true);
             setTimeout(() => setIsAnimating(false), 1400);
         }
     }, [isAnimating, isOpen]);
@@ -95,6 +97,7 @@ export const LetterChapter = ({
               <LetterPaper
                   isOpen={isOpen}
                   paperVisible={paperVisible}
+                  hasInteracted={hasInteracted}
                   letterLines={letterLines}
                   primaryColor={primaryColor}
                   uid={uid}
@@ -490,12 +493,13 @@ export const LetterChapter = ({
 interface LetterPaperProps {
     isOpen: boolean;
     paperVisible: boolean;
+    hasInteracted: boolean;
     letterLines: string[];
     primaryColor: string;
     uid: string;
 }
 
-const LetterPaper = ({ isOpen,paperVisible, letterLines, primaryColor, uid }: LetterPaperProps) => {
+const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primaryColor, uid }: LetterPaperProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -550,13 +554,21 @@ const LetterPaper = ({ isOpen,paperVisible, letterLines, primaryColor, uid }: Le
                         scale: [0.94, 0.97, 1],
                         opacity: [0, 1, 1],
                     }
-                    : {
-                        // Fold back: tilt reset → slide straight down → shrink into envelope
-                        y: [0, -20, CLOSED_BOTTOM],
-                        rotate: [-1.2, 0, 0],
-                        scale: [1, 0.97, 0.94],
-                        opacity: [1, 1, 0],
-                    }
+                    : hasInteracted
+                        ? {
+                            // Fold back: tilt reset → slide straight down → shrink into envelope
+                            y: [0, -20, CLOSED_BOTTOM],
+                            rotate: [-1.2, 0, 0],
+                            scale: [1, 0.97, 0.94],
+                            opacity: [1, 1, 0],
+                        }
+                        : {
+                            // Initial state: paper hidden inside envelope, no animation
+                            y: CLOSED_BOTTOM,
+                            rotate: 0,
+                            scale: 0.94,
+                            opacity: 0,
+                        }
             }
             transition={
                 isOpen
@@ -569,15 +581,17 @@ const LetterPaper = ({ isOpen,paperVisible, letterLines, primaryColor, uid }: Le
                         ],
                         delay: 0.32,
                     }
-                    : {
-                        duration: 0.7,
-                        times: [0, 0.25, 1],
-                        ease: [
-                            [0.4, 0, 0.2, 1],
-                            [0.55, 0, 0.9, 0.4],    // accelerate down into envelope
-                        ],
-                        delay: 0.05,
-                    }
+                    : hasInteracted
+                        ? {
+                            duration: 0.7,
+                            times: [0, 0.25, 1],
+                            ease: [
+                                [0.4, 0, 0.2, 1],
+                                [0.55, 0, 0.9, 0.4],    // accelerate down into envelope
+                            ],
+                            delay: 0.05,
+                        }
+                        : { duration: 0 }
             }
         >
             {/* Paper border */}

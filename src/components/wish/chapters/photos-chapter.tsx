@@ -23,6 +23,11 @@ const easeSettle = [0.16, 1, 0.3, 1] as const;
 /* Slower, smoother paper motion */
 const easePaper = [0.32, 0.72, 0.18, 1] as const;
 const FLIP_MS = 1150;
+const ALBUM_HEIGHT = "clamp(420px, 68vh, 560px)";
+
+/* Chrome (paddings, caption, dots) around a photo frame — subtract from ALBUM_HEIGHT so open/closed book heights match */
+const MOBILE_PHOTO_MAX_HEIGHT = `calc(${ALBUM_HEIGHT} - clamp(0.8rem, 2vh, 1.5rem) - clamp(1.5rem, 6vh, 6rem) - 78px - clamp(0.75rem, 2.5vh, 2rem) - 4px)`;
+const DESKTOP_PHOTO_MAX_HEIGHT = `min(calc(${ALBUM_HEIGHT} - clamp(0.8rem, 2vh, 1.5rem) - clamp(1.5rem, 5vh, 5rem) - 54px), min(46vh, 380px))`;
 
 export const PhotosChapter = ({
                                   photos,
@@ -278,11 +283,12 @@ export const PhotosChapter = ({
                             />
 
                             <motion.div
-                                className="relative aspect-[3/4] overflow-hidden rounded-[18px]"
+                                className="relative w-full overflow-hidden rounded-[18px]"
                                 whileHover={{ y: -6, rotate: -1 }}
                                 whileTap={{ scale: 0.985 }}
                                 transition={{ duration: 0.35, ease: easeSettle }}
                                 style={{
+                                    height: ALBUM_HEIGHT,
                                     background: `linear-gradient(140deg, ${primaryColor}, ${primaryColor}CC 60%, ${primaryColor}AA)`,
                                     boxShadow: `0 30px 60px -25px ${foregroundColor}60, inset 0 0 0 1px rgba(255,255,255,.22), inset 0 -8px 24px rgba(0,0,0,.15)`,
                                 }}
@@ -402,7 +408,7 @@ export const PhotosChapter = ({
                             background: `linear-gradient(135deg, ${primaryColor}22, #d8c8b8 50%, ${primaryColor}18)`,
                             boxShadow: `0 40px 80px -35px ${foregroundColor}60, 0 0 0 1px ${primaryColor}22`,
                             padding: "clamp(0.4rem, 1vh, 0.75rem)",
-                            maxHeight: "calc(100vh - 4rem)",
+                            height: ALBUM_HEIGHT,
                         }}
                     >
                         <div
@@ -421,18 +427,19 @@ export const PhotosChapter = ({
                         />
 
                         <div
-                            className="relative overflow-hidden rounded-[16px]"
                             onTouchStart={onTouchStart}
                             onTouchEnd={onTouchEnd}
+                            className="relative overflow-hidden rounded-[16px]"
                             style={{
+                                height: "100%",
                                 background: "#fdfaf4",
                                 perspective: isDesktop ? 2600 : 1400,
-                                /* Hinge at the TOP for the mobile roll (page lifts up from bottom) */
-                                perspectiveOrigin: isDesktop
-                                    ? "50% 50%"
-                                    : "50% 0%",
+                                perspectiveOrigin: isDesktop ? "50% 50%" : "50% 0%",
                             }}
-                        >
+
+                    >
+
+
                             <div
                                 className="pointer-events-none absolute inset-0 z-[60] opacity-[0.06]"
                                 style={{
@@ -699,7 +706,7 @@ const MobilePage = ({
                     }: MobilePageProps) => {
     return (
         <div
-            className="relative flex flex-col items-center justify-center"
+            className="relative flex h-full flex-col items-center justify-center"
             style={{
                 background:
                     "radial-gradient(120% 100% at 50% 0%, #fffdf9, #fdfaf4 60%, #f7f0e6)",
@@ -717,7 +724,7 @@ const MobilePage = ({
             <motion.div
                 key={photo.id}
                 className="relative w-full"
-                style={{ maxWidth: "min(92%, 420px)", maxHeight: "100%" }}
+                style={{ maxWidth: "min(92%, 420px)" }}
                 initial={{ opacity: 0, y: 14, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.5, ease: easeSettle }}
@@ -732,14 +739,16 @@ const MobilePage = ({
                     style={{
                         boxShadow: `0 20px 40px -20px ${foregroundColor}55, 0 2px 6px ${foregroundColor}15, inset 0 0 0 1px rgba(0,0,0,.03)`,
                         transform: "rotate(-0.8deg)",
-                        maxHeight: "100%",
                     }}
                 >
                     <div
                         className="relative overflow-hidden rounded-[3px] bg-neutral-100"
                         style={{
                             aspectRatio: "4 / 5",
-                            maxHeight: "min(52vh, 460px)",
+                            maxHeight: MOBILE_PHOTO_MAX_HEIGHT,
+                            maxWidth: `calc((${MOBILE_PHOTO_MAX_HEIGHT}) * 4 / 5)`,
+                            width: "100%",
+                            marginInline: "auto",
                         }}
                     >
                         <img
@@ -830,8 +839,7 @@ const DesktopSpread = ({
             className="relative grid grid-cols-2"
             style={{
                 background: "#fdfaf4",
-                minHeight: "min(460px, 62vh)",
-                height: "min(560px, 68vh)",
+                height: "100%",
             }}
         >
             <DesktopPage
@@ -947,7 +955,10 @@ const DesktopPage = ({
                         className="relative overflow-hidden rounded-[3px] bg-neutral-100"
                         style={{
                             aspectRatio: "4 / 5",
-                            maxHeight: "min(46vh, 380px)",
+                            maxHeight: DESKTOP_PHOTO_MAX_HEIGHT,
+                            maxWidth: `calc((${DESKTOP_PHOTO_MAX_HEIGHT}) * 4 / 5)`,
+                            width: "100%",
+                            marginInline: "auto",
                         }}
                     >
                         <img
