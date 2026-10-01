@@ -177,8 +177,12 @@ export const PhotosChapter = ({
 
     return (
         <section
-            className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-20"
-            style={{ color: foregroundColor }}
+            className="relative overflow-hidden px-4 sm:px-6"
+            style={{
+                color: foregroundColor,
+                paddingTop: "clamp(1.5rem, 5vh, 5rem)",
+                paddingBottom: "clamp(1.5rem, 5vh, 5rem)",
+            }}
         >
             {/* Background */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -200,7 +204,10 @@ export const PhotosChapter = ({
             </div>
 
             {/* Header */}
-            <div className="relative z-10 mx-auto mb-8 max-w-xl text-center sm:mb-12">
+            <div
+                className="relative z-10 mx-auto max-w-xl text-center"
+                style={{ marginBottom: "clamp(1rem, 3vh, 3rem)" }}
+            >
                 <motion.div
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -214,10 +221,11 @@ export const PhotosChapter = ({
             Chapter 02
           </span>
                     <h2
-                        className="text-3xl font-semibold sm:text-4xl"
+                        className="font-semibold"
                         style={{
                             fontFamily:
                                 "var(--wish-font-heading), 'Playfair Display', Georgia, serif",
+                            fontSize: "clamp(1.5rem, 3.5vh, 2.25rem)",
                         }}
                     >
                         Our Memories
@@ -389,10 +397,12 @@ export const PhotosChapter = ({
                     />
 
                     <div
-                        className="relative rounded-[20px] p-2 sm:rounded-[22px] sm:p-3"
+                        className="relative rounded-[20px] sm:rounded-[22px]"
                         style={{
                             background: `linear-gradient(135deg, ${primaryColor}22, #d8c8b8 50%, ${primaryColor}18)`,
                             boxShadow: `0 40px 80px -35px ${foregroundColor}60, 0 0 0 1px ${primaryColor}22`,
+                            padding: "clamp(0.4rem, 1vh, 0.75rem)",
+                            maxHeight: "calc(100vh - 4rem)",
                         }}
                     >
                         <div
@@ -540,7 +550,10 @@ export const PhotosChapter = ({
                         </div>
                     </div>
 
-                    <div className="mt-5 flex items-center justify-between gap-2 px-2 sm:mt-6 sm:px-4">
+                    <div
+                        className="flex items-center justify-between gap-2 px-2 sm:px-4"
+                        style={{ marginTop: "clamp(0.5rem, 1.5vh, 1.5rem)" }}
+                    >
                         <button
                             type="button"
                             onClick={goPrev}
@@ -583,7 +596,10 @@ export const PhotosChapter = ({
                         </button>
                     </div>
 
-                    <div className="mt-5 text-center">
+                    <div
+                        className="text-center"
+                        style={{ marginTop: "clamp(0.5rem, 1.5vh, 1.5rem)" }}
+                    >
                         <button
                             type="button"
                             onClick={closeAlbum}
@@ -599,7 +615,8 @@ export const PhotosChapter = ({
 
             {videoUrl && !isClosed && !isOpening && (
                 <motion.div
-                    className="relative z-10 mx-auto mt-16 max-w-3xl"
+                    className="relative z-10 mx-auto max-w-3xl"
+                    style={{ marginTop: "clamp(2rem, 6vh, 4rem)" }}
                     initial={{ opacity: 0, y: 35 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.25 }}
@@ -682,10 +699,12 @@ const MobilePage = ({
                     }: MobilePageProps) => {
     return (
         <div
-            className="relative flex flex-col items-center justify-center px-4 py-8 sm:px-8 sm:py-12"
+            className="relative flex flex-col items-center justify-center"
             style={{
                 background:
                     "radial-gradient(120% 100% at 50% 0%, #fffdf9, #fdfaf4 60%, #f7f0e6)",
+                padding:
+                    "clamp(0.75rem, 3vh, 3rem) clamp(0.75rem, 4vw, 2rem)",
             }}
         >
             <div
@@ -697,7 +716,8 @@ const MobilePage = ({
 
             <motion.div
                 key={photo.id}
-                className="relative w-full max-w-[min(92%,420px)]"
+                className="relative w-full"
+                style={{ maxWidth: "min(92%, 420px)", maxHeight: "100%" }}
                 initial={{ opacity: 0, y: 14, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.5, ease: easeSettle }}
@@ -712,9 +732,16 @@ const MobilePage = ({
                     style={{
                         boxShadow: `0 20px 40px -20px ${foregroundColor}55, 0 2px 6px ${foregroundColor}15, inset 0 0 0 1px rgba(0,0,0,.03)`,
                         transform: "rotate(-0.8deg)",
+                        maxHeight: "100%",
                     }}
                 >
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-neutral-100">
+                    <div
+                        className="relative overflow-hidden rounded-[3px] bg-neutral-100"
+                        style={{
+                            aspectRatio: "4 / 5",
+                            maxHeight: "min(52vh, 460px)",
+                        }}
+                    >
                         <img
                             src={photo.url}
                             alt={`Memory ${photoIndex + 1}`}
@@ -756,7 +783,10 @@ const MobilePage = ({
                 </div>
             </motion.div>
 
-            <div className="relative z-10 mt-8 flex items-center gap-1.5 sm:mt-10">
+            <div
+                className="relative z-10 flex items-center gap-1.5"
+                style={{ marginTop: "clamp(0.75rem, 2.5vh, 2rem)" }}
+            >
                 {Array.from({ length: total }).map((_, i) => (
                     <span
                         key={i}
@@ -797,8 +827,12 @@ const DesktopSpread = ({
                        }: DesktopSpreadProps) => {
     return (
         <div
-            className="relative grid min-h-[460px] grid-cols-2 sm:min-h-[520px]"
-            style={{ background: "#fdfaf4" }}
+            className="relative grid grid-cols-2"
+            style={{
+                background: "#fdfaf4",
+                minHeight: "min(460px, 62vh)",
+                height: "min(560px, 68vh)",
+            }}
         >
             <DesktopPage
                 photo={spread?.left}
@@ -848,8 +882,12 @@ const DesktopPage = ({
     if (!photo) {
         return (
             <div
-                className="relative flex items-center justify-center overflow-hidden px-6 py-10"
-                style={{ background: bg }}
+                className="relative flex items-center justify-center overflow-hidden"
+                style={{
+                    background: bg,
+                    padding:
+                        "clamp(0.75rem, 2.5vh, 2.5rem) clamp(0.75rem, 2vw, 1.5rem)",
+                }}
             >
                 <div
                     className="text-center"
@@ -874,12 +912,20 @@ const DesktopPage = ({
 
     return (
         <div
-            className="relative flex items-center justify-center overflow-hidden px-6 py-10"
-            style={{ background: bg }}
+            className="relative flex items-center justify-center overflow-hidden"
+            style={{
+                background: bg,
+                padding:
+                    "clamp(0.75rem, 2.5vh, 2.5rem) clamp(0.75rem, 2vw, 1.5rem)",
+            }}
         >
             <motion.div
                 key={photo.id}
-                className="relative w-full max-w-[300px]"
+                className="relative w-full"
+                style={{
+                    maxWidth: "min(300px, 90%)",
+                    maxHeight: "100%",
+                }}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: easeSettle }}
@@ -894,9 +940,16 @@ const DesktopPage = ({
                     style={{
                         boxShadow: `0 18px 35px -18px ${foregroundColor}55, 0 1px 3px ${foregroundColor}12`,
                         transform: side === "left" ? "rotate(-1deg)" : "rotate(1deg)",
+                        maxHeight: "100%",
                     }}
                 >
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-neutral-100">
+                    <div
+                        className="relative overflow-hidden rounded-[3px] bg-neutral-100"
+                        style={{
+                            aspectRatio: "4 / 5",
+                            maxHeight: "min(46vh, 380px)",
+                        }}
+                    >
                         <img
                             src={photo.url}
                             alt={`Memory ${(photoIndex ?? 0) + 1}`}
