@@ -18,11 +18,11 @@ interface PhotosChapterProps {
 
 type PageDirection = "next" | "previous" | null;
 
-const ease = [0.4, 0, 0.2, 1] as const;
 const easeSettle = [0.16, 1, 0.3, 1] as const;
 /* Slower, smoother paper motion */
 const easePaper = [0.32, 0.72, 0.18, 1] as const;
-const FLIP_MS = 1150;
+const FLIP_MS_DESKTOP = 1300;
+const FLIP_MS_MOBILE = 1150;
 const ALBUM_HEIGHT = "clamp(420px, 68vh, 560px)";
 
 /* Chrome (paddings, caption, dots) around a photo frame — subtract from ALBUM_HEIGHT so open/closed book heights match */
@@ -41,6 +41,7 @@ export const PhotosChapter = ({
     const [direction, setDirection] = useState<PageDirection>(null);
     const [isTurning, setIsTurning] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
+    const [hasFlipped, setHasFlipped] = useState(false);
 
     const touchStartX = useRef<number | null>(null);
     const touchStartY = useRef<number | null>(null);
@@ -85,17 +86,20 @@ export const PhotosChapter = ({
     const openAlbum = useCallback(() => {
         if (isOpening || !isClosed) return;
         setIsOpening(true);
+        // Must be >= AlbumOpeningAnimation duration, or open book appears mid-flip (flash)
+        const ms = isDesktop ? 1250 : 1450;
         window.setTimeout(() => {
             setIsClosed(false);
             setIsOpening(false);
-        }, 850);
-    }, [isClosed, isOpening]);
+        }, ms);
+    }, [isClosed, isOpening, isDesktop]);
 
     const closeAlbum = useCallback(() => {
         if (isTurning || isOpening) return;
         setIsClosed(true);
         setCurrentPage(0);
         setDirection(null);
+        setHasFlipped(false);
     }, [isOpening, isTurning]);
 
     const goNext = useCallback(() => {
@@ -103,24 +107,28 @@ export const PhotosChapter = ({
         if (currentPage >= totalViews - 1) return;
         setIsTurning(true);
         setDirection("next");
+        setHasFlipped(true);
+        const ms = isDesktop ? FLIP_MS_DESKTOP : FLIP_MS_MOBILE;
         window.setTimeout(() => {
             setCurrentPage((v) => v + 1);
             setDirection(null);
             setIsTurning(false);
-        }, FLIP_MS);
-    }, [currentPage, isClosed, isOpening, isTurning, totalViews]);
+        }, ms);
+    }, [currentPage, isClosed, isDesktop, isOpening, isTurning, totalViews]);
 
     const goPrev = useCallback(() => {
         if (isClosed || isOpening || isTurning) return;
         if (currentPage <= 0) return;
         setIsTurning(true);
         setDirection("previous");
+        setHasFlipped(true);
+        const ms = isDesktop ? FLIP_MS_DESKTOP : FLIP_MS_MOBILE;
         window.setTimeout(() => {
             setCurrentPage((v) => v - 1);
             setDirection(null);
             setIsTurning(false);
-        }, FLIP_MS);
-    }, [currentPage, isClosed, isOpening, isTurning]);
+        }, ms);
+    }, [currentPage, isClosed, isDesktop, isOpening, isTurning]);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
@@ -159,20 +167,12 @@ export const PhotosChapter = ({
         touchStartX.current = null;
         touchStartY.current = null;
 
-        if (!isDesktop) {
-            if (Math.abs(dy) < 40 && Math.abs(dx) < 40) return;
-            if (Math.abs(dy) >= Math.abs(dx)) {
-                if (dy < 0) goNext();
-                else goPrev();
-            } else {
-                if (dx < 0) goNext();
-                else goPrev();
-            }
-        } else {
-            if (Math.abs(dx) < 45) return;
-            if (dx < 0) goNext();
-            else goPrev();
-        }
+        // Horizontal swipe only — vertical gestures should scroll the page.
+        if (Math.abs(dx) < 40) return;
+        if (Math.abs(dx) <= Math.abs(dy)) return;
+
+        if (dx < 0) goNext();
+        else goPrev();
     };
 
     if (!photos?.length && !videoUrl) return null;
@@ -182,6 +182,8 @@ export const PhotosChapter = ({
 
     return (
         <section
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
             className="relative overflow-hidden px-4 sm:px-6"
             style={{
                 color: foregroundColor,
@@ -384,6 +386,7 @@ export const PhotosChapter = ({
                         <AlbumOpeningAnimation
                             primaryColor={primaryColor}
                             foregroundColor={foregroundColor}
+                            isDesktop={isDesktop}
                         />
                     </motion.div>
                 )}
@@ -434,7 +437,7 @@ export const PhotosChapter = ({
                                 height: "100%",
                                 background: "#fdfaf4",
                                 perspective: isDesktop ? 2600 : 1400,
-                                perspectiveOrigin: isDesktop ? "50% 50%" : "50% 0%",
+                                perspectiveOrigin: "50% 50%",
                             }}
 
                     >
@@ -522,40 +525,55 @@ export const PhotosChapter = ({
                                 </>
                             )}
 
+                            {!isDesktop && (
+                                <div
+                                    className="pointer-events-none absolute inset-y-0 left-0 z-[55] w-10"
+                                    style={{
+                                        background:
+                                            "linear-gradient(90deg, rgba(60,40,30,.22), rgba(60,40,30,.04) 50%, transparent 85%)",
+                                    }}
+                                />
+                            )}
+
                             <button
                                 type="button"
                                 aria-label="Previous page"
                                 onClick={goPrev}
                                 disabled={currentPage === 0 || isTurning}
-                                className="absolute inset-y-0 left-0 z-[70] w-1/4 cursor-w-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
+                                className="absolute inset-y-0 left-0 z-[70] w-1/2 cursor-w-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
                             />
                             <button
                                 type="button"
                                 aria-label="Next page"
                                 onClick={goNext}
                                 disabled={currentPage === totalViews - 1 || isTurning}
-                                className="absolute inset-y-0 right-0 z-[70] w-1/4 cursor-e-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
+                                className="absolute inset-y-0 right-0 z-[70] w-1/2 cursor-e-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
                             />
-
-                            {!isTurning && currentPage < totalViews - 1 && (
-                                <motion.div
-                                    className="pointer-events-none absolute bottom-4 left-1/2 z-[75] flex -translate-x-1/2 items-center gap-2 rounded-full px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] md:right-4 md:left-auto md:translate-x-0"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 0.55 }}
-                                    transition={{ delay: 1 }}
-                                    style={{
-                                        background: "rgba(255,255,255,.8)",
-                                        color: foregroundColor,
-                                        backdropFilter: "blur(8px)",
-                                    }}
-                                >
-                                    Swipe
-                                    <span className="text-sm md:hidden">↑</span>
-                                    <span className="hidden text-sm md:inline">→</span>
-                                </motion.div>
-                            )}
                         </div>
                     </div>
+
+                    {!isTurning && !hasFlipped && totalViews > 1 && (
+                        <motion.div
+                            className="relative z-10 mx-auto mt-4 flex w-fit items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] sm:text-[10px] sm:tracking-[0.18em]"
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.2, duration: 0.5 }}
+                            style={{
+                                borderColor: `${primaryColor}40`,
+                                background: "rgba(255,255,255,.92)",
+                                color: foregroundColor,
+                                boxShadow: `0 6px 20px ${foregroundColor}18`,
+                            }}
+                        >
+                            {isDesktop
+                                ? "Click or use"
+                                : "Swipe anywhere or tap sides"}
+                            <span className="text-sm normal-case tracking-normal">
+                                ← →
+                            </span>
+                            to flip
+                        </motion.div>
+                    )}
 
                     <div
                         className="flex items-center justify-between gap-2 px-2 sm:px-4"
@@ -611,8 +629,13 @@ export const PhotosChapter = ({
                             type="button"
                             onClick={closeAlbum}
                             disabled={isTurning}
-                            className="border-0 bg-transparent text-[9px] font-medium uppercase tracking-[0.28em] transition hover:opacity-70 disabled:opacity-20"
-                            style={{ color: foregroundColor, opacity: 0.4 }}
+                            className="rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition hover:opacity-80 disabled:opacity-30"
+                            style={{
+                                borderColor: `${foregroundColor}35`,
+                                color: foregroundColor,
+                                background: "rgba(255,255,255,.65)",
+                                backdropFilter: "blur(6px)",
+                            }}
                         >
                             Close album
                         </button>
@@ -1017,7 +1040,7 @@ const DesktopPage = ({
 };
 
 /* =============================================================
-   PAGE FLIP — vertical (bottom → up) on mobile, horizontal on desktop
+   PAGE FLIP — horizontal page-turn around the spine on both platforms
 ============================================================= */
 
 interface PageFlipProps {
@@ -1044,57 +1067,32 @@ const PageFlip = ({
                       foregroundColor,
                   }: PageFlipProps) => {
     const isNext = direction === "next";
-    const durationSec = FLIP_MS / 1000;
+    const durationSec = (isDesktop ? FLIP_MS_DESKTOP : FLIP_MS_MOBILE) / 1000;
 
-    /**
-     * Mobile: vertical roll with hinge at the TOP edge.
-     *   - `next` rotates +180° (bottom edge lifts up, swings over the top)
-     *   - `previous` rotates -180° (reverse)
-     * Desktop: classic horizontal flip around the spine.
-     */
-    const axis = isDesktop ? "rotateY" : "rotateX";
-    const targetRotation = isDesktop
-        ? isNext
-            ? -180
-            : 180
-        : isNext
-            ? 180
-            : -180;
+    /** rotateY on both platforms: page swings around a vertical spine. */
+    const axis = "rotateY";
 
     const originStyle: React.CSSProperties = isDesktop
         ? isNext
             ? { right: 0, transformOrigin: "left center" }
             : { left: 0, transformOrigin: "right center" }
-        : {
-            inset: 0,
-            // Hinge at TOP → page lifts up from the bottom edge
-            transformOrigin: "center top",
-        };
+        : // MOBILE: next hinges left (spine), prev hinges right and peels back
+          {
+              inset: 0,
+              transformOrigin: isNext ? "left center" : "right center",
+          };
 
     const containerClass = isDesktop
         ? `absolute inset-y-0 z-50 w-1/2 ${isNext ? "right-0" : "left-0"}`
         : "absolute inset-0 z-50";
 
-    /* --- Shading ---
-     * Desktop keeps left/right gradients. Mobile rolls vertically:
-     * during the lift the page darkens near the bottom (which is rising),
-     * and lightens near the top; the back face does the inverse.
-     */
-    const frontShade = isDesktop
-        ? isNext
-            ? "linear-gradient(90deg, transparent 40%, rgba(30,20,15,.4))"
-            : "linear-gradient(270deg, transparent 40%, rgba(30,20,15,.4))"
-        : isNext
-            ? "linear-gradient(0deg, rgba(30,20,15,.5), transparent 55%)"
-            : "linear-gradient(180deg, rgba(30,20,15,.5), transparent 55%)";
+    const frontShade = isNext
+        ? "linear-gradient(90deg, transparent 35%, rgba(30,20,15,.55) 100%)"
+        : "linear-gradient(270deg, transparent 35%, rgba(30,20,15,.55) 100%)";
 
-    const backShade = isDesktop
-        ? isNext
-            ? "linear-gradient(270deg, transparent 40%, rgba(30,20,15,.4))"
-            : "linear-gradient(90deg, transparent 40%, rgba(30,20,15,.4))"
-        : isNext
-            ? "linear-gradient(180deg, rgba(30,20,15,.45), transparent 55%)"
-            : "linear-gradient(0deg, rgba(30,20,15,.45), transparent 55%)";
+    const backShade = isNext
+        ? "linear-gradient(270deg, transparent 35%, rgba(30,20,15,.5) 100%)"
+        : "linear-gradient(90deg, transparent 35%, rgba(30,20,15,.5) 100%)";
 
     const frontSide: "left" | "right" = isDesktop
         ? isNext
@@ -1108,15 +1106,22 @@ const PageFlip = ({
             : "right"
         : "right";
 
+    /** Lift off the spine mid-turn, settle softly — paper weight. */
+    const rotationKeyframes = isNext ? [0, -20, -155, -180] : [0, 20, 155, 180];
+    const liftKeyframes = isDesktop ? [0, 16, 38, 0] : [0, 10, 24, 0];
+
     return (
         <motion.div
             className={containerClass}
-            initial={{ [axis]: 0 }}
-            animate={{ [axis]: targetRotation }}
+            initial={{ [axis]: 0, translateZ: 0 }}
+            animate={{
+                [axis]: rotationKeyframes,
+                translateZ: liftKeyframes,
+            }}
             transition={{
                 duration: durationSec,
-                /* Slow start, gentle middle, long soft settle — paper weight */
                 ease: easePaper,
+                times: [0, 0.32, 0.72, 1],
             }}
             style={{
                 ...originStyle,
@@ -1175,7 +1180,7 @@ const PageFlip = ({
                 className="absolute inset-0 overflow-hidden"
                 style={{
                     background: "#fdfaf4",
-                    transform: isDesktop ? "rotateY(180deg)" : "rotateX(180deg)",
+                    transform: "rotateY(180deg)",
                     backfaceVisibility: "hidden",
                 }}
             >
@@ -1217,7 +1222,7 @@ const PageFlip = ({
                 />
             </div>
 
-            {/* Paper thickness — sits on the hinge edge */}
+            {/* Paper thickness — hinge edge */}
             <div
                 className="pointer-events-none absolute"
                 style={
@@ -1232,14 +1237,13 @@ const PageFlip = ({
                                 : "linear-gradient(270deg, rgba(80,50,35,.18), transparent)",
                         }
                         : {
-                            left: 0,
-                            right: 0,
-                            height: 12,
-                            /* Hinge is at the top now */
                             top: 0,
+                            bottom: 0,
+                            [isNext ? "left" : "right"]: 0,
+                            width: 12,
                             background: isNext
-                                ? "linear-gradient(180deg, rgba(80,50,35,.18), transparent)"
-                                : "linear-gradient(0deg, rgba(80,50,35,.18), transparent)",
+                                ? "linear-gradient(90deg, rgba(80,50,35,.18), transparent)"
+                                : "linear-gradient(270deg, rgba(80,50,35,.18), transparent)",
                         }
                 }
             />
@@ -1254,61 +1258,178 @@ const PageFlip = ({
 interface AlbumOpeningAnimationProps {
     primaryColor: string;
     foregroundColor: string;
+    isDesktop: boolean;
 }
 
 const AlbumOpeningAnimation = ({
                                    primaryColor,
                                    foregroundColor,
+                                   isDesktop,
                                }: AlbumOpeningAnimationProps) => {
+    const coverDuration = isDesktop ? 1.1 : 1.35;
+    const aspect = isDesktop ? "1.55 / 1" : "3 / 4";
+    const maxWidth = isDesktop ? "40rem" : "min(68vw, 260px)";
+    const coverRotate = isDesktop ? -118 : -102;
+
     return (
         <div
-            className="relative mx-auto aspect-[1.55/1] w-full"
-            style={{ perspective: 2200 }}
+            className="relative mx-auto w-full"
+            style={{
+                aspectRatio: aspect,
+                maxWidth,
+                perspective: 1800,
+                perspectiveOrigin: "50% 42%",
+            }}
         >
-            <div
-                className="absolute inset-0 rounded-[18px]"
-                style={{
-                    background: primaryColor,
-                    boxShadow: "0 35px 70px rgba(20,10,10,.30)",
-                }}
-            />
+            {/* Soft glow behind the book */}
             <motion.div
-                className="absolute inset-y-2 left-2 w-[calc(50%-6px)] origin-right rounded-l-[15px]"
-                initial={{ rotateY: 0 }}
-                animate={{ rotateY: -105 }}
-                transition={{ duration: 1, ease: easeSettle }}
-                style={{
-                    background: "#fdfaf4",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                }}
+                className="pointer-events-none absolute -inset-8 rounded-[32px] blur-2xl"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: [0, 0.85, 0.5], scale: [0.9, 1.05, 1] }}
+                transition={{ duration: coverDuration + 0.25, ease: "easeOut" }}
+                style={{ background: `${primaryColor}28` }}
             />
+
             <motion.div
-                className="absolute inset-y-2 right-2 w-[calc(50%-6px)] origin-left rounded-r-[15px]"
-                initial={{ rotateY: 0 }}
-                animate={{ rotateY: 105 }}
-                transition={{ duration: 1, delay: 0.05, ease: easeSettle }}
-                style={{
-                    background: "#fdfaf4",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                }}
-            />
+                className="absolute inset-0"
+                initial={{ scale: 0.93, y: 10 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ duration: coverDuration, ease: easeSettle }}
+                style={{ transformStyle: "preserve-3d" }}
+            >
+                {/* Back cover — closed-album gradient */}
+                <div
+                    className="absolute inset-0 rounded-[18px]"
+                    style={{
+                        background: `linear-gradient(140deg, ${primaryColor}, ${primaryColor}CC 60%, ${primaryColor}AA)`,
+                        boxShadow:
+                            "0 40px 80px rgba(20,10,10,.32), inset 0 0 0 1px rgba(255,255,255,.16)",
+                    }}
+                />
+
+                {/* Staggered inner pages — fan open under the cover */}
+                {[0, 1].map((i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute rounded-[13px]"
+                        style={{
+                            inset: isDesktop
+                                ? `${10 + i * 5}px ${14 + i * 8}px`
+                                : "14px 12px",
+                            transformOrigin: "left center",
+                            background:
+                                i === 0
+                                    ? "linear-gradient(180deg, #fffdf9, #f7f0e6)"
+                                    : "#fdfaf4",
+                            boxShadow:
+                                "1px 2px 12px rgba(40,20,15,.14), inset 0 0 0 1px rgba(0,0,0,.03)",
+                            zIndex: 5 - i,
+                        }}
+                        initial={{ rotateY: 0, opacity: 0, y: 0 }}
+                        animate={{
+                            rotateY: isDesktop ? -7 - i * 5 : -3 - i * 2,
+                            opacity: 1,
+                            y: -2 - i,
+                        }}
+                        transition={{
+                            duration: coverDuration * 0.8,
+                            delay: 0.1 + i * 0.08,
+                            ease: easeSettle,
+                        }}
+                    />
+                ))}
+
+                {/* Front cover — matches closed album */}
+                <motion.div
+                    className="absolute inset-0 rounded-[18px]"
+                    style={{
+                        transformOrigin: "left center",
+                        transformStyle: "preserve-3d",
+                        zIndex: 10,
+                        background: `linear-gradient(140deg, ${primaryColor}, ${primaryColor}CC 60%, ${primaryColor}AA)`,
+                        boxShadow:
+                            "0 28px 55px rgba(20,10,10,.30), inset 0 0 0 1px rgba(255,255,255,.22)",
+                    }}
+                    initial={{ rotateY: 0 }}
+                    animate={{ rotateY: [0, -6, coverRotate] }}
+                    transition={{
+                        duration: coverDuration,
+                        ease: easeSettle,
+                        times: [0, 0.18, 1],
+                    }}
+                >
+                    <motion.div
+                        className="absolute inset-0"
+                        animate={{ opacity: [1, 1, 0] }}
+                        transition={{
+                            duration: coverDuration,
+                            times: [0, 0.4, 0.85],
+                        }}
+                    >
+                        <div
+                            className="pointer-events-none absolute inset-3 rounded-[14px] border"
+                            style={{ borderColor: "rgba(255,255,255,.35)" }}
+                        />
+                        <div
+                            className="pointer-events-none absolute inset-5 rounded-[11px] border"
+                            style={{ borderColor: "rgba(255,255,255,.12)" }}
+                        />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-white">
+                            <span className="mb-2 text-[8px] uppercase tracking-[0.4em] opacity-70">
+                                A collection of
+                            </span>
+                            <span
+                                className="text-center text-2xl italic leading-tight sm:text-3xl"
+                                style={{
+                                    fontFamily:
+                                        "var(--wish-font-heading), 'Playfair Display', Georgia, serif",
+                                }}
+                            >
+                                Our
+                                <br />
+                                Memories
+                            </span>
+                        </div>
+                    </motion.div>
+                </motion.div>
+
+                {/* Light sweep across the opening */}
+                <motion.div
+                    className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[18px]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{
+                        duration: coverDuration,
+                        times: [0, 0.4, 1],
+                    }}
+                >
+                    <motion.div
+                        className="absolute inset-y-0 w-2/3"
+                        style={{
+                            background:
+                                "linear-gradient(105deg, transparent, rgba(255,255,255,.5), transparent)",
+                            filter: "blur(10px)",
+                        }}
+                        initial={{ left: "-70%" }}
+                        animate={{ left: "130%" }}
+                        transition={{
+                            duration: coverDuration * 0.85,
+                            delay: 0.12,
+                            ease: "easeInOut",
+                        }}
+                    />
+                </motion.div>
+            </motion.div>
+
+            {/* Caption */}
             <motion.div
-                className="pointer-events-none absolute left-1/2 top-1/2 z-20 h-40 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: [0, 0.8, 0], scale: [0.5, 1.5, 1] }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                style={{ background: `${primaryColor}35` }}
-            />
-            <motion.div
-                className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] uppercase tracking-[0.4em]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 0.6, 0] }}
-                transition={{ duration: 1 }}
+                className="absolute -bottom-9 left-0 right-0 text-center text-[9px] uppercase tracking-[0.35em]"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: [0, 0.55, 0], y: [6, 0, -4] }}
+                transition={{ duration: coverDuration + 0.2 }}
                 style={{ color: foregroundColor }}
             >
-                Our memories
+                Opening your memories
             </motion.div>
         </div>
     );
