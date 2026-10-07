@@ -18,6 +18,7 @@ interface ClickThroughProps {
   stages: MergedStage[];
   giftConfig?: GiftChapterConfig;
   primaryColor: string;
+  recipientName?: string;
   onNext: () => void;
   onBack: () => void;
   onNextGiftSubScreen: () => void;
@@ -38,8 +39,10 @@ export const ClickThrough = ({
   chapterIndex,
   giftSubScreen,
   stages,
+
   giftConfig,
   primaryColor,
+  recipientName,
   onNext,
   onBack,
   onNextGiftSubScreen,
@@ -127,6 +130,7 @@ export const ClickThrough = ({
               <TimelineChapter
                 entries={timelineStage?.content.memoryTimeline ?? []}
                 primaryColor={primaryColor}
+                chapterLabel="Chapter 04"
               />
             )}
             {chapterIndex === 4 && (
@@ -135,6 +139,7 @@ export const ClickThrough = ({
                 config={giftConfig}
                 onNextSubScreen={onNextGiftSubScreen}
                 primaryColor={primaryColor}
+                recipientName={recipientName}
               />
             )}
           </motion.div>

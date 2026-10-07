@@ -1,27 +1,46 @@
 "use client";
 
 import { motion } from "motion/react";
+import { Heart } from "lucide-react";
+import {
+  HeartNode,
+  MemoryCard,
+  TimelineBackdrop,
+  TimelineHeader,
+} from "../timeline/timeline-visuals";
+import { cn } from "@/lib/utils";
 import type { MemoryTimelineEntry } from "@/types/wish";
 
 interface TimelineChapterProps {
   entries: MemoryTimelineEntry[];
   primaryColor?: string;
   foregroundColor?: string;
+  /** e.g. "Chapter 04" — shown as the timeline eyebrow */
+  chapterLabel?: string;
 }
 
 /**
- * Screen 8: Memory Timeline Chapter.
- * Vertical timeline with animated line drawing and staggered cards.
+ * TimelineChapter — click-through memory timeline chapter.
+ *
+ * Premium photo-less design shared with MemoryTimelineStage:
+ * rose backdrop, heart spine, alternating glass-paper MemoryCards.
+ * Extra bottom padding for the fixed click-through nav.
  */
 export const TimelineChapter = ({
   entries,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
+  chapterLabel = "Our Story",
 }: TimelineChapterProps) => {
   if (entries.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-6">
-        <p style={{ color: foregroundColor, opacity: 0.4 }}>
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 px-6">
+        <Heart
+          className="h-8 w-8 opacity-30"
+          style={{ color: foregroundColor }}
+          aria-hidden
+        />
+        <p className="text-sm" style={{ color: foregroundColor, opacity: 0.45 }}>
           No memories yet
         </p>
       </div>
@@ -29,109 +48,85 @@ export const TimelineChapter = ({
   }
 
   return (
-    <div className="min-h-screen px-4 py-16">
-      <div className="mx-auto max-w-md">
-        {/* Title */}
-        <motion.h2
-          className="mb-8 text-center text-xl font-bold"
-          style={{
-            fontFamily: "var(--wish-font-heading), Playfair Display, serif",
-            color: foregroundColor,
-          }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          Our Journey Together 💕
-        </motion.h2>
+    <div className="relative min-h-[calc(100dvh-4.5rem)] overflow-hidden">
+      <TimelineBackdrop primaryColor={primaryColor} />
 
-        {/* Timeline */}
-        <div className="relative pl-8">
-          {/* Animated line */}
+      <div
+        className="relative z-10 mx-auto w-full max-w-2xl px-4 sm:px-6"
+        style={{
+          paddingTop: "clamp(1.5rem, 6vh, 3.5rem)",
+          paddingBottom: "clamp(5rem, 16vh, 8rem)",
+        }}
+      >
+        <TimelineHeader
+          eyebrow={chapterLabel}
+          titleLead="Memory"
+          titleAccent="Timeline"
+          subtitle="Every moment with you is a beautiful chapter in my life story."
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
+
+        <div className="relative">
           <motion.div
-            className="absolute left-3 top-0 bottom-0 w-0.5"
+            aria-hidden
+            className="absolute bottom-2 left-5 top-2 w-px sm:left-1/2 sm:-translate-x-1/2"
             style={{
-              background: `linear-gradient(180deg, ${primaryColor}, ${primaryColor}60, transparent)`,
+              background: `linear-gradient(180deg, transparent, ${primaryColor} 10%, ${primaryColor} 90%, transparent)`,
             }}
-            initial={{ scaleY: 0, transformOrigin: "top" }}
+            initial={{ scaleY: 0 }}
             animate={{ scaleY: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
           />
 
-          {/* Cards */}
           <div className="space-y-6">
-            {entries.map((entry, i) => (
-              <motion.div
-                key={i}
-                className="relative"
-                initial={{ opacity: 0, x: -15 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.2, duration: 0.5 }}
-              >
-                {/* Dot */}
-                <motion.div
-                  className="absolute -left-5 top-2 h-3 w-3 rounded-full"
-                  style={{
-                    background: primaryColor,
-                    boxShadow: `0 0 0 3px ${primaryColor}20`,
-                  }}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    delay: 0.3 + i * 0.2,
-                    type: "spring",
-                    stiffness: 300,
-                  }}
-                />
-
-                {/* Card */}
-                <div
-                  className="rounded-xl p-4"
-                  style={{
-                    background: "rgba(255,255,255,0.7)",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-                    border: `1px solid ${primaryColor}10`,
-                  }}
-                >
-                  {/* Date badge */}
-                  <span
-                    className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                    style={{
-                      backgroundColor: `${primaryColor}10`,
-                      color: primaryColor,
-                    }}
-                  >
-                    {entry.date}
-                  </span>
-
-                  <h3
-                    className="mt-1 text-sm font-bold"
-                    style={{ color: foregroundColor }}
-                  >
-                    {entry.title}
-                  </h3>
-
-                  {entry.description && (
-                    <p
-                      className="mt-1 text-xs leading-relaxed"
-                      style={{ color: foregroundColor, opacity: 0.6 }}
-                    >
-                      {entry.description}
-                    </p>
-                  )}
-
-                  {entry.photoUrl && (
-                    <img
-                      src={entry.photoUrl}
-                      alt={entry.title}
-                      className="mt-2 h-32 w-full rounded-lg object-cover"
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-              </motion.div>
+            {entries.map((entry, index) => (
+              <TimelineRow
+                key={index}
+                entry={entry}
+                index={index}
+                primaryColor={primaryColor}
+                foregroundColor={foregroundColor}
+              />
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+/** Alternating row shared with MemoryTimelineStage. */
+const TimelineRow = ({
+  entry,
+  index,
+  primaryColor,
+  foregroundColor,
+}: {
+  entry: MemoryTimelineEntry;
+  index: number;
+  primaryColor: string;
+  foregroundColor: string;
+}) => {
+  const isLeft = index % 2 === 0;
+  const nodeDelay = 0.25 + index * 0.12;
+
+  return (
+    <div
+      className={cn(
+        "relative flex",
+        isLeft ? "sm:justify-start" : "sm:justify-end",
+      )}
+    >
+      <HeartNode primaryColor={primaryColor} delay={nodeDelay} />
+
+      <div className="ml-12 w-[calc(100%-3.5rem)] sm:ml-0 sm:w-[calc(50%-2.5rem)]">
+        <MemoryCard
+          entry={entry}
+          index={index}
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
       </div>
     </div>
   );

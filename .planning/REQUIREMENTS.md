@@ -48,8 +48,12 @@
 
 ### Gifts & Gamification
 
-- [ ] **GIFT-01**: Creator can configure a Main Gift unlocked via a challenge (quiz, secret code, or question like "Where did we first meet?"); correct answer reveals the gift
+- [ ] **GIFT-01**: Creator can configure a Main Gift unlocked via a challenge; correct answer reveals the gift
+- [ ] **GIFT-01a**: Challenge type — **Multiple Choice Quiz**: creator writes a question with 2-4 options (e.g., "Where is our first date?" → Cinema / Park / Garden); recipient selects correct option to unlock
+- [ ] **GIFT-01b**: Challenge type — **Number PIN with Hint**: creator sets a numeric PIN (e.g., anniversary date) and a hint text (e.g., "This is our anniversary"); recipient enters correct number sequence to unlock
+- [ ] **GIFT-01c**: Challenge type — **Heart Catch Game**: falling hearts animate down screen; recipient moves a girl avatar to catch hearts; catch threshold (e.g., 10 hearts) unlocks gift. Needs avatar asset, collision detection, score tracking.
 - [ ] **GIFT-02**: Creator can add multiple Bonus Gifts placed into a Spin Wheel or Lottery; recipient spins/picks to reveal fun rewards (dinner, movie night, chocolate, etc.)
+- [ ] **GIFT-03**: **Proof of Rewards** — every won prize is persisted server-side and the recipient can download a non-forgeable proof (PNG prize ticket with QR code + verification code). Anti-fake design: (1) spin outcome is decided server-side with weighted crypto RNG (`probability` weights) — client cannot choose the winner; (2) each win stored in `reward_proofs` with a 128-bit crypto-random verify token; (3) ticket carries an HMAC-SHA256 signature over wish id + token + prize + timestamp. Recipient sends the ticket to the creator; anyone with the QR/code can confirm authenticity at the public `/w/[slug]/verify/[token]` page, which reads the database (authoritative record). Attempts are capped per anonymous viewer id (`playerId`), stored with each proof.
 
 ### Other
 

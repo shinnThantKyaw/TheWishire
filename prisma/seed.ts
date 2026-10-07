@@ -36,8 +36,8 @@ Alex ❤️`,
   poem: {
     id: "birthday-wish-1",
     title: "A Birthday Wish",
-    author: "Unknown",
-    text: "May your day be filled with sunshine,\nAnd your year with joy untold,\nMay each dream you've ever wished for,\nCome to you as you grow old.",
+    author: "အီလစ်",
+    text: "အာရေးဘီးယန်း သိုးဖြူလေးတွေ လိုပေါ့\nဟောဒီကမ္ဘာမှာ မင်းရှိနေရင် တော်ပါပြီ။",
   },
   memoryTimeline: [
     {
@@ -85,8 +85,33 @@ const SHARED_SETTINGS_BASE = {
   enableMusic: true,
   enablePoem: true,
   enableTimeline: true,
-  enableGiftChallenge: false,
-  enableSpinWheel: false,
+  enableGiftChallenge: true,
+  enableSpinWheel: true,
+  giftChapter: {
+    gateAction: {
+      type: "pin" as const,
+      pin: "1609",
+      hint: "our anniversary date",
+    },
+    mainGiftMessage: "This is just the beginning of forever. I love you more than words can say. 💝",
+    mainGiftPhotoIds: ["/Gift.jpg"],
+    // Bonus prize wheel — spins are server-authoritative; every win is
+    // persisted as a verifiable proof ticket (GIFT-03)
+    miniGame: {
+      type: "spin-wheel" as const,
+      attempts: 3,
+      items: [
+        { id: "1", label: "Love Note", emoji: "💌", description: "A sweet handwritten note", probability: 22 },
+        { id: "2", label: "Flowers", emoji: "🌸", description: "A bouquet of virtual flowers", probability: 18 },
+        { id: "3", label: "Chocolate", emoji: "🍫", description: "Your favorite chocolate box", probability: 18 },
+        { id: "4", label: "Warm Hug", emoji: "🤗", description: "One extra-long warm hug", probability: 14 },
+        { id: "5", label: "Sweet Song", emoji: "🎵", description: "A song picked just for you", probability: 10 },
+        { id: "6", label: "Movie Night", emoji: "🎬", description: "A cozy movie night together", probability: 8 },
+        { id: "7", label: "Lucky Cat", emoji: "🐱", description: "A lucky companion for the year", probability: 6 },
+        { id: "8", label: "Golden Star", emoji: "🌟", description: "The rarest prize of all", probability: 4 },
+      ],
+    },
+  },
 } as const;
 
 const SHARED_STAGES = [

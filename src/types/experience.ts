@@ -68,6 +68,7 @@ export type StartAction =
   | { type: "candles"; count: number }
   | { type: "yes-no"; prompt: string }
   | { type: "password"; answer: string }
+  | { type: "pin"; pin: string; hint: string }
   | { type: "tap"; prompt: string };
 
 // ─── Gift Box (Screen 4) ──────────────────────────────
@@ -92,6 +93,22 @@ export interface MiniGameConfig {
   type: MiniGameType;
   attempts: number;
   items: RewardItem[];
+}
+
+/** Server-issued proof backing a won prize (GIFT-03). */
+export interface SpinProof {
+  verifyToken: string;
+  signature: string;
+  serial: string;
+  bonusPoints: number;
+  /** ISO timestamp of the win. */
+  wonAt: string;
+}
+
+/** A won prize plus its server-side proof, as returned by POST /api/w/[slug]/spin. */
+export interface WonReward {
+  item: RewardItem;
+  proof: SpinProof;
 }
 
 // ─── Material Themes (Interactive Mode) ────────────────

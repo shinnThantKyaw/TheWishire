@@ -43,6 +43,34 @@ Wishire is a Next.js 16 app for creating personalized, interactive surprise webs
 - Follow the existing design system: pink primary color, dark mode support via `dark:` prefix.
 - Use shadcn component variants via `class-variance-authority` (CVA).
 
+### Responsive Design — Small Laptops (MANDATORY)
+
+Every new page and every modified page **must** be responsive for small 13-inch laptops. Do not wait to be asked — assume this requirement on every UI change.
+
+**Reference target: Dell Latitude 7320 (13.3" FHD 1920×1080).**
+
+| Constraint | Value |
+|---|---|
+| Screen | 1920 × 1080 |
+| Browser chrome (tabs + URL bar + bookmarks + UI) | ~80–120 px |
+| **Real viewport to design for** | **≈ 1920 × 930–950** |
+| Minimum supported | 1366 × 768 (older 13"/small Windows laptops) |
+
+**Never assume full 1080 px height.** Vertical space is the scarce resource on small laptops — treat ~900 px as the design height, not 1080.
+
+**Checklist for every page:**
+
+1. **Viewport-height-aware layout** — full-screen stages must fit in `h-[100dvh]` / `min-h-0` space, not hard-coded `h-screen` against a design that assumed 1080. Use `dvh` where scrollbars would otherwise break the fold.
+2. **No fixed pixel heights for large blocks** — prefer `min-h`, `max-h`, aspect-ratio, and flexible gaps over hard-coded `h-[700px]`.
+3. **Test at 1366×768 and 1920×900** — not just 1920×1080 and mobile. Breakpoints and overflow must be verified at these laptop sizes.
+4. **Long text / long names** — truncate with `line-clamp` or ellipsis; never let content push layout past the viewport.
+5. **Fixed/sticky nav must not collide** — fixed headers, footers, and action bars need `top`/`bottom` offsets that respect `dvh` and safe areas.
+6. **Scroll containers over page scroll for long content** — when a section exceeds the small-laptop viewport, make the section scroll (`overflow-y-auto` with `min-h-0` flex child), not the whole page, when that is the existing pattern.
+7. **Fonts and spacing scale down** — avoid viewport-fixed large display type that overflows at 1366 width; clamp with `clamp()` or responsive `text-*` sizes.
+8. **Verify dark mode too** — contrast and fixed overlays must work in both themes at small sizes.
+
+**Definition of done:** page renders without horizontal scroll, without clipped content, and without vertical overflow at 1366×768 and 1920×900.
+
 ### Forms & Validation
 
 - Use React Hook Form for form state management.
@@ -137,6 +165,7 @@ Do NOT just dump code. Explain first, then show code.
 
 ## Key Conventions
 
+- **Responsive design:** every new/modified page must work on small 13-inch laptops (Dell Latitude 7320, ~1920×930 viewport; floor 1366×768) — see **Responsive Design — Small Laptops** under Styling. Never assume full 1080px height.
 - **Singleton pattern** for Prisma Client (`src/lib/prisma.ts`) — never instantiate directly.
 - **Supabase clients:** use `src/lib/supabase/server.ts` for server, `src/lib/supabase/client.ts` for browser.
 - **Public wish pages** are at `/w/[slug]` — keep this route lightweight and performant.

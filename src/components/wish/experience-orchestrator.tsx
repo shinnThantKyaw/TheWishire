@@ -180,6 +180,7 @@ export const ExperienceOrchestrator = ({
                 stages={stages}
                 giftConfig={giftConfig}
                 primaryColor={primaryColor}
+                recipientName={recipientName}
                 onNext={actions.next}
                 onBack={actions.back}
                 onNextGiftSubScreen={actions.nextGiftSubScreen}
@@ -262,7 +263,10 @@ export const ExperienceOrchestrator = ({
       {/* ── Screen Content ────────────────────────── */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`${activePhase}-${state.chapterIndex}-${state.giftSubScreen}`}
+          // giftSubScreen intentionally NOT in the key — GiftChapter owns its
+          // sub-screen transitions internally; remounting here would wipe
+          // chapter state (e.g. won spin-wheel rewards) on every sub-screen change
+          key={`${activePhase}-${state.chapterIndex}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

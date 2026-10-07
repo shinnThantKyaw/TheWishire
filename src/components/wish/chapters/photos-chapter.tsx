@@ -355,19 +355,25 @@ export const PhotosChapter = ({
                                 )}
 
                                 <motion.div
-                                    className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full px-4 py-2 text-[9px] font-semibold uppercase tracking-[0.22em]"
-                                    animate={{ y: [0, -3, 0] }}
+                                    className="pointer-events-none absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold tracking-[0.16em] uppercase sm:text-xs sm:tracking-[0.18em]"
+                                    animate={{ y: [0, -4, 0] }}
                                     transition={{
                                         duration: 2.2,
                                         repeat: Infinity,
                                         ease: "easeInOut",
                                     }}
                                     style={{
-                                        background: "rgba(255,255,255,.16)",
-                                        border: "1px solid rgba(255,255,255,.22)",
-                                        backdropFilter: "blur(10px)",
+                                        background: "rgba(18, 18, 32, 0.82)",
+                                        border: "1px solid rgba(255,255,255,0.22)",
+                                        color: "#FFFFFF",
+                                        boxShadow:
+                                            "0 10px 28px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08)",
+                                        backdropFilter: "blur(8px)",
                                     }}
                                 >
+                                    <span aria-hidden="true" className="text-[13px] leading-none">
+                                        ✨
+                                    </span>
                                     Tap to open
                                 </motion.div>
                             </motion.div>
@@ -549,31 +555,66 @@ export const PhotosChapter = ({
                                 disabled={currentPage === totalViews - 1 || isTurning}
                                 className="absolute inset-y-0 right-0 z-[70] w-1/2 cursor-e-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
                             />
+
+                            {/* Flip instruction — on the page surface, high-contrast, never blocks taps */}
+                            {!isTurning && !hasFlipped && totalViews > 1 && (
+                                <motion.div
+                                    className="pointer-events-none absolute bottom-4 left-1/2 z-[75] flex w-[calc(100%-2rem)] max-w-xs -translate-x-1/2 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-center text-[11px] font-semibold leading-snug tracking-[0.04em] sm:bottom-5 sm:w-auto sm:max-w-none sm:px-5 sm:py-2.5 sm:text-xs"
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        scale: [1, 1.03, 1],
+                                    }}
+                                    transition={{
+                                        opacity: { delay: 1.1, duration: 0.45 },
+                                        y: { delay: 1.1, duration: 0.45 },
+                                        scale: {
+                                            delay: 1.7,
+                                            duration: 2.4,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                        },
+                                    }}
+                                    style={{
+                                        background: "rgba(18, 18, 32, 0.9)",
+                                        border: `1px solid ${primaryColor}80`,
+                                        color: "#FFFFFF",
+                                        boxShadow: `0 12px 32px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.06) inset`,
+                                        backdropFilter: "blur(10px)",
+                                    }}
+                                >
+                                    {isDesktop ? (
+                                        <>
+                                            <span
+                                                aria-hidden="true"
+                                                className="rounded-md border border-white/25 bg-white/10 px-1.5 py-0.5 text-[10px] font-bold leading-none"
+                                            >
+                                                ←
+                                            </span>
+                                            <span>Click sides or use arrow keys</span>
+                                            <span
+                                                aria-hidden="true"
+                                                className="rounded-md border border-white/25 bg-white/10 px-1.5 py-0.5 text-[10px] font-bold leading-none"
+                                            >
+                                                →
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span
+                                                aria-hidden="true"
+                                                className="text-[13px] leading-none"
+                                            >
+                                                👆
+                                            </span>
+                                            <span>Swipe or tap the sides to flip</span>
+                                        </>
+                                    )}
+                                </motion.div>
+                            )}
                         </div>
                     </div>
-
-                    {!isTurning && !hasFlipped && totalViews > 1 && (
-                        <motion.div
-                            className="relative z-10 mx-auto mt-4 flex w-fit items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] sm:text-[10px] sm:tracking-[0.18em]"
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1.2, duration: 0.5 }}
-                            style={{
-                                borderColor: `${primaryColor}40`,
-                                background: "rgba(255,255,255,.92)",
-                                color: foregroundColor,
-                                boxShadow: `0 6px 20px ${foregroundColor}18`,
-                            }}
-                        >
-                            {isDesktop
-                                ? "Click or use"
-                                : "Swipe anywhere or tap sides"}
-                            <span className="text-sm normal-case tracking-normal">
-                                ← →
-                            </span>
-                            to flip
-                        </motion.div>
-                    )}
 
                     <div
                         className="flex items-center justify-between gap-2 px-2 sm:px-4"

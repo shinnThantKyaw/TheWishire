@@ -1,8 +1,17 @@
 "use client";
 
 import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
 import { StageContainer, StaggeredContainer, RevealChild } from "../stage-container";
 import { RevealWrapper } from "../reveal-wrapper";
+import {
+  HeartNode,
+  MemoryCard,
+  TimelineBackdrop,
+  TimelineHeader,
+  bodyFont,
+} from "../timeline/timeline-visuals";
+import { cn } from "@/lib/utils";
 import type { AnimationConfig } from "@/types/template";
 import type { MemoryTimelineEntry, FlowMode } from "@/types/wish";
 
@@ -14,10 +23,13 @@ interface MemoryTimelineStageProps {
 }
 
 /**
- * MemoryTimelineStage — displays shared memories on an elegant timeline.
+ * MemoryTimelineStage — premium photo-less memory timeline.
  *
- * In "tap-to-reveal" mode, each timeline card starts hidden.
- * In other modes, cards cascade in via stagger animation.
+ * Rose backdrop, heart spine, alternating glass-paper MemoryCards.
+ * Fits small 13" laptops (~1920×900 viewport) as well as mobile.
+ *
+ * "tap-to-reveal" wraps each row in RevealWrapper;
+ * other modes cascade rows via StaggeredContainer.
  */
 export const MemoryTimelineStage = ({
   entries,
@@ -29,41 +41,39 @@ export const MemoryTimelineStage = ({
 
   const isTapToReveal = flowMode === "tap-to-reveal";
   const isButtonMode = flowMode === "buttons";
+  const primaryColor = "var(--wish-primary, #E91E63)";
+  const foregroundColor = "var(--wish-foreground, #1A1A2E)";
 
   return (
-    <StageContainer animation={animation} className="flex-col px-4 sm:px-6">
-      <div className="mx-auto w-full max-w-lg py-12">
-        {/* Title */}
-        <motion.div
-          className="mb-10 text-center"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        >
-          <h2
-            className="text-3xl font-bold sm:text-4xl"
-            style={{
-              color: "var(--wish-foreground, #1A1A2E)",
-              fontFamily: "var(--wish-font-heading), Georgia, serif",
-            }}
-          >
-            Our Memories
-          </h2>
-          <p
-            className="mt-2 text-sm"
-            style={{ color: "var(--wish-foreground, #1A1A2E)", opacity: 0.5 }}
-          >
-            ✨ A journey through our moments together
-          </p>
-        </motion.div>
+    <StageContainer
+      animation={animation}
+      className="relative flex-col overflow-hidden"
+    >
+      <TimelineBackdrop primaryColor={primaryColor} />
 
-        {/* Timeline */}
+      <div
+        className="relative z-10 mx-auto w-full max-w-2xl px-4 sm:px-6"
+        style={{
+          paddingTop: "clamp(2rem, 8vh, 5rem)",
+          paddingBottom: "clamp(4.5rem, 14vh, 7rem)",
+        }}
+      >
+        <TimelineHeader
+          eyebrow="Our Story"
+          titleLead="Memory"
+          titleAccent="Timeline"
+          subtitle="Every moment with you is a beautiful chapter in our story."
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
+
         <div className="relative">
-          {/* Animated vertical line */}
+          {/* Spine — left on mobile, center on sm+ */}
           <motion.div
-            className="absolute bottom-0 left-5 top-0 w-px sm:left-1/2 sm:-translate-x-1/2"
+            aria-hidden
+            className="absolute bottom-4 left-5 top-4 w-px sm:left-1/2 sm:-translate-x-1/2"
             style={{
-              background: "linear-gradient(180deg, transparent, var(--wish-primary, #E91E63), transparent)",
+              background: `linear-gradient(180deg, transparent, ${primaryColor} 12%, ${primaryColor} 88%, transparent)`,
             }}
             initial={{ scaleY: 0 }}
             animate={{ scaleY: 1 }}
@@ -71,55 +81,55 @@ export const MemoryTimelineStage = ({
           />
 
           {isTapToReveal ? (
-            /* Tap-to-reveal: each card wrapped individually */
-            <div className="space-y-10">
+            <div className="space-y-8">
               {entries.map((entry, index) => (
-                <TimelineCard
+                <TimelineRow
                   key={index}
                   entry={entry}
                   index={index}
+                  primaryColor={primaryColor}
+                  foregroundColor={foregroundColor}
                   isTapToReveal
                 />
               ))}
             </div>
           ) : (
-            /* Scroll / buttons: staggered cascade */
             <StaggeredContainer staggerDelay={0.15}>
               {entries.map((entry, index) => (
                 <RevealChild key={index}>
-                  <TimelineCard entry={entry} index={index} />
+                  <TimelineRow
+                    entry={entry}
+                    index={index}
+                    primaryColor={primaryColor}
+                    foregroundColor={foregroundColor}
+                  />
                 </RevealChild>
               ))}
             </StaggeredContainer>
           )}
         </div>
 
-        {/* Continue button (scroll & tap-to-reveal only) */}
         {!isButtonMode && (
           <motion.div
-            className="mt-10 text-center"
+            className="mt-12 text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 + entries.length * 0.15 }}
+            transition={{ delay: 0.4 + entries.length * 0.12 }}
           >
             <motion.button
+              type="button"
               onClick={onAdvance}
-              className="relative overflow-hidden rounded-full px-10 py-3.5 text-sm font-semibold text-white shadow-lg"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full px-10 py-3.5 text-sm font-semibold text-white shadow-lg"
               style={{
-                background: "linear-gradient(135deg, var(--wish-primary, #E91E63), var(--wish-accent, #FF80AB))",
-                boxShadow: "0 4px 16px rgba(233, 30, 99, 0.3)",
+                background: `linear-gradient(135deg, ${primaryColor}, var(--wish-accent, #FF80AB))`,
+                boxShadow: `0 4px 16px ${primaryColor}44`,
+                fontFamily: bodyFont,
               }}
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
               Continue
-              <motion.span
-                className="ml-2 inline-block"
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
+              <ArrowRight className="h-4 w-4" aria-hidden />
             </motion.button>
           </motion.div>
         )}
@@ -128,114 +138,58 @@ export const MemoryTimelineStage = ({
   );
 };
 
-/** Single timeline card */
-const TimelineCard = ({
+/** One alternating row: glass memory card + heart node on the spine. */
+const TimelineRow = ({
   entry,
   index,
+  primaryColor,
+  foregroundColor,
   isTapToReveal = false,
 }: {
   entry: MemoryTimelineEntry;
   index: number;
+  primaryColor: string;
+  foregroundColor: string;
   isTapToReveal?: boolean;
 }) => {
   const isLeft = index % 2 === 0;
+  const nodeDelay = 0.25 + index * 0.12;
 
-  const card = (
+  const row = (
     <div
-      className={`relative mb-10 flex items-start ${
-        isLeft ? "flex-row" : "flex-row-reverse"
-      }`}
+      className={cn(
+        "relative mb-8 flex sm:mb-10",
+        isLeft ? "sm:justify-start" : "sm:justify-end",
+      )}
     >
-      {/* Dot on the line */}
-      <motion.div
-        className="absolute left-5 z-10 -translate-x-1/2 sm:left-1/2"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 15,
-          delay: 0.3 + index * 0.15,
-        }}
-      >
-        <div
-          className="h-3.5 w-3.5 rounded-full border-[3px] border-white"
-          style={{
-            backgroundColor: "var(--wish-primary, #E91E63)",
-            boxShadow: "0 0 0 4px rgba(233, 30, 99, 0.15), 0 2px 8px rgba(233, 30, 99, 0.3)",
-          }}
-        />
-      </motion.div>
+      <HeartNode primaryColor={primaryColor} delay={nodeDelay} />
 
-      {/* Card */}
       <div
-        className={`ml-12 w-[calc(100%-3.5rem)] sm:ml-0 sm:w-[calc(50%-2rem)] ${
-          isLeft ? "sm:mr-auto sm:pr-10" : "sm:ml-auto sm:pl-10"
-        }`}
+        className={cn(
+          "ml-12 w-[calc(100%-3.5rem)] sm:ml-0 sm:w-[calc(50%-2.5rem)]",
+        )}
       >
-        <div
-          className="overflow-hidden rounded-xl p-5"
-          style={{
-            background: "linear-gradient(135deg, #FFFBF0 0%, #FFF8E8 100%)",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03)",
-          }}
-        >
-          {/* Date badge */}
-          <div
-            className="mb-2.5 inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider"
-            style={{
-              backgroundColor: "rgba(233, 30, 99, 0.08)",
-              color: "var(--wish-primary, #E91E63)",
-            }}
-          >
-            {entry.date}
-          </div>
-
-          {/* Title */}
-          <h3
-            className="text-lg font-bold"
-            style={{
-              color: "#3E2723",
-              fontFamily: "var(--wish-font-heading), Georgia, serif",
-            }}
-          >
-            {entry.title}
-          </h3>
-
-          {/* Description */}
-          {entry.description && (
-            <p
-              className="mt-2 text-sm leading-relaxed"
-              style={{ color: "#5D4037", opacity: 0.85 }}
-            >
-              {entry.description}
-            </p>
-          )}
-
-          {/* Photo */}
-          {entry.photoUrl && (
-            <div className="mt-3 overflow-hidden rounded-lg">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={entry.photoUrl}
-                alt={entry.title}
-                className="h-36 w-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          )}
-        </div>
+        <MemoryCard
+          entry={entry}
+          index={index}
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
       </div>
     </div>
   );
 
   if (isTapToReveal) {
     return (
-      <RevealWrapper hint={`Reveal: ${entry.title} ✨`} delay={index * 0.2}>
-        {card}
+      <RevealWrapper
+        hint={`Reveal: ${entry.title}`}
+        delay={index * 0.2}
+        primaryColor={primaryColor}
+      >
+        {row}
       </RevealWrapper>
     );
   }
 
-  return card;
+  return row;
 };

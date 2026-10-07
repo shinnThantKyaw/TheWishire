@@ -40,11 +40,38 @@ model Wish {
 
   user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   media WishMedia[]
+  rewardProofs RewardProof[]
 
   @@index([userId])
   @@index([slug])
   @@index([published, publishedAt])
   @@map("wishes")
+}
+
+/// A won prize from the gift-chapter mini-game. Each row is an
+/// authoritative, non-forgeable record backing the downloadable
+/// PNG proof ticket (verify token + HMAC signature).
+model RewardProof {
+  id          String   @id @default(uuid()) @db.Uuid
+  wishId      String   @map("wish_id") @db.Uuid
+  /// Ephemeral viewer id (crypto UUID in sessionStorage) — caps attempts per anonymous viewer
+  playerId    String   @map("player_id")
+  rewardId    String   @map("reward_id")
+  label       String
+  emoji       String
+  description String
+  /// 128-bit crypto-random hex — authority for the public verify page
+  verifyToken String   @unique @map("verify_token")
+  /// HMAC-SHA256 over wishId|token|label|wonAt — proves ticket matches this record
+  signature   String
+  serial      String
+  bonusPoints Int      @map("bonus_points")
+  wonAt       DateTime @default(now()) @map("won_at")
+
+  wish Wish @relation(fields: [wishId], references: [id], onDelete: Cascade)
+
+  @@index([wishId, playerId])
+  @@map("reward_proofs")
 }
 
 model WishMedia {
