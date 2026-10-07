@@ -32,9 +32,38 @@ export const GiftChapter = ({
 }: GiftChapterProps) => {
   // Track every prize won on the spin wheel → shown on reward-result tickets
   const [wonItems, setWonItems] = useState<WonReward[]>([]);
+  // Server-restored remaining attempts (undefined until restore fetch resolves)
+  const [initialRemaining, setInitialRemaining] = useState<number | undefined>(undefined);
 
   const handleWin = useCallback((won: WonReward) => {
     setWonItems((prev) => [...prev, won]);
+  }, []);
+
+  // Restore wallet from server on mount — reward proofs survive refresh;
+  // client React state alone lost them (and attempts appeared reset).
+  useEffect(() => {
+    const slug = window.location.pathname.split("/")[2];
+    if (!slug) return;
+    let playerId = sessionStorage.getItem("wish_player_id");
+    if (!playerId) {
+      playerId = crypto.randomUUID();
+      sessionStorage.setItem("wish_player_id", playerId);
+    }
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`/api/w/${slug}/rewards?playerId=${playerId}`, {
+          signal: controller.signal,
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as { won: WonReward[]; remaining: number };
+        setWonItems(data.won);
+        setInitialRemaining(data.remaining);
+      } catch {
+        // offline/aborted — start fresh from local state
+      }
+    })();
+    return () => controller.abort();
   }, []);
 
   return (
@@ -73,6 +102,7 @@ export const GiftChapter = ({
             config={config}
             onComplete={onNextSubScreen}
             onWin={handleWin}
+            initialRemaining={initialRemaining}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
           />
@@ -1607,12 +1637,15 @@ const MiniGame = ({
   config,
   onComplete,
   onWin,
+  initialRemaining,
   primaryColor,
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
   onComplete: () => void;
   onWin: (won: WonReward) => void;
+  /** Server-restored attempts left (from GET /api/w/[slug]/rewards). */
+  initialRemaining?: number;
   primaryColor: string;
   foregroundColor: string;
 }) => {
@@ -1621,10 +1654,15 @@ const MiniGame = ({
   const attempts = config?.miniGame?.attempts ?? DEFAULT_ATTEMPTS;
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
-  const [remaining, setRemaining] = useState(attempts);
+  const [remaining, setRemaining] = useState(initialRemaining ?? attempts);
   const [winner, setWinner] = useState<WonReward | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [spinError, setSpinError] = useState<string | null>(null);
+
+  // Adopt server-restored count when the restore fetch resolves after mount
+  useEffect(() => {
+    if (initialRemaining !== undefined) setRemaining(initialRemaining);
+  }, [initialRemaining]);
 
   // Ephemeral viewer id — caps attempts per anonymous viewer server-side
   const playerIdRef = useRef<string>("");
