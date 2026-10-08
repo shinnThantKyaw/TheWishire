@@ -92,6 +92,7 @@ export const GiftChapter = ({
             key="bonus-intro"
             config={config}
             onComplete={onNextSubScreen}
+            attemptsLeft={initialRemaining}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
           />
@@ -1403,16 +1404,19 @@ const MainGiftReveal = ({
 const BonusIntro = ({
   config,
   onComplete,
+  attemptsLeft,
   primaryColor,
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
   onComplete: () => void;
+  /** Server-restored attempts left — keeps this screen honest vs the wheel. */
+  attemptsLeft?: number;
   primaryColor: string;
   foregroundColor: string;
 }) => {
   const prefersReducedMotion = useReducedMotion();
-  const attempts = config?.miniGame?.attempts ?? 3;
+  const attempts = attemptsLeft ?? config?.miniGame?.attempts ?? 3;
 
   // Rising sparkle particles — celebratory teaser, none under reduced motion
   const sparkles = useMemo(
@@ -1602,7 +1606,9 @@ const BonusIntro = ({
         >
           <Clover className="h-4 w-4" style={{ color: primaryColor }} aria-hidden />
           <p className="text-sm font-medium" style={{ color: primaryColor }}>
-            You have {attempts} chances to win!
+            {attempts > 0
+              ? `You have ${attempts} ${attempts === 1 ? "chance" : "chances"} to win!`
+              : "All chances used — your prizes await!"}
           </p>
         </motion.div>
 
