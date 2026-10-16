@@ -10,16 +10,23 @@ export type ExperiencePhase =
   | "chapters" // Screens 5-9: The main content experience
   | "closing"; // Screen 10: Final thank you + CTAs
 
-/** The 5 chapters within the "chapters" phase (screens 6-10). */
-export type ChapterIndex = 0 | 1 | 2 | 3 | 4;
+/** The 6 chapters within the "chapters" phase (screens 6-11). */
+export type ChapterIndex = 0 | 1 | 2 | 3 | 4 | 5;
 
 export const CHAPTER_NAMES: Record<ChapterIndex, string> = {
   0: "letter",
   1: "photos",
   2: "poem",
-  3: "timeline",
-  4: "gift",
+  3: "song",
+  4: "timeline",
+  5: "gift",
 };
+
+/** Total number of chapters in the experience. */
+export const TOTAL_CHAPTERS = 6;
+
+/** The gift & rewards chapter is always last. */
+export const GIFT_CHAPTER_INDEX = 5;
 
 /** Sub-screens within the Gift chapter (screen 10). */
 export type GiftSubScreen =

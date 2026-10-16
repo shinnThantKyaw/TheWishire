@@ -180,7 +180,6 @@ export const ExperienceOrchestrator = ({
                 stages={stages}
                 giftConfig={giftConfig}
                 primaryColor={primaryColor}
-                recipientName={recipientName}
                 onNext={actions.next}
                 onBack={actions.back}
                 onNextGiftSubScreen={actions.nextGiftSubScreen}
@@ -211,6 +210,8 @@ export const ExperienceOrchestrator = ({
         return (
           <ClosingScreen
             senderName={senderName}
+            recipientName={recipientName}
+            occasion={occasion}
             onRestart={actions.restart}
             primaryColor={theme.colors.primary}
             secondaryColor={theme.colors.secondary}
@@ -223,7 +224,9 @@ export const ExperienceOrchestrator = ({
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden"
+      // overflow-x-hidden (not overflow-hidden): vertical page scroll must
+      // work on mobile so tall chapters (song video card) reach the fold
+      className="relative min-h-screen overflow-x-hidden"
       style={{
         ...themeToCSSVars(theme),
         backgroundColor: theme.colors.background,
@@ -245,20 +248,30 @@ export const ExperienceOrchestrator = ({
         <Decorations config={decorations} />
       )}
 
-      {/* ── Progress Bar (all phases) ─────────────── */}
-      <div className="fixed left-0 right-0 top-0 z-50">
-        <div
-          className="h-1 w-full"
-          style={{ backgroundColor: `${theme.colors.secondary}30` }}
-        >
+      {/* ── Progress Bar (chapters phase only) ────── */}
+      <AnimatePresence>
+        {activePhase === "chapters" && (
           <motion.div
-            className="h-full"
-            style={{ backgroundColor: theme.colors.primary }}
-            animate={{ width: `${state.progress * 100}%` }}
-            transition={{ type: "spring", stiffness: 200, damping: 25 }}
-          />
-        </div>
-      </div>
+            className="fixed left-0 right-0 top-0 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div
+              className="h-1 w-full"
+              style={{ backgroundColor: `${theme.colors.secondary}30` }}
+            >
+              <motion.div
+                className="h-full"
+                style={{ backgroundColor: theme.colors.primary }}
+                animate={{ width: `${state.progress * 100}%` }}
+                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Screen Content ────────────────────────── */}
       <AnimatePresence mode="wait">

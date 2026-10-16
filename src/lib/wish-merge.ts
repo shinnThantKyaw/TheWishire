@@ -41,6 +41,7 @@ const NEW_STAGE_TYPES = new Set([
   "letter",
   "photos",
   "poem",
+  "song",
   "timeline",
   "gift",
   "closing",
@@ -125,6 +126,10 @@ const buildMergedStage = (
 
     case "poem":
       stageContent.poem = content.poem ?? undefined;
+      break;
+
+    case "song":
+      stageContent.song = content.song ?? undefined;
       break;
 
     case "timeline":

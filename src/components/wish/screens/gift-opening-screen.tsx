@@ -35,6 +35,8 @@ const OCCASION_COPY: Record<
       { emoji: "📸", label: "Memories" },
       { emoji: "🎵", label: "A Song" },
       { emoji: "💝", label: "A Wish" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   anniversary: {
@@ -47,6 +49,8 @@ const OCCASION_COPY: Record<
       { emoji: "📸", label: "Our Story" },
       { emoji: "💕", label: "A Promise" },
       { emoji: "🌹", label: "A Rose" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   valentine: {
@@ -59,6 +63,8 @@ const OCCASION_COPY: Record<
       { emoji: "❤️", label: "A Heart" },
       { emoji: "🌹", label: "Roses" },
       { emoji: "✨", label: "A Wish" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   wedding: {
@@ -71,6 +77,8 @@ const OCCASION_COPY: Record<
       { emoji: "💍", label: "Blessings" },
       { emoji: "📸", label: "Memories" },
       { emoji: "🥂", label: "Cheers" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   graduation: {
@@ -83,6 +91,8 @@ const OCCASION_COPY: Record<
       { emoji: "🎓", label: "Pride" },
       { emoji: "⭐", label: "A Wish" },
       { emoji: "📖", label: "Wisdom" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   friendship: {
@@ -95,6 +105,8 @@ const OCCASION_COPY: Record<
       { emoji: "🤗", label: "A Hug" },
       { emoji: "📸", label: "Memories" },
       { emoji: "💛", label: "A Wish" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
   "thank-you": {
@@ -107,6 +119,8 @@ const OCCASION_COPY: Record<
       { emoji: "🙏", label: "Gratitude" },
       { emoji: "🌸", label: "Warmth" },
       { emoji: "✨", label: "A Wish" },
+      { emoji: "🖼️", label: "Photos" },
+      { emoji: "📜", label: "A Poem" },
     ],
   },
 };
@@ -121,6 +135,8 @@ const FALLBACK_COPY = {
     { emoji: "📸", label: "Memories" },
     { emoji: "🎵", label: "A Song" },
     { emoji: "💝", label: "A Wish" },
+    { emoji: "🖼️", label: "Photos" },
+    { emoji: "📜", label: "A Poem" },
   ],
 };
 
@@ -386,6 +402,8 @@ export const GiftOpeningScreen = ({
                   { x: 75, y: -210, rotate: 12 },
                   { x: -48, y: -150, rotate: -5 },
                   { x: 48, y: -150, rotate: 5 },
+                  { x: -118, y: -138, rotate: -20 },
+                  { x: 118, y: -138, rotate: 20 },
                 ];
                 const pos = positions[i % positions.length];
                 const tints = [
@@ -393,6 +411,8 @@ export const GiftOpeningScreen = ({
                   { bg: `${secondaryColor}10`, border: `${secondaryColor}20` },
                   { bg: `${primaryColor}0a`, border: `${primaryColor}15` },
                   { bg: `${secondaryColor}08`, border: `${secondaryColor}18` },
+                  { bg: `${primaryColor}0c`, border: `${primaryColor}1a` },
+                  { bg: `${secondaryColor}0c`, border: `${secondaryColor}1c` },
                 ];
                 const tint = tints[i % tints.length];
 

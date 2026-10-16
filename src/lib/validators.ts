@@ -109,6 +109,13 @@ export const WishContentSchema = z.object({
       mood: z.string(),
     })
     .optional(),
+  song: z
+    .object({
+      youtubeUrl: z.string().min(1).max(300),
+      title: z.string().max(100).optional(),
+      artist: z.string().max(100).optional(),
+    })
+    .optional(),
   voiceMessageUrl: z.string().url().optional(),
   videoUrl: z.string().url().optional(),
   memoryTimeline: z

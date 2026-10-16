@@ -15,7 +15,6 @@ interface GiftChapterProps {
   onNextSubScreen: () => void;
   primaryColor?: string;
   foregroundColor?: string;
-  recipientName?: string;
 }
 
 /**
@@ -28,7 +27,6 @@ export const GiftChapter = ({
   onNextSubScreen,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
-  recipientName,
 }: GiftChapterProps) => {
   // Track every prize won on the spin wheel → shown on reward-result tickets
   const [wonItems, setWonItems] = useState<WonReward[]>([]);
@@ -113,14 +111,6 @@ export const GiftChapter = ({
             key="reward-result"
             wonItems={wonItems}
             onComplete={onNextSubScreen}
-            primaryColor={primaryColor}
-            foregroundColor={foregroundColor}
-          />
-        )}
-        {giftSubScreen === "complete" && (
-          <GoodbyeScreen
-            key="complete"
-            recipientName={recipientName}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
           />
@@ -1664,11 +1654,20 @@ const MiniGame = ({
   const [winner, setWinner] = useState<WonReward | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [spinError, setSpinError] = useState<string | null>(null);
+  // Current wheel animation; phase 1 = fast linear rev-up, phase 2 = ease-out settle
+  const [spinTransition, setSpinTransition] = useState<{
+    duration: number;
+    ease: "linear" | [number, number, number, number];
+  }>({ duration: 0, ease: "linear" });
 
   // Adopt server-restored count when the restore fetch resolves after mount
   useEffect(() => {
     if (initialRemaining !== undefined) setRemaining(initialRemaining);
   }, [initialRemaining]);
+
+  // Mirror of `rotation` for use inside the async spin callback without
+  // stale closures — always the wheel's latest target angle.
+  const rotationRef = useRef(0);
 
   // Ephemeral viewer id — caps attempts per anonymous viewer server-side
   const playerIdRef = useRef<string>("");
@@ -1743,14 +1742,25 @@ const MiniGame = ({
     });
   }, [items, segmentAngle, center, radius]);
 
-  // Server-authoritative spin: winner decided in API (weighted crypto RNG),
-  // client only animates the wheel to the returned segment (GIFT-03).
+  // Server-authoritative spin: winner decided in API (weighted crypto RNG).
+  // Two-phase animation (GIFT-03):
+  //   Phase 1 — instant rev-up on click so the wheel never waits on the network
+  //   Phase 2 — when the server answers, framer retargets mid-flight to the
+  //             decided segment with a strong ease-out settle
   const spin = useCallback(async () => {
     if (spinning || remaining <= 0) return;
     setSpinning(true);
     setWinner(null);
     setShowConfetti(false);
     setSpinError(null);
+
+    // Phase 1 — start spinning immediately (2 fast turns while the API answers)
+    if (!prefersReducedMotion) {
+      const revTarget = rotationRef.current + 720;
+      rotationRef.current = revTarget;
+      setSpinTransition({ duration: 0.9, ease: "linear" });
+      setRotation(revTarget);
+    }
 
     const wishSlug = window.location.pathname.split("/")[2] ?? "";
     try {
@@ -1775,20 +1785,28 @@ const MiniGame = ({
         remaining: number;
       };
 
-      // Animate wheel to the SERVER-decided segment.
+      // Phase 2 — retarget to the SERVER-decided segment.
       // Segment i center sits at (i + 0.5) * segmentAngle clockwise from top,
       // so wheel must end at R ≡ 360 − center angle (mod 360).
       const arr = new Uint32Array(1);
       crypto.getRandomValues(arr);
       const jitter = (arr[0] / 2 ** 32 - 0.5) * segmentAngle * 0.7;
       const targetMod = ((((360 - (data.index + 0.5) * segmentAngle + jitter) % 360) + 360) % 360);
-      const currentMod = (((rotation % 360) + 360) % 360);
+      const currentMod = (((rotationRef.current % 360) + 360) % 360);
       let delta = targetMod - currentMod;
       if (delta < 0) delta += 360;
-      const fullTurns = 5 + Math.floor((arr[0] % 2)); // 5–6 full turns
-      setRotation(rotation + fullTurns * 360 + delta);
+      const settleTurns = 2 + Math.floor((arr[0] % 2)); // 2–3 more turns
+      const finalTarget = rotationRef.current + settleTurns * 360 + delta;
+      rotationRef.current = finalTarget;
 
-      const spinDuration = prefersReducedMotion ? 50 : 4500;
+      const spinDuration = prefersReducedMotion ? 50 : 2200;
+      if (prefersReducedMotion) {
+        setSpinTransition({ duration: 0, ease: "linear" });
+      } else {
+        setSpinTransition({ duration: 2.2, ease: [0.12, 0.7, 0.08, 1] });
+      }
+      setRotation(finalTarget);
+
       setTimeout(() => {
         const won: WonReward = {
           item: {
@@ -1810,7 +1828,7 @@ const MiniGame = ({
       setSpinError("Network error — check your connection and try again");
       setSpinning(false);
     }
-  }, [spinning, remaining, rotation, segmentAngle, prefersReducedMotion, onWin]);
+  }, [spinning, remaining, segmentAngle, prefersReducedMotion, onWin]);
 
   // Reset confetti after showing (useEffect — side effects don't belong in useMemo)
   useEffect(() => {
@@ -1872,15 +1890,7 @@ const MiniGame = ({
             className="h-full w-full"
             style={{ overflow: "visible" }}
             animate={{ rotate: rotation }}
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : {
-                    duration: 4.5,
-                    // Strong deceleration — fast launch, long coast to stop (real wheel feel)
-                    ease: [0.1, 0.62, 0.05, 1],
-                  }
-            }
+            transition={spinTransition}
           >
             {/* Segment fills */}
             {segments.map((seg, i) => (
@@ -1968,18 +1978,18 @@ const MiniGame = ({
           </div>
         </div>
 
-        {/* Pointer at top — teardrop in theme pink; wiggles while wheel spins */}
+        {/* Pointer at top — teardrop in theme pink; gentle tick while wheel spins */}
         <motion.div
           className="absolute -top-2 left-1/2 z-10 -translate-x-1/2 sm:-top-3"
           style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.35))" }}
           animate={
             spinning && !prefersReducedMotion
-              ? { rotate: [0, -10, 8, -6, 4, 0] }
+              ? { rotate: [0, -3, 2.5, -1.5, 0] }
               : { rotate: 0 }
           }
           transition={
             spinning && !prefersReducedMotion
-              ? { duration: 0.45, repeat: Infinity, ease: "easeInOut" }
+              ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" }
               : { duration: 0.3 }
           }
         >
@@ -2435,182 +2445,6 @@ const RewardResult = ({
         Continue
         <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
       </motion.button>
-    </motion.div>
-  );
-};
-
-// ─── Goodbye Screen (Finale) ─────────────────────────────
-// Real-world reference: cinema "The End" card + curtain-call
-// finale — golden confetti, warm thank-you, soft fade-out.
-
-const GoodbyeScreen = ({
-  recipientName,
-  primaryColor,
-  foregroundColor,
-}: {
-  recipientName?: string;
-  primaryColor: string;
-  foregroundColor: string;
-}) => {
-  const prefersReducedMotion = useReducedMotion();
-
-  // Falling golden + primary confetti rain
-  const confetti = useMemo(
-    () =>
-      Array.from({ length: prefersReducedMotion ? 12 : 36 }).map((_, i) => ({
-        id: i,
-        x: 3 + ((i * 13) % 94),
-        delay: (i % 12) * 0.25,
-        duration: 3.5 + (i % 5) * 0.6,
-        size: 4 + (i % 4) * 2,
-        color:
-          i % 3 === 0 ? "#FFD700" : i % 3 === 1 ? primaryColor : "#FFA500",
-        drift: ((i % 7) - 3) * 8,
-      })),
-    [prefersReducedMotion, primaryColor],
-  );
-
-  // Twinkling stars
-  const stars = useMemo(
-    () =>
-      Array.from({ length: prefersReducedMotion ? 4 : 10 }).map((_, i) => ({
-        id: i,
-        x: 5 + ((i * 17) % 90),
-        y: 8 + ((i * 23) % 70),
-        delay: i * 0.4,
-        size: 8 + (i % 3) * 4,
-      })),
-    [prefersReducedMotion],
-  );
-
-  return (
-    <motion.div
-      className="relative flex min-h-[80dvh] flex-col items-center justify-center overflow-hidden px-4 py-12"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      role="status"
-      aria-live="polite"
-    >
-      {/* Falling confetti */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {confetti.map((c) => (
-          <motion.div
-            key={c.id}
-            className="absolute top-0"
-            style={{
-              left: `${c.x}%`,
-              width: c.size,
-              height: c.size * 1.6,
-              backgroundColor: c.color,
-              borderRadius: "1px",
-            }}
-            initial={{ y: -40, opacity: 0, rotate: 0 }}
-            animate={{
-              y: "105dvh",
-              x: c.drift,
-              opacity: [0, 1, 1, 0],
-              rotate: 540,
-            }}
-            transition={{
-              duration: c.duration,
-              delay: c.delay,
-              ease: "linear",
-              repeat: Infinity,
-              repeatDelay: 1.5,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Twinkling stars */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {stars.map((s) => (
-          <motion.span
-            key={s.id}
-            className="absolute text-yellow-400"
-            style={{ left: `${s.x}%`, top: `${s.y}%`, fontSize: s.size }}
-            animate={prefersReducedMotion ? {} : { opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
-            transition={{ duration: 2.2, delay: s.delay, repeat: Infinity }}
-          >
-            ✦
-          </motion.span>
-        ))}
-      </div>
-
-      {/* Center card */}
-      <motion.div
-        className="relative z-10 flex max-w-md flex-col items-center text-center"
-        initial={{ scale: prefersReducedMotion ? 1 : 0.85, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, type: "spring", stiffness: 140, damping: 16 }}
-      >
-        {/* Heart icon with pulse */}
-        <motion.div
-          className="mb-4 text-5xl sm:text-6xl"
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          💖
-        </motion.div>
-
-        {/* Headline */}
-        <h2
-          className="mb-3 text-2xl font-bold leading-tight sm:text-3xl"
-          style={{
-            fontFamily: "var(--wish-font-heading), Playfair Display, serif",
-            color: foregroundColor,
-          }}
-        >
-          {recipientName ? `Happy Birthday, ${recipientName}!` : "Happy Birthday!"}
-        </h2>
-
-        {/* Decorative divider */}
-        <div className="mb-4 flex items-center gap-2" aria-hidden="true">
-          <span className="h-px w-10" style={{ background: `${primaryColor}50` }} />
-          <span className="text-sm" style={{ color: primaryColor }}>❤</span>
-          <span className="h-px w-10" style={{ background: `${primaryColor}50` }} />
-        </div>
-
-        {/* Thank-you message */}
-        <p
-          className="mb-6 text-sm leading-relaxed sm:text-base"
-          style={{ color: foregroundColor, opacity: 0.7 }}
-        >
-          Thank you for being part of this beautiful journey. Every chapter
-          was written with love — just for you. May all your wishes come true!
-        </p>
-
-        {/* THE END cinema card */}
-        <motion.div
-          className="mb-6 rounded-lg px-6 py-3"
-          style={{
-            border: `1px solid ${primaryColor}30`,
-            background: `${primaryColor}08`,
-          }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <p
-            className="text-xs font-semibold uppercase tracking-[0.35em]"
-            style={{ color: primaryColor }}
-          >
-            The End
-          </p>
-        </motion.div>
-
-        {/* Attribution */}
-        <motion.p
-          className="text-xs"
-          style={{ color: foregroundColor, opacity: 0.4 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ delay: 1.2 }}
-        >
-          Made with ❤️ — see you next year ✨
-        </motion.p>
-      </motion.div>
     </motion.div>
   );
 };

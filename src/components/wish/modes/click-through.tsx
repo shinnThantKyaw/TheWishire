@@ -3,10 +3,11 @@
 import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import type { ChapterIndex, GiftSubScreen } from "@/types/experience";
-import { CHAPTER_NAMES } from "@/types/experience";
+import { CHAPTER_NAMES, TOTAL_CHAPTERS, GIFT_CHAPTER_INDEX } from "@/types/experience";
 import { LetterChapter } from "../chapters/letter-chapter";
 import { PhotosChapter } from "../chapters/photos-chapter";
 import { PoemChapter } from "../chapters/poem-chapter";
+import { SongChapter } from "../chapters/song-chapter";
 import { TimelineChapter } from "../chapters/timeline-chapter";
 import { GiftChapter } from "../chapters/gift-chapter";
 import type { MergedStage } from "@/types/wish";
@@ -18,13 +19,10 @@ interface ClickThroughProps {
   stages: MergedStage[];
   giftConfig?: GiftChapterConfig;
   primaryColor: string;
-  recipientName?: string;
   onNext: () => void;
   onBack: () => void;
   onNextGiftSubScreen: () => void;
 }
-
-const TOTAL_CHAPTERS = 5;
 
 /**
  * Click-through mode container (Screen 6-10).
@@ -42,13 +40,12 @@ export const ClickThrough = ({
 
   giftConfig,
   primaryColor,
-  recipientName,
   onNext,
   onBack,
   onNextGiftSubScreen,
 }: ClickThroughProps) => {
   const isFirstChapter = chapterIndex === 0;
-  const isLastChapter = chapterIndex === 4;
+  const isLastChapter = chapterIndex === GIFT_CHAPTER_INDEX;
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -69,6 +66,7 @@ export const ClickThrough = ({
   const letterStage = findStage("letter");
   const photosStage = findStage("photos");
   const poemStage = findStage("poem");
+  const songStage = findStage("song");
   const timelineStage = findStage("timeline");
 
   const chapterNames = Object.values(CHAPTER_NAMES);
@@ -127,19 +125,24 @@ export const ClickThrough = ({
               />
             )}
             {chapterIndex === 3 && (
-              <TimelineChapter
-                entries={timelineStage?.content.memoryTimeline ?? []}
+              <SongChapter
+                song={songStage?.content.song}
                 primaryColor={primaryColor}
-                chapterLabel="Chapter 04"
               />
             )}
             {chapterIndex === 4 && (
+              <TimelineChapter
+                entries={timelineStage?.content.memoryTimeline ?? []}
+                primaryColor={primaryColor}
+                chapterLabel="Chapter 05"
+              />
+            )}
+            {chapterIndex === GIFT_CHAPTER_INDEX && (
               <GiftChapter
                 giftSubScreen={giftSubScreen}
                 config={giftConfig}
                 onNextSubScreen={onNextGiftSubScreen}
                 primaryColor={primaryColor}
-                recipientName={recipientName}
               />
             )}
           </motion.div>

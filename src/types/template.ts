@@ -24,9 +24,10 @@ export type StageType =
   | "letter" // Screen 6
   | "photos" // Screen 7
   | "poem" // Screen 8
-  | "timeline" // Screen 9
-  | "gift" // Screen 10
-  | "closing" // Screen 11
+  | "song" // Screen 9 (YouTube video chapter)
+  | "timeline" // Screen 10
+  | "gift" // Screen 11
+  | "closing" // Screen 12
   // ── Legacy stage types (kept for backward compatibility) ──
   | "envelope"
   | "gift-box"

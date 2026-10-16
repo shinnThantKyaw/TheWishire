@@ -45,6 +45,7 @@ export type FlowMode = ExperienceFlowMode;
 export interface WishContent {
   letter?: string;
   poem?: PoemSelection;
+  song?: SongSelection;
   music?: MusicSelection;
   voiceMessageUrl?: string;
   videoUrl?: string;
@@ -70,6 +71,14 @@ export interface PoemSelection {
   title: string;
   author: string;
   text: string;
+}
+
+/** A YouTube video the creator picked for the song chapter. */
+export interface SongSelection {
+  /** Any YouTube URL (watch, youtu.be, shorts, embed) or a bare video ID. */
+  youtubeUrl: string;
+  title?: string;
+  artist?: string;
 }
 
 export interface MusicSelection {
@@ -160,6 +169,7 @@ export interface MergedStage {
   content: {
     letter?: string;
     poem?: PoemSelection;
+    song?: SongSelection;
     photos: { id: string; url: string; type: "photo" }[];
     voiceMessageUrl?: string;
     videoUrl?: string;

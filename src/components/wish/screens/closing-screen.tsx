@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 interface ClosingScreenProps {
   senderName: string;
+  recipientName?: string;
+  occasion?: string;
   onRestart: () => void;
   primaryColor?: string;
   secondaryColor?: string;
@@ -12,21 +14,50 @@ interface ClosingScreenProps {
   foregroundColor?: string;
 }
 
+/** Occasion-aware finale headline (merged from the old gift "complete" screen). */
+const finaleHeadline = (occasion: string, name?: string): string => {
+  const n = name?.trim();
+  switch (occasion.toLowerCase()) {
+    case "birthday":
+      return n ? `Happy Birthday, ${n}!` : "Happy Birthday!";
+    case "anniversary":
+    case "valentine":
+      return n ? `With All My Love, ${n}` : "With All My Love";
+    case "graduation":
+      return n ? `So Proud of You, ${n}!` : "Congratulations!";
+    case "wedding":
+      return n ? `Cheers to You, ${n}!` : "Cheers to You!";
+    case "friendship":
+      return n ? `Lucky to Know You, ${n}!` : "Lucky to Have You";
+    case "thank-you":
+      return n ? `Thank You, ${n}!` : "Thank You!";
+    default:
+      return n ? `With Love, ${n}` : "With Love";
+  }
+};
+
 /**
- * Screen 10: Closing.
- * Thank you message + CTA buttons.
+ * Screen 12: Closing — the merged finale.
+ * Absorbed the gift chapter's "The End" goodbye card: occasion headline,
+ * thank-you message, cinema "The End" card + confetti — then the CTAs
+ * (Experience Again / Create Your Own). One end screen, not two.
  */
 export const ClosingScreen = ({
   senderName,
+  recipientName,
+  occasion = "",
   onRestart,
   primaryColor = "#E91E63",
   secondaryColor = "#F48FB1",
   backgroundColor = "#FFF0F5",
   foregroundColor = "#1A1A2E",
 }: ClosingScreenProps) => {
+  const reduceMotion = useReducedMotion();
+
+  // Floating emoji particles
   const particles = useMemo(
     () =>
-      Array.from({ length: 10 }, (_, i) => ({
+      Array.from({ length: reduceMotion ? 0 : 10 }, (_, i) => ({
         id: i,
         x: 10 + Math.random() * 80,
         y: 10 + Math.random() * 80,
@@ -35,20 +66,96 @@ export const ClosingScreen = ({
         delay: Math.random() * 2,
         emoji: ["💜", "✨", "💫", "💕", "⭐"][i % 5],
       })),
-    [],
+    [reduceMotion],
+  );
+
+  // Golden confetti rain (from the old goodbye finale)
+  const confetti = useMemo(
+    () =>
+      Array.from({ length: reduceMotion ? 0 : 30 }).map((_, i) => ({
+        id: i,
+        x: 3 + ((i * 13) % 94),
+        delay: (i % 12) * 0.3,
+        duration: 3.5 + (i % 5) * 0.6,
+        size: 4 + (i % 4) * 2,
+        color: i % 3 === 0 ? "#FFD700" : i % 3 === 1 ? primaryColor : secondaryColor,
+        drift: ((i % 7) - 3) * 8,
+      })),
+    [reduceMotion, primaryColor, secondaryColor],
+  );
+
+  // Twinkling stars
+  const stars = useMemo(
+    () =>
+      Array.from({ length: reduceMotion ? 0 : 8 }).map((_, i) => ({
+        id: i,
+        x: 5 + ((i * 17) % 90),
+        y: 8 + ((i * 23) % 60),
+        delay: i * 0.4,
+        size: 8 + (i % 3) * 4,
+      })),
+    [reduceMotion],
   );
 
   return (
     <div
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-12"
       style={{ backgroundColor }}
+      role="status"
+      aria-live="polite"
     >
-      {/* Floating particles */}
+      {/* Falling confetti rain */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        {confetti.map((c) => (
+          <motion.div
+            key={c.id}
+            className="absolute top-0"
+            style={{
+              left: `${c.x}%`,
+              width: c.size,
+              height: c.size * 1.6,
+              backgroundColor: c.color,
+              borderRadius: "1px",
+            }}
+            initial={{ y: -40, opacity: 0, rotate: 0 }}
+            animate={{
+              y: "105dvh",
+              x: c.drift,
+              opacity: [0, 1, 1, 0],
+              rotate: 540,
+            }}
+            transition={{
+              duration: c.duration,
+              delay: c.delay,
+              ease: "linear",
+              repeat: Infinity,
+              repeatDelay: 1.5,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Twinkling stars */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        {stars.map((s) => (
+          <motion.span
+            key={s.id}
+            className="absolute"
+            style={{ left: `${s.x}%`, top: `${s.y}%`, fontSize: s.size, color: "#FFD700" }}
+            animate={reduceMotion ? {} : { opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
+            transition={{ duration: 2.2, delay: s.delay, repeat: Infinity }}
+          >
+            ✦
+          </motion.span>
+        ))}
+      </div>
+
+      {/* Floating emoji particles */}
       {particles.map((p) => (
         <motion.div
           key={p.id}
           className="pointer-events-none fixed text-sm"
-          style={{ left: `${p.x}%`, top: `${p.y}%` }}
+          style={{ left: `${p.x}%`, top: `${p.y}%`, fontSize: p.size }}
           animate={{
             y: [0, -20, 0],
             opacity: [0.2, 0.5, 0.2],
@@ -66,35 +173,82 @@ export const ClosingScreen = ({
       ))}
 
       <motion.div
-        className="relative z-10 text-center"
+        className="relative z-10 flex flex-col items-center text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
       >
-        {/* Heart */}
+        {/* Pulsing heart */}
         <motion.div
-          className="mb-6 text-5xl"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="mb-5 text-5xl sm:text-6xl"
+          animate={reduceMotion ? {} : { scale: [1, 1.12, 1] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          💜
+          💖
         </motion.div>
 
-        {/* Thank you */}
+        {/* Occasion-aware headline */}
         <h2
-          className="text-xl font-bold leading-relaxed"
+          className="mb-3 text-2xl font-bold leading-tight sm:text-3xl"
           style={{
             fontFamily: "var(--wish-font-heading), Playfair Display, serif",
             color: foregroundColor,
           }}
         >
-          Thank you for being
-          <br />
-          part of this special moment.
+          {finaleHeadline(occasion, recipientName)}
         </h2>
 
-        {/* Branding */}
-        <p className="mt-5 text-sm" style={{ color: foregroundColor, opacity: 0.45 }}>
+        {/* Decorative divider */}
+        <div className="mb-4 flex items-center gap-2" aria-hidden="true">
+          <span className="h-px w-10" style={{ background: `${primaryColor}50` }} />
+          <span className="text-sm" style={{ color: primaryColor }}>
+            ❤
+          </span>
+          <span className="h-px w-10" style={{ background: `${primaryColor}50` }} />
+        </div>
+
+        {/* Thank-you message */}
+        <p
+          className="mb-5 max-w-sm text-sm leading-relaxed sm:text-base"
+          style={{ color: foregroundColor, opacity: 0.7 }}
+        >
+          Thank you for being part of this beautiful journey. Every chapter
+          was written with love — just for you. May all your wishes come true!
+        </p>
+
+        {/* THE END cinema card */}
+        <motion.div
+          className="mb-6 rounded-lg px-6 py-3"
+          style={{
+            border: `1px solid ${primaryColor}30`,
+            background: `${primaryColor}08`,
+          }}
+          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <p
+            className="text-xs font-semibold uppercase tracking-[0.35em]"
+            style={{ color: primaryColor }}
+          >
+            The End
+          </p>
+        </motion.div>
+
+        {/* Branding — sender attribution from old closing + Wishire mark */}
+        <p
+          className="text-xs"
+          style={{ color: foregroundColor, opacity: 0.45 }}
+        >
+          {senderName && (
+            <>
+              With love from{" "}
+              <span className="font-bold not-italic" style={{ color: primaryColor }}>
+                {senderName}
+              </span>
+              <br />
+            </>
+          )}
           Made with love by{" "}
           <span className="font-bold" style={{ color: primaryColor }}>
             Wishire
@@ -103,7 +257,7 @@ export const ClosingScreen = ({
 
         {/* Divider */}
         <div
-          className="mx-auto my-7 h-px"
+          className="mx-auto my-6 h-px"
           style={{
             width: 50,
             background: `linear-gradient(90deg, transparent, ${primaryColor}30, transparent)`,

@@ -77,6 +77,15 @@
       }
     },
     {
+      "type": "song",
+      "enabled": true,
+      "props": {},
+      "animation": {
+        "type": "fade",
+        "duration": 0.8
+      }
+    },
+    {
       "type": "timeline",
       "enabled": true,
       "props": {},

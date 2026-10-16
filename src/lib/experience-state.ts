@@ -5,7 +5,7 @@ import type {
   GiftSubScreen,
   FlowMode,
 } from "@/types/experience";
-import { PHASE_ORDER, getNextPhase, getPrevPhase } from "@/types/experience";
+import { getNextPhase, getPrevPhase, TOTAL_CHAPTERS, GIFT_CHAPTER_INDEX } from "@/types/experience";
 
 // ─── State Shape ────────────────────────────────────────
 
@@ -14,7 +14,7 @@ export interface ExperienceState {
   phase: ExperiencePhase;
   /** Current chapter index (only meaningful when phase === "chapters"). */
   chapterIndex: ChapterIndex;
-  /** Current sub-screen within the gift chapter (only meaningful when chapterIndex === 4). */
+  /** Current sub-screen within the gift chapter (only meaningful when chapterIndex === GIFT_CHAPTER_INDEX). */
   giftSubScreen: GiftSubScreen;
   /** The flow mode chosen by the creator. */
   flowMode: FlowMode;
@@ -45,13 +45,14 @@ export interface ExperienceActions {
 
 // ─── Gift Sub-Screen Order ─────────────────────────────
 
+// "complete" intentionally absent: after the last reward the flow goes
+// straight to the closing screen (finale + CTAs live there now)
 const GIFT_SUB_ORDER: GiftSubScreen[] = [
   "challenge",
   "main-gift",
   "bonus-intro",
   "mini-game",
   "reward-result",
-  "complete",
 ];
 
 const getNextGiftSubScreen = (current: GiftSubScreen): GiftSubScreen | null => {
@@ -64,34 +65,34 @@ const getNextGiftSubScreen = (current: GiftSubScreen): GiftSubScreen | null => {
 /**
  * Calculates overall progress (0-1) based on current position.
  *
- * Phase weights (total = 1.0):
- *   introduction: 0-0.10  (includes unlock)
- *   start:        0.10-0.20
- *   gift-reveal:  0.20-0.30
- *   gift-opening: 0.30-0.40
- *   chapters:     0.40-0.90 (each chapter = 0.10)
- *   closing:      0.90-1.00
+ * The progress bar is only rendered during the "chapters" phase, so
+ * chapters span the full range: each chapter = 1 / TOTAL_CHAPTERS,
+ * and the gift chapter subdivides its slice across its sub-screens
+ * (last sub-screen = 1.0). Earlier phases report 0, closing reports 1.
  */
 const calculateProgress = (
   phase: ExperiencePhase,
   chapterIndex: ChapterIndex,
   giftSubScreen: GiftSubScreen,
 ): number => {
-  const phaseIndex = PHASE_ORDER.indexOf(phase);
-
-  // Before chapters: 0.10 per phase
-  if (phase !== "chapters") {
-    return phaseIndex * 0.1;
+  // Closing = finished
+  if (phase === "closing") {
+    return 1;
   }
 
-  // Within chapters: 0.40 + (chapter * 0.10) + gift sub-progress
-  const chapterBase = 0.4 + chapterIndex * 0.1;
+  // Before chapters: bar hidden
+  if (phase !== "chapters") {
+    return 0;
+  }
 
-  // Gift chapter (index 4) has sub-progress
-  if (chapterIndex === 4) {
+  const slice = 1 / TOTAL_CHAPTERS;
+  const chapterBase = chapterIndex * slice;
+
+  // Gift chapter has sub-progress
+  if (chapterIndex === GIFT_CHAPTER_INDEX) {
     const giftIndex = GIFT_SUB_ORDER.indexOf(giftSubScreen);
     const giftFraction = giftIndex / (GIFT_SUB_ORDER.length - 1);
-    return 0.4 + 4 * 0.1 + giftFraction * 0.1;
+    return chapterBase + giftFraction * slice;
   }
 
   return chapterBase;
@@ -117,7 +118,7 @@ export const useExperienceState = (flowMode: FlowMode = "click-through") => {
   const next = useCallback(() => {
     if (phase === "chapters") {
       // Within chapters phase, advance to next chapter or closing
-      if (chapterIndex < 4) {
+      if (chapterIndex < GIFT_CHAPTER_INDEX) {
         setChapterIndex((prev) => (prev + 1) as ChapterIndex);
         setGiftSubScreen("challenge"); // Reset gift sub-screen for new chapter
       } else {
@@ -147,7 +148,7 @@ export const useExperienceState = (flowMode: FlowMode = "click-through") => {
         setPhase(prevPhase);
         // If going back to chapters, reset to last chapter
         if (prevPhase === "chapters") {
-          setChapterIndex(4);
+          setChapterIndex(GIFT_CHAPTER_INDEX);
         }
       }
     }
