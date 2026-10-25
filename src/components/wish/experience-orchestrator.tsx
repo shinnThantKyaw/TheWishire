@@ -61,8 +61,8 @@ const themeToCSSVars = (theme: ThemeConfig): React.CSSProperties =>
     "--wish-accent": theme.colors.accent,
     "--wish-background": theme.colors.background,
     "--wish-foreground": theme.colors.foreground,
-    "--wish-font-heading": theme.fonts.heading,
-    "--wish-font-body": theme.fonts.body,
+    "--wish-font-heading": `${theme.fonts.heading}, var(--font-padauk)`,
+    "--wish-font-body": `${theme.fonts.body}, var(--font-padauk)`,
   }) as React.CSSProperties;
 
 // ─── Default Actions ───────────────────────────────────

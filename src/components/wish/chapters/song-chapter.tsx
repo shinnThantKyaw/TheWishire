@@ -331,7 +331,7 @@ export const SongChapter = ({
               <h2
                 className="text-center text-xl font-bold tracking-wide sm:text-2xl"
                 style={{
-                  fontFamily: "var(--wish-font-heading), 'Padauk', Georgia, serif",
+                  fontFamily: "var(--wish-font-heading), var(--font-padauk), Georgia, serif",
                   color: foregroundColor,
                 }}
               >
@@ -353,7 +353,7 @@ export const SongChapter = ({
                 style={{
                   color: foregroundColor,
                   opacity: 0.55,
-                  fontFamily: "'Padauk', Georgia, serif",
+                  fontFamily: "var(--font-padauk), Georgia, serif",
                 }}
               >
                 {copy.chapters.song.emptyBody}
@@ -481,7 +481,7 @@ export const SongChapter = ({
                 style={{
                   color: primaryColor,
                   letterSpacing: "0.4em",
-                  fontFamily: "'Padauk', Georgia, serif",
+                  fontFamily: "var(--font-padauk), Georgia, serif",
                   opacity: 0.8,
                 }}
               >
@@ -497,7 +497,7 @@ export const SongChapter = ({
             <motion.h2
               className="mb-6 text-center text-xl font-bold tracking-wide sm:text-2xl"
               style={{
-                fontFamily: "var(--wish-font-heading), 'Padauk', Georgia, serif",
+                fontFamily: "var(--wish-font-heading), var(--font-padauk), Georgia, serif",
                 color: foregroundColor,
               }}
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
@@ -530,7 +530,7 @@ export const SongChapter = ({
                   style={{
                     color: primaryColor,
                     letterSpacing: "0.3em",
-                    fontFamily: "'Padauk', Georgia, serif",
+                    fontFamily: "var(--font-padauk), Georgia, serif",
                     opacity: 0.75,
                   }}
                 >
@@ -541,7 +541,7 @@ export const SongChapter = ({
                   style={{
                     color: foregroundColor,
                     opacity: 0.85,
-                    fontFamily: "'Padauk', Georgia, serif",
+                    fontFamily: "var(--font-padauk), Georgia, serif",
                   }}
                 >
                   {song.title?.trim() || copy.chapters.song.fallbackTitle}

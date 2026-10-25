@@ -248,7 +248,7 @@ export const PoemChapter = ({
                                 style={{
                                     color: primaryColor,
                                     letterSpacing: "0.4em",
-                                    fontFamily: "'Padauk', Georgia, serif",
+                                    fontFamily: "var(--font-padauk), Georgia, serif",
                                     opacity: 0.8,
                                 }}
                             >
@@ -307,7 +307,7 @@ export const PoemChapter = ({
                                     key={i}
                                     className="relative px-2 text-center"
                                     style={{
-                                        fontFamily: "'Padauk', 'Noto Sans Myanmar', Georgia, serif",
+                                        fontFamily: "var(--font-padauk), 'Noto Sans Myanmar', Georgia, serif",
                                         fontWeight: 400,
                                         fontSize: "clamp(1.05rem, 3.8vw, 1.3rem)",
                                         lineHeight: 1.9,
@@ -414,7 +414,7 @@ export const PoemChapter = ({
                                         color: foregroundColor,
                                         opacity: 0.8,
                                         letterSpacing: "0.08em",
-                                        fontFamily: "'Padauk', Georgia, serif",
+                                        fontFamily: "var(--font-padauk), Georgia, serif",
                                     }}
                                 >
                                     {poem.title}
@@ -428,7 +428,7 @@ export const PoemChapter = ({
                                         color: foregroundColor,
                                         opacity: 0.55,
                                         letterSpacing: "0.06em",
-                                        fontFamily: "'Padauk', Georgia, serif",
+                                        fontFamily: "var(--font-padauk), Georgia, serif",
                                     }}
                                 >
                                     <span style={{ color: primaryColor, opacity: 0.9 }}>—</span>{" "}
