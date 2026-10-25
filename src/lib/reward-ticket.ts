@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+import { copy, interpolate } from "@/config/copy";
 import type { SpinProof } from "@/types/experience";
 
 /**
@@ -38,12 +39,38 @@ const drawRoundRect = (
   ctx.closePath();
 };
 
+/**
+ * Resolve webfont family names for canvas `ctx.font` strings.
+ *
+ * next/font hashes family names (var(--font-padauk) → '__Padauk_xxx'), so
+ * literal names like 'Padauk'/'Playfair Display' never match the loaded
+ * webfont. Canvas can't use var() — read the declared value from the root
+ * computed style instead, then force-load glyphs (Burmese sample for
+ * Padauk) before drawing, since canvas does not trigger font downloads.
+ */
+const resolveCanvasFonts = async (): Promise<{ padauk: string; playfair: string }> => {
+  const styles = getComputedStyle(document.documentElement);
+  const padauk = styles.getPropertyValue("--font-padauk").trim() || "sans-serif";
+  const playfair = styles.getPropertyValue("--font-playfair").trim() || "Georgia";
+  try {
+    await Promise.all([
+      document.fonts.load(`700 34px ${padauk}`, "က"),
+      document.fonts.load(`400 18px ${padauk}`, "က"),
+      document.fonts.load(`700 34px ${playfair}`, "Ag"),
+    ]);
+  } catch {
+    // Font already loaded or unavailable — drawing falls back down the stack.
+  }
+  return { padauk, playfair };
+};
+
 export const downloadRewardTicketPng = async ({
   item,
   proof,
   primaryColor,
   wishSlug,
 }: TicketOptions): Promise<void> => {
+  const fonts = await resolveCanvasFonts();
   const verifyUrl = `${window.location.origin}/w/${wishSlug}/verify/${proof.verifyToken}`;
   const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
     margin: 1,
@@ -92,12 +119,12 @@ export const downloadRewardTicketPng = async ({
   ctx.fillRect(4, 40, W - 8, 32); // square off bottom of header
   ctx.restore();
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 20px Georgia, serif";
+  ctx.font = `bold 20px ${fonts.padauk}, Georgia, serif`;
   ctx.textBaseline = "middle";
-  ctx.fillText("PRIZE TICKET", 32, 36);
-  ctx.font = "13px Georgia, serif";
+  ctx.fillText(copy.rewards.ticket.prizeTicket, 32, 36);
+  ctx.font = `13px ${fonts.padauk}, Georgia, serif`;
   ctx.globalAlpha = 0.85;
-  ctx.fillText("WISHIRE · PROOF OF REWARD", 190, 37);
+  ctx.fillText(copy.rewards.ticket.proofOfReward, 190, 37);
   ctx.globalAlpha = 1;
 
   // ── Prize body ─────────────────────────────────────────
@@ -105,23 +132,23 @@ export const downloadRewardTicketPng = async ({
   ctx.fillText(item.emoji, 36, 150);
 
   ctx.fillStyle = "#5C4033";
-  ctx.font = "bold 34px 'Playfair Display', Georgia, serif";
+  ctx.font = `bold 34px ${fonts.playfair}, ${fonts.padauk}, Georgia, serif`;
   ctx.fillText(item.label, 130, 128);
 
   ctx.globalAlpha = 0.75;
-  ctx.font = "18px Georgia, serif";
+  ctx.font = `18px ${fonts.padauk}, Georgia, serif`;
   ctx.fillText(item.description, 130, 168);
   ctx.globalAlpha = 1;
 
   // Points + serial row
   ctx.fillStyle = primaryColor;
-  ctx.font = "bold 16px Georgia, serif";
-  ctx.fillText(`${proof.bonusPoints} BONUS POINTS`, 36, 240);
+  ctx.font = `bold 16px ${fonts.padauk}, Georgia, serif`;
+  ctx.fillText(interpolate(copy.rewards.ticket.bonusPoints, { points: proof.bonusPoints }), 36, 240);
 
   ctx.fillStyle = "#5C4033";
   ctx.globalAlpha = 0.7;
-  ctx.font = "14px 'Courier New', monospace";
-  ctx.fillText(`No. ${proof.serial}`, 36, 272);
+  ctx.font = `14px 'Courier New', ${fonts.padauk}, monospace`;
+  ctx.fillText(interpolate(copy.rewards.ticket.serial, { serial: proof.serial }), 36, 272);
   ctx.globalAlpha = 1;
 
   // Won date
@@ -131,14 +158,14 @@ export const downloadRewardTicketPng = async ({
     day: "numeric",
   });
   ctx.globalAlpha = 0.7;
-  ctx.font = "14px Georgia, serif";
-  ctx.fillText(`Won on ${wonDate}`, 36, 302);
+  ctx.font = `14px ${fonts.padauk}, Georgia, serif`;
+  ctx.fillText(interpolate(copy.rewards.ticket.wonOn, { date: wonDate }), 36, 302);
   ctx.globalAlpha = 1;
 
   // Footer
   ctx.globalAlpha = 0.5;
-  ctx.font = "12px Georgia, serif";
-  ctx.fillText("Send this ticket to your wish sender to claim your prize.", 36, H - 36);
+  ctx.font = `12px ${fonts.padauk}, Georgia, serif`;
+  ctx.fillText(copy.rewards.ticket.claimFooter, 36, H - 36);
   ctx.globalAlpha = 1;
 
   // ── Perforation ────────────────────────────────────────
@@ -173,8 +200,8 @@ export const downloadRewardTicketPng = async ({
 
   ctx.fillStyle = "#5C4033";
   ctx.textAlign = "center";
-  ctx.font = "bold 13px Georgia, serif";
-  ctx.fillText("SCAN TO VERIFY", stubX + (W - stubX) / 2, 224);
+  ctx.font = `bold 13px ${fonts.padauk}, Georgia, serif`;
+  ctx.fillText(copy.rewards.ticket.scanToVerify, stubX + (W - stubX) / 2, 224);
   ctx.globalAlpha = 0.7;
   ctx.font = "11px 'Courier New', monospace";
   ctx.fillText(proof.verifyToken.slice(0, 16), stubX + (W - stubX) / 2, 248);

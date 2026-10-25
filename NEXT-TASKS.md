@@ -23,8 +23,8 @@
 |---|------|-----|---------|-------|
 | ~~1.1~~ | **DONE:** inventory = `STRING-INVENTORY.md` (S/F/D/P classes) | done | — | Grep long strings; output = spreadsheet/markdown list |
 | ~~1.2~~ | **DONE 2026-10-25:** `src/config/copy.ts` dictionary + all wish components consume it (English values first); server-error client remap wired; 5 keys added during migration (song.eyebrow, introduction.quote, gift.mainGiftHeading/letsPlay/qrFooterNote), 2 reused rewards.ticket.* | done | 1.1 | No translation yet — just indirection |
-| 1.3 | Fix Padauk font wiring: add `--font-padauk` to wish font stack in `globals.css`, verify Myanmar glyphs + line-height | 1h | — | Variable exists, zero consumers today |
-| 1.4 | Register Padauk into canvas for reward-ticket renderer (Burmese names) | 1h | 1.3 | `document.fonts.load` before draw |
+| ~~1.3~~ | **DONE 2026-10-25:** `--font-padauk` wired via themeToCSSVars setters (globals.css would be dead code — inline vars win); 10 `'Padauk'` literals → `var(--font-padauk)` | done | — | Myanmar glyph/line-height eyeball → 1.6 |
+| ~~1.4~~ | **DONE 2026-10-25:** `resolveCanvasFonts()` reads `--font-padauk`/`--font-playfair` from computed style + `document.fonts.load` with Burmese sample before draw; 7 `rewards.ticket.*` keys wired (was missed by 1.2 — lib/ outside sweep scope) | done | 1.3 | Also fixed pre-existing `'Playfair Display'` canvas miss |
 | 1.5 | Translate dictionary values → Myanmar | 2–3h | 1.2, 0.2 | User writes/approves copy |
 | 1.6 | Visual pass: all screens at 1366×768, 1920×900, mobile — Myanmar wrapping, truncation, contrast | 1.5–2h | 1.5 | Dark mode too |
 
