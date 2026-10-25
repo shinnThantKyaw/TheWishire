@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { StageContainer } from "../stage-container";
+import { copy, interpolate } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 
 interface CakeStageProps {
@@ -116,7 +117,11 @@ export const CakeStage = ({
                 className="relative flex cursor-pointer flex-col items-center focus:outline-none"
                 whileHover={!isBlown && !allBlown ? { scale: 1.15, y: -4 } : undefined}
                 whileTap={!isBlown && !allBlown ? { scale: 0.9 } : undefined}
-                aria-label={isBlown ? `Candle ${i + 1} blown out` : `Blow out candle ${i + 1}`}
+                aria-label={
+                  isBlown
+                    ? interpolate(copy.stages.cake.candleBlownAria, { n: i + 1 })
+                    : interpolate(copy.stages.cake.candleBlowAria, { n: i + 1 })
+                }
               >
                 {/* Flame */}
                 <AnimatePresence>
@@ -235,7 +240,7 @@ export const CakeStage = ({
                 fontFamily: "var(--wish-font-heading), Georgia, serif",
               }}
             >
-              Make a wish! 🎂
+              {copy.stages.cake.makeWish}
             </p>
             <p
               className="mt-2 text-sm"
@@ -259,7 +264,7 @@ export const CakeStage = ({
                 fontFamily: "var(--wish-font-heading), Georgia, serif",
               }}
             >
-              Happy Birthday! 🎉
+              {copy.stages.cake.happyBirthday}
             </p>
           </motion.div>
         )}

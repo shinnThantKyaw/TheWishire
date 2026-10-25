@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { StageContainer, StaggeredContainer, RevealChild } from "../stage-container";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 import type { FlowMode } from "@/types/wish";
 
@@ -11,57 +12,39 @@ interface FancyFactsStageProps {
   onAdvance: () => void;
 }
 
-/** Birthday fun facts data */
-const FUN_FACTS = [
-  {
-    category: "Zodiac",
+/** Design tokens (emoji, accent color, card gradient) keyed by fact id. */
+const FACT_DESIGN: Record<string, { emoji: string; color: string; bg: string }> = {
+  zodiac: {
     emoji: "♈",
-    title: "Born under a lucky star",
-    detail: "Your zodiac sign reveals hidden strengths — curiosity, creativity, and a heart that never stops dreaming.",
     color: "#7C4DFF",
     bg: "linear-gradient(135deg, #EDE7F6, #D1C4E9)",
   },
-  {
-    category: "Birthstone",
+  birthstone: {
     emoji: "💎",
-    title: "Diamond — April's gem",
-    detail: "Symbol of eternal love and inner strength. Like you — unbreakable, brilliant, and one of a kind.",
     color: "#00BCD4",
     bg: "linear-gradient(135deg, #E0F7FA, #B2EBF2)",
   },
-  {
-    category: "Birth Flower",
+  birthFlower: {
     emoji: "🌸",
-    title: "Sweet Pea & Daisy",
-    detail: "Delicate, joyful, and full of life — just like the memories we've shared together.",
     color: "#E91E63",
     bg: "linear-gradient(135deg, #FCE4EC, #F8BBD0)",
   },
-  {
-    category: "Fun Fact",
+  funFact: {
     emoji: "🎂",
-    title: "Birthday number meaning",
-    detail: "The 25th birthday is known as the 'Silver Jubilee' — a milestone marking a quarter century of making the world brighter.",
     color: "#FF9800",
     bg: "linear-gradient(135deg, #FFF3E0, #FFE0B2)",
   },
-  {
-    category: "Lucky Color",
+  luckyColor: {
     emoji: "🎨",
-    title: "Rose Gold & Lavender",
-    detail: "These colors represent warmth, grace, and a touch of magic — your birthday palette for the year ahead.",
     color: "#9C27B0",
     bg: "linear-gradient(135deg, #F3E5F5, #E1BEE7)",
   },
-  {
-    category: "Birthday Wish",
+  birthdayWish: {
     emoji: "🌟",
-    title: "Make it count",
-    detail: "They say the first birthday wish whispered while blowing out candles always comes true. So make it a good one.",
     color: "#FF5722",
     bg: "linear-gradient(135deg, #FBE9E7, #FFCCBC)",
   },
-];
+};
 
 /**
  * FancyFactsStage — displays zodiac, birthstone, flowers, and fun birthday facts
@@ -97,17 +80,17 @@ export const FancyFactsStage = ({
             className="mt-2 text-sm"
             style={{ color: "var(--wish-foreground, #1A1A2E)", opacity: 0.5 }}
           >
-            Fun facts, lucky charms, and birthday magic
+            {copy.facts.subtitle}
           </p>
         </motion.div>
 
         {/* Facts grid */}
         <StaggeredContainer className="grid gap-4 sm:grid-cols-2" staggerDelay={0.1}>
-          {FUN_FACTS.map((fact, index) => (
-            <RevealChild key={index}>
+          {copy.facts.sample.map((fact, index) => (
+            <RevealChild key={fact.id}>
               <motion.div
                 className="group relative overflow-hidden rounded-2xl p-6"
-                style={{ background: fact.bg }}
+                style={{ background: FACT_DESIGN[fact.id].bg }}
                 whileHover={{ scale: 1.02, y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               >
@@ -115,8 +98,8 @@ export const FancyFactsStage = ({
                 <div
                   className="mb-3 inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
                   style={{
-                    backgroundColor: `${fact.color}18`,
-                    color: fact.color,
+                    backgroundColor: `${FACT_DESIGN[fact.id].color}18`,
+                    color: FACT_DESIGN[fact.id].color,
                   }}
                 >
                   {fact.category}
@@ -129,7 +112,7 @@ export const FancyFactsStage = ({
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
                   >
-                    {fact.emoji}
+                    {FACT_DESIGN[fact.id].emoji}
                   </motion.span>
                   <div>
                     <h3
@@ -155,7 +138,7 @@ export const FancyFactsStage = ({
                   className="absolute -bottom-2 -right-2 text-4xl opacity-10"
                   style={{ transform: "rotate(15deg)" }}
                 >
-                  {fact.emoji}
+                  {FACT_DESIGN[fact.id].emoji}
                 </div>
               </motion.div>
             </RevealChild>
@@ -180,7 +163,7 @@ export const FancyFactsStage = ({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
-              Continue
+              {copy.common.continue}
               <motion.span
                 className="ml-2 inline-block"
                 animate={{ x: [0, 4, 0] }}

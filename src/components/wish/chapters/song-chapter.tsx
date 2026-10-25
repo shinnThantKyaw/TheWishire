@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { copy, interpolate } from "@/config/copy";
 import type { SongSelection } from "@/types/wish";
 
 // ── YouTube IFrame API (minimal typings) ──────────────────
@@ -334,7 +335,7 @@ export const SongChapter = ({
                   color: foregroundColor,
                 }}
               >
-                The Turntable is Waiting
+                {copy.chapters.song.emptyHeading}
               </h2>
 
               {/* Soft divider */}
@@ -355,8 +356,7 @@ export const SongChapter = ({
                   fontFamily: "'Padauk', Georgia, serif",
                 }}
               >
-                No melody has been placed on the record yet — but the rest of
-                your surprise is waiting just ahead.
+                {copy.chapters.song.emptyBody}
               </p>
 
               {/* Bottom flourish */}
@@ -485,7 +485,7 @@ export const SongChapter = ({
                   opacity: 0.8,
                 }}
               >
-                🎵 သီချင်း
+                {copy.chapters.song.eyebrow}
               </span>
               <span
                 className="h-px w-8"
@@ -504,7 +504,7 @@ export const SongChapter = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduceMotion ? 0 : 0.6, duration: reduceMotion ? 0 : 1 }}
             >
-              A Song, Just for You
+              {copy.chapters.song.heading}
             </motion.h2>
 
             {/* Now Playing row — small spinning vinyl + label */}
@@ -534,7 +534,7 @@ export const SongChapter = ({
                     opacity: 0.75,
                   }}
                 >
-                  Now Playing
+                  {copy.chapters.song.nowPlaying}
                 </p>
                 <p
                   className="truncate text-[0.85rem] font-semibold"
@@ -544,7 +544,7 @@ export const SongChapter = ({
                     fontFamily: "'Padauk', Georgia, serif",
                   }}
                 >
-                  {song.title?.trim() || "A song picked for you"}
+                  {song.title?.trim() || copy.chapters.song.fallbackTitle}
                   {song.artist?.trim() && (
                     <span style={{ opacity: 0.55, fontWeight: 400 }}>
                       {" — "}
@@ -599,7 +599,7 @@ export const SongChapter = ({
                   <iframe
                     className="h-full w-full"
                     src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
-                    title={song.title || "A song picked for you"}
+                    title={song.title || copy.chapters.song.fallbackTitle}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   />
@@ -610,7 +610,9 @@ export const SongChapter = ({
                 <button
                   type="button"
                   onClick={() => setPlaying(true)}
-                  aria-label={`Play ${song.title?.trim() || "the song picked for you"}`}
+                  aria-label={interpolate(copy.chapters.song.playAria, {
+                    title: song.title?.trim() || "the song picked for you",
+                  })}
                   className="group relative block h-full w-full cursor-pointer touch-manipulation border-0 p-0"
                 >
                   {/* Thumbnail — hqdefault is 4:3; cover crops letterbox to 16:9 */}
@@ -676,7 +678,7 @@ export const SongChapter = ({
                     className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3.5 py-1.5 text-[11px] font-semibold tracking-wide text-white backdrop-blur-sm"
                     style={{ backgroundColor: "rgba(26,18,8,0.55)" }}
                   >
-                    ▶ Tap to play
+                    {copy.chapters.song.tapToPlay}
                   </span>
                 </button>
               )}
@@ -693,7 +695,11 @@ export const SongChapter = ({
                 <button
                   type="button"
                   onClick={togglePlayback}
-                  aria-label={isPlaying ? "Pause the song" : "Play the song"}
+                  aria-label={
+                    isPlaying
+                      ? copy.chapters.song.pauseAria
+                      : copy.chapters.song.playAriaButton
+                  }
                   className="flex h-14 w-14 cursor-pointer touch-manipulation items-center justify-center rounded-full border-0 transition-transform duration-200 hover:scale-105 active:scale-95"
                   style={{
                     background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
@@ -718,13 +724,13 @@ export const SongChapter = ({
                   style={{ color: foregroundColor, opacity: 0.55 }}
                 >
                   {playerState === YT_STATE_PLAYING
-                    ? "Playing"
+                    ? copy.chapters.song.playing
                     : playerState === 2
-                      ? "Paused"
+                      ? copy.chapters.song.paused
                       : playerState === 3
-                        ? "Buffering…"
+                        ? copy.chapters.song.buffering
                         : playerState === 4
-                          ? "Replay"
+                          ? copy.chapters.song.replay
                           : ""}
                 </span>
               </motion.div>
@@ -758,7 +764,7 @@ export const SongChapter = ({
                 />
                 <path d="M9.75 15.02 15.5 11.75 9.75 8.48v6.54Z" fill="currentColor" />
               </svg>
-              Watch on YouTube
+              {copy.chapters.song.watchYouTube}
             </motion.a>
 
             {/* Bottom flourish */}

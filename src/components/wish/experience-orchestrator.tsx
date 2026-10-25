@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { copy } from "@/config/copy";
 import { useExperienceState } from "@/lib/experience-state";
 import { normalizeFlowMode } from "@/types/experience";
 import type { FlowMode, StartAction } from "@/types/experience";
@@ -72,9 +73,9 @@ const getDefaultStartAction = (occasion: string): StartAction => {
       return { type: "candles", count: 3 };
     case "anniversary":
     case "valentine":
-      return { type: "yes-no", prompt: "Are you ready to see your surprise? 💕" };
+      return { type: "yes-no", prompt: copy.gateDefaults.yesNo };
     default:
-      return { type: "tap", prompt: "Tap to reveal your surprise! 🎁" };
+      return { type: "tap", prompt: copy.gateDefaults.tap };
   }
 };
 

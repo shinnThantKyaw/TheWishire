@@ -8,6 +8,7 @@ import {
     useState,
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { copy, interpolate } from "@/config/copy";
 
 interface PhotosChapterProps {
     photos: { id: string; url: string; type: "photo" }[];
@@ -225,7 +226,7 @@ export const PhotosChapter = ({
               className="mb-3 inline-block text-[10px] font-semibold uppercase tracking-[0.35em]"
               style={{ color: primaryColor }}
           >
-            Chapter 02
+            {copy.chapters.photos.chapterNumber}
           </span>
                     <h2
                         className="font-semibold"
@@ -235,13 +236,13 @@ export const PhotosChapter = ({
                             fontSize: "clamp(1.5rem, 3.5vh, 2.25rem)",
                         }}
                     >
-                        Our Memories
+                        {copy.chapters.photos.title}
                     </h2>
                     <p
                         className="mx-auto mt-3 max-w-md text-sm leading-6"
                         style={{ color: foregroundColor, opacity: 0.56 }}
                     >
-                        A little collection of moments I never want to forget.
+                        {copy.chapters.photos.subtitle}
                     </p>
                 </motion.div>
             </div>
@@ -260,7 +261,7 @@ export const PhotosChapter = ({
                         <button
                             type="button"
                             onClick={openAlbum}
-                            aria-label="Open memory album"
+                            aria-label={copy.chapters.photos.openAlbumAria}
                             className="group relative block w-full cursor-pointer border-0 bg-transparent p-0"
                         >
                             <div
@@ -313,7 +314,7 @@ export const PhotosChapter = ({
 
                                 <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-white">
                   <span className="mb-3 text-[9px] uppercase tracking-[0.45em] opacity-75">
-                    A collection of
+                    {copy.chapters.photos.collectionOf}
                   </span>
                                     <h3
                                         className="text-center text-4xl italic leading-tight sm:text-5xl"
@@ -322,16 +323,14 @@ export const PhotosChapter = ({
                                                 "var(--wish-font-heading), 'Playfair Display', Georgia, serif",
                                         }}
                                     >
-                                        Our
-                                        <br />
-                                        Memories
+                                        {copy.chapters.photos.title}
                                     </h3>
                                     <div
                                         className="my-5 h-px w-14"
                                         style={{ background: "rgba(255,255,255,.5)" }}
                                     />
                                     <span className="text-[10px] tracking-[0.3em] opacity-85">
-                    A STORY WORTH KEEPING
+                    {copy.chapters.photos.coverAccent}
                   </span>
                                 </div>
 
@@ -374,7 +373,7 @@ export const PhotosChapter = ({
                                     <span aria-hidden="true" className="text-[13px] leading-none">
                                         ✨
                                     </span>
-                                    Tap to open
+                                    {copy.common.tapToOpen}
                                 </motion.div>
                             </motion.div>
                         </button>
@@ -543,14 +542,14 @@ export const PhotosChapter = ({
 
                             <button
                                 type="button"
-                                aria-label="Previous page"
+                                aria-label={copy.chapters.photos.prevPageAria}
                                 onClick={goPrev}
                                 disabled={currentPage === 0 || isTurning}
                                 className="absolute inset-y-0 left-0 z-[70] w-1/2 cursor-w-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
                             />
                             <button
                                 type="button"
-                                aria-label="Next page"
+                                aria-label={copy.chapters.photos.nextPageAria}
                                 onClick={goNext}
                                 disabled={currentPage === totalViews - 1 || isTurning}
                                 className="absolute inset-y-0 right-0 z-[70] w-1/2 cursor-e-resize border-0 bg-transparent disabled:cursor-default sm:w-1/3"
@@ -592,7 +591,7 @@ export const PhotosChapter = ({
                                             >
                                                 ←
                                             </span>
-                                            <span>Click sides or use arrow keys</span>
+                                            <span>{copy.chapters.photos.desktopHint}</span>
                                             <span
                                                 aria-hidden="true"
                                                 className="rounded-md border border-white/25 bg-white/10 px-1.5 py-0.5 text-[10px] font-bold leading-none"
@@ -608,7 +607,7 @@ export const PhotosChapter = ({
                                             >
                                                 👆
                                             </span>
-                                            <span>Swipe or tap the sides to flip</span>
+                                            <span>{copy.chapters.photos.mobileHint}</span>
                                         </>
                                     )}
                                 </motion.div>
@@ -630,7 +629,7 @@ export const PhotosChapter = ({
               <span className="text-lg transition-transform duration-300 group-hover:-translate-x-1">
                 ←
               </span>
-                            <span className="hidden sm:inline">Previous</span>
+                            <span className="hidden sm:inline">{copy.chapters.photos.previous}</span>
                         </button>
 
                         <div className="flex flex-col items-center">
@@ -638,7 +637,7 @@ export const PhotosChapter = ({
                   className="text-[9px] font-semibold uppercase tracking-[0.32em]"
                   style={{ color: foregroundColor, opacity: 0.42 }}
               >
-                Our Memories
+                {copy.chapters.photos.title}
               </span>
                             <span
                                 className="mt-0.5 text-xs"
@@ -655,7 +654,7 @@ export const PhotosChapter = ({
                             className="group flex items-center gap-1.5 rounded-full border-0 bg-transparent px-3 py-2 text-xs transition disabled:opacity-20"
                             style={{ color: foregroundColor }}
                         >
-                            <span className="hidden sm:inline">Next</span>
+                            <span className="hidden sm:inline">{copy.chapters.photos.next}</span>
                             <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
@@ -678,7 +677,7 @@ export const PhotosChapter = ({
                                 backdropFilter: "blur(6px)",
                             }}
                         >
-                            Close album
+                            {copy.chapters.photos.closeAlbum}
                         </button>
                     </div>
                 </motion.div>

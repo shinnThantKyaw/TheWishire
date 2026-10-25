@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Scissors, Sparkles, Heart } from "lucide-react";
 
+import { copy, interpolate, introductionOccasionCopy } from "@/config/copy";
+
 interface IntroductionScreenProps {
     recipientName: string;
     senderName: string;
@@ -14,65 +16,6 @@ interface IntroductionScreenProps {
     backgroundColor?: string;
     foregroundColor?: string;
 }
-
-type OccasionConfig = {
-    emoji: string;
-    label: string;
-    celebrationText: string;
-    description: string;
-};
-
-const OCCASIONS: Record<string, OccasionConfig> = {
-    birthday: {
-        emoji: "🎂",
-        label: "Birthday",
-        celebrationText: "your birthday",
-        description:
-            "Someone who cares about you deeply wanted to take a moment to celebrate the day you were born — and everything you bring to the world.",
-    },
-    anniversary: {
-        emoji: "💕",
-        label: "Anniversary",
-        celebrationText: "your anniversary",
-        description:
-            "Love is worth celebrating, and someone wanted to remind you just how much this journey together means to them.",
-    },
-    valentine: {
-        emoji: "❤️",
-        label: "Valentine's Day",
-        celebrationText: "Valentine's Day",
-        description:
-            "In a world full of people, someone chose to write their feelings just for you. This is a little token of love, made with heart.",
-    },
-    wedding: {
-        emoji: "💍",
-        label: "Wedding",
-        celebrationText: "your special day",
-        description:
-            "Two hearts, one beautiful journey. Someone wanted to celebrate this incredible milestone with a personal touch.",
-    },
-    graduation: {
-        emoji: "🎓",
-        label: "Graduation",
-        celebrationText: "your graduation",
-        description:
-            "All those late nights, hard work, and determination have paid off. Someone is incredibly proud of you and wanted you to know.",
-    },
-    friendship: {
-        emoji: "🤝",
-        label: "Friendship",
-        celebrationText: "our friendship",
-        description:
-            "True friends are rare and precious. Someone wanted to take a moment to say thank you for being exactly who you are.",
-    },
-    "thank-you": {
-        emoji: "💌",
-        label: "Thank You",
-        celebrationText: "this special moment",
-        description:
-            "Gratitude is one of the most beautiful feelings, and someone wanted to express theirs in a way that words alone can't capture.",
-    },
-};
 
 /** Small twinkling sparkle dots */
 const SPARKLE_DOTS = [
@@ -103,14 +46,7 @@ export const IntroductionScreen = ({
     const nextTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const cutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const currentOccasion =
-        OCCASIONS[occasion.toLowerCase()] ?? {
-            emoji: "🎁",
-            label: "Special Moment",
-            celebrationText: "this special moment",
-            description:
-                "Someone wanted to create a little moment of joy, just for you. Take your time and enjoy what comes next.",
-        };
+    const currentOccasion = introductionOccasionCopy(occasion.toLowerCase());
 
     const handleCut = () => {
         if (cutting || cutDone) return;
@@ -285,7 +221,7 @@ export const IntroductionScreen = ({
                 {/* ── Logo ─────────────────────────────────────────── */}
                 <motion.img
                     src="/Logo/LogoWithText.png"
-                    alt="Wishire"
+                    alt={copy.introduction.logoAlt}
                     className="mb-7 h-auto w-36 select-none sm:w-44"
                     draggable={false}
                     initial={{ opacity: 0, scale: 0.85, y: -10 }}
@@ -354,7 +290,7 @@ export const IntroductionScreen = ({
                             className="text-sm font-medium tracking-wide"
                             style={{ color: primaryColor }}
                         >
-                            Hey {recipientName}!
+                            {interpolate(copy.introduction.hey, { recipientName })}
                         </span>
 
                         <span aria-hidden="true">{currentOccasion.emoji}</span>
@@ -369,7 +305,7 @@ export const IntroductionScreen = ({
                     animate={{ opacity: 0.62 }}
                     transition={{ duration: 0.5, delay: 0.5 }}
                 >
-                    Someone made something special just for you.
+                    {copy.introduction.subtitle}
                 </motion.p>
 
                 {/* ── Glass Card ───────────────────────── */}
@@ -403,9 +339,11 @@ export const IntroductionScreen = ({
                                     style={{ color: primaryColor }}
                                 >
                                     {senderName}
-                                </span>{" "}
-                                prepared a special surprise for you to celebrate{" "}
-                                {currentOccasion.celebrationText}.
+                                </span>
+                                {interpolate(copy.introduction.senderLine, {
+                                    senderName: "",
+                                    celebrationText: currentOccasion.celebrationText,
+                                })}
                             </p>
 
                             {/* Decorative divider */}
@@ -447,9 +385,7 @@ export const IntroductionScreen = ({
                     animate={{ opacity: 0.4 }}
                     transition={{ duration: 0.3, delay: 0.65 }}
                 >
-                    &ldquo;The best things in life are the people you love, the places
-                    you&rsquo;ve been, and the memories you&rsquo;ve made along the
-                    way.&rdquo;
+                    &ldquo;{copy.introduction.quote}&rdquo;
                 </motion.p>
 
                 {/* ── Ribbon + Scissors ────────────────── */}
@@ -632,7 +568,7 @@ export const IntroductionScreen = ({
                                 type="button"
                                 onClick={handleCut}
                                 disabled={cutting}
-                                aria-label="Cut the ribbon to open your surprise"
+                                aria-label={copy.introduction.cutRibbonAria}
                                 className="relative z-20 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-[3px] border-white shadow-lg transition-all focus:outline-none focus:ring-4 disabled:cursor-default"
                                 style={{
                                     backgroundColor: primaryColor,
@@ -679,8 +615,8 @@ export const IntroductionScreen = ({
                                 style={{ color: foregroundColor }}
                             >
                                 {cutting
-                                    ? "Opening your surprise..."
-                                    : "Cut the ribbon to unwrap your surprise"}
+                                    ? copy.introduction.opening
+                                    : copy.introduction.cutRibbon}
                             </p>
                         </motion.div>
                     </div>

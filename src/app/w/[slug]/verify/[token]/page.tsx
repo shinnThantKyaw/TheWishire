@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Check, ShieldCheck, ShieldX } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { verifyRewardSignature } from "@/lib/rewards";
+import { copy, interpolate } from "@/config/copy";
 import type { Metadata } from "next";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: "Verify Reward Proof — Wishire" };
+  return { title: copy.verify.metaTitle };
 }
 
 /**
@@ -116,7 +117,7 @@ export default async function VerifyRewardPage({ params }: Props) {
             style={{ background: "linear-gradient(90deg, transparent, rgba(233,30,99,0.6))" }}
           />
           <p className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-300">
-            Proof of reward
+            {copy.verify.heading}
           </p>
           <span
             className="h-px w-8"
@@ -128,13 +129,13 @@ export default async function VerifyRewardPage({ params }: Props) {
           className="text-2xl font-bold text-pink-950 dark:text-pink-50"
           style={{ fontFamily: "var(--wish-font-heading), 'Playfair Display', Georgia, serif" }}
         >
-          {signatureValid ? "Authentic prize ticket" : "Ticket could not be verified"}
+          {signatureValid ? copy.verify.authentic : copy.verify.unverified}
         </h1>
 
         {signatureValid ? (
           <>
             <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-relaxed text-pink-800/70 dark:text-pink-200/70">
-              This ticket was issued by Wishire and matches the official record.
+              {copy.verify.issuedNote}
             </p>
 
             <div className="mt-6 rounded-2xl border border-pink-500/25 bg-white/60 px-6 py-5 text-left dark:border-pink-400/20 dark:bg-white/5">
@@ -157,13 +158,13 @@ export default async function VerifyRewardPage({ params }: Props) {
               <div className="mt-4 grid grid-cols-2 gap-3 border-t border-pink-500/15 pt-4 text-xs dark:border-pink-400/15">
                 <div>
                   <p className="uppercase tracking-wider text-pink-900/40 dark:text-pink-100/40">
-                    Won on
+                    {copy.verify.wonOn}
                   </p>
                   <p className="mt-0.5 font-medium text-pink-900 dark:text-pink-100">{wonDate}</p>
                 </div>
                 <div>
                   <p className="uppercase tracking-wider text-pink-900/40 dark:text-pink-100/40">
-                    Serial
+                    {copy.verify.serial}
                   </p>
                   <p className="mt-0.5 font-mono font-medium text-pink-900 dark:text-pink-100">
                     {proof.serial}
@@ -171,10 +172,14 @@ export default async function VerifyRewardPage({ params }: Props) {
                 </div>
                 <div className="col-span-2">
                   <p className="uppercase tracking-wider text-pink-900/40 dark:text-pink-100/40">
-                    For
+                    {copy.verify.forLabel}
                   </p>
                   <p className="mt-0.5 font-medium text-pink-900 dark:text-pink-100">
-                    {proof.wish.recipientName} — “{proof.wish.title}” from {proof.wish.senderName}
+                    {interpolate(copy.verify.forValue, {
+                      recipient: proof.wish.recipientName,
+                      title: proof.wish.title,
+                      sender: proof.wish.senderName,
+                    })}
                   </p>
                 </div>
               </div>
@@ -182,13 +187,12 @@ export default async function VerifyRewardPage({ params }: Props) {
 
             <p className="mt-6 inline-flex items-center gap-2 text-xs font-medium text-pink-700 dark:text-pink-300">
               <ShieldCheck className="h-4 w-4" aria-hidden />
-              Signature verified · record stored on Wishire
+              {copy.verify.signatureOk}
             </p>
           </>
         ) : (
           <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-relaxed text-pink-800/70 dark:text-pink-200/70">
-            The signature on this ticket does not match the official record. It may have been
-            altered. Contact the sender if you think this is a mistake.
+            {copy.verify.signatureFail}
           </p>
         )}
       </div>

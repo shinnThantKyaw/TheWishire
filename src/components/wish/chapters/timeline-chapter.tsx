@@ -9,6 +9,7 @@ import {
   TimelineHeader,
 } from "../timeline/timeline-visuals";
 import { cn } from "@/lib/utils";
+import { copy } from "@/config/copy";
 import type { MemoryTimelineEntry } from "@/types/wish";
 
 interface TimelineChapterProps {
@@ -30,7 +31,7 @@ export const TimelineChapter = ({
   entries,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
-  chapterLabel = "Our Story",
+  chapterLabel = copy.chapters.timeline.chapterLabel,
 }: TimelineChapterProps) => {
   if (entries.length === 0) {
     return (
@@ -41,7 +42,7 @@ export const TimelineChapter = ({
           aria-hidden
         />
         <p className="text-sm" style={{ color: foregroundColor, opacity: 0.45 }}>
-          No memories yet
+          {copy.chapters.timeline.empty}
         </p>
       </div>
     );
@@ -60,9 +61,9 @@ export const TimelineChapter = ({
       >
         <TimelineHeader
           eyebrow={chapterLabel}
-          titleLead="Memory"
-          titleAccent="Timeline"
-          subtitle="Every moment with you is a beautiful chapter in my life story."
+          titleLead={copy.stages.timeline.titleLead}
+          titleAccent={copy.stages.timeline.titleAccent}
+          subtitle={copy.stages.timeline.subtitleMine}
           primaryColor={primaryColor}
           foregroundColor={foregroundColor}
         />

@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
+import { copy, interpolate } from "@/config/copy";
+
 interface ClosingScreenProps {
   senderName: string;
   recipientName?: string;
@@ -17,23 +19,11 @@ interface ClosingScreenProps {
 /** Occasion-aware finale headline (merged from the old gift "complete" screen). */
 const finaleHeadline = (occasion: string, name?: string): string => {
   const n = name?.trim();
-  switch (occasion.toLowerCase()) {
-    case "birthday":
-      return n ? `Happy Birthday, ${n}!` : "Happy Birthday!";
-    case "anniversary":
-    case "valentine":
-      return n ? `With All My Love, ${n}` : "With All My Love";
-    case "graduation":
-      return n ? `So Proud of You, ${n}!` : "Congratulations!";
-    case "wedding":
-      return n ? `Cheers to You, ${n}!` : "Cheers to You!";
-    case "friendship":
-      return n ? `Lucky to Know You, ${n}!` : "Lucky to Have You";
-    case "thank-you":
-      return n ? `Thank You, ${n}!` : "Thank You!";
-    default:
-      return n ? `With Love, ${n}` : "With Love";
-  }
+  const headline =
+    copy.closing.headlines[
+      occasion.toLowerCase() as keyof typeof copy.closing.headlines
+    ] ?? copy.closing.headlines.fallback;
+  return n ? interpolate(headline.withName, { name: n }) : headline.plain;
 };
 
 /**
@@ -212,8 +202,7 @@ export const ClosingScreen = ({
           className="mb-5 max-w-sm text-sm leading-relaxed sm:text-base"
           style={{ color: foregroundColor, opacity: 0.7 }}
         >
-          Thank you for being part of this beautiful journey. Every chapter
-          was written with love — just for you. May all your wishes come true!
+          {copy.closing.thankYou}
         </p>
 
         {/* THE END cinema card */}
@@ -231,7 +220,7 @@ export const ClosingScreen = ({
             className="text-xs font-semibold uppercase tracking-[0.35em]"
             style={{ color: primaryColor }}
           >
-            The End
+            {copy.closing.theEnd}
           </p>
         </motion.div>
 
@@ -242,14 +231,14 @@ export const ClosingScreen = ({
         >
           {senderName && (
             <>
-              With love from{" "}
+              {copy.closing.withLoveFrom}{" "}
               <span className="font-bold not-italic" style={{ color: primaryColor }}>
                 {senderName}
               </span>
               <br />
             </>
           )}
-          Made with love by{" "}
+          {copy.closing.madeWithLoveBy}{" "}
           <span className="font-bold" style={{ color: primaryColor }}>
             Wishire
           </span>
@@ -276,7 +265,7 @@ export const ClosingScreen = ({
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
           >
-            ✨ Experience Again
+            {copy.closing.experienceAgain}
           </motion.button>
 
           <motion.a
@@ -289,7 +278,7 @@ export const ClosingScreen = ({
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
           >
-            🎁 Create Your Own Wish
+            {copy.closing.createOwn}
           </motion.a>
         </div>
       </motion.div>

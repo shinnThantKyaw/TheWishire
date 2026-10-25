@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
+
+import { copy } from "@/config/copy";
 import type { CharacterGifConfig } from "@/types/wish";
 
 const positionClasses: Record<CharacterGifConfig["position"], string> = {
@@ -15,7 +17,7 @@ const positionClasses: Record<CharacterGifConfig["position"], string> = {
  * The character gently sways/bounces to add life to the experience.
  * Non-interactive (pointer-events-none) so it doesn't block user taps.
  */
-export const CharacterGif = ({ src, position, alt = "Character" }: CharacterGifConfig) => {
+export const CharacterGif = ({ src, position, alt = copy.characterGif.defaultAlt }: CharacterGifConfig) => {
   return (
     <motion.div
       className={`pointer-events-none fixed z-30 ${positionClasses[position]}`}

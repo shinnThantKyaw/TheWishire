@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getTemplate } from "@/templates/registry";
 import { mergeWishWithTemplate } from "@/lib/wish-merge";
 import { ExperienceOrchestrator } from "@/components/wish/experience-orchestrator";
+import { copy, interpolate } from "@/config/copy";
 import type { WishConfig } from "@/types/wish";
 import type { Metadata } from "next";
 
@@ -18,12 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 
   if (!wish) {
-    return { title: "Wish not found" };
+    return { title: copy.route.notFoundTitle };
   }
 
   return {
-    title: `${wish.title} — from ${wish.senderName} to ${wish.recipientName}`,
-    description: `${wish.senderName} made you a special surprise!`,
+    title: interpolate(copy.route.metaTitle, {
+      title: wish.title,
+      sender: wish.senderName,
+      recipient: wish.recipientName,
+    }),
+    description: interpolate(copy.route.metaDescription, { sender: wish.senderName }),
   };
 }
 

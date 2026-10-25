@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 
+import { copy } from "@/config/copy";
+
 interface RevealWrapperProps {
   children: React.ReactNode;
   hint?: string;
@@ -18,7 +20,7 @@ interface RevealWrapperProps {
  */
 export const RevealWrapper = ({
   children,
-  hint = "Tap to reveal ✨",
+  hint = copy.reveal.default,
   delay = 0,
   primaryColor = "#E91E63",
 }: RevealWrapperProps) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { copy } from "@/config/copy";
 import type { PoemSelection } from "@/types/wish";
 
 interface PoemChapterProps {
@@ -29,7 +30,7 @@ export const PoemChapter = ({
     if (!poem) {
         return (
             <div className="flex min-h-screen items-center justify-center px-6">
-                <p style={{ color: foregroundColor, opacity: 0.4 }}>No poem yet</p>
+                <p style={{ color: foregroundColor, opacity: 0.4 }}>{copy.chapters.poem.empty}</p>
             </div>
         );
     }

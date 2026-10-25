@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { HeartCrack, RefreshCw, RotateCcw } from "lucide-react";
+import { copy } from "@/config/copy";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -140,7 +141,7 @@ export default function WishError({ error, retry }: ErrorProps) {
             }}
           />
           <p className="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-300">
-            A little hiccup
+            {copy.route.error.hiccup}
           </p>
           <span
             className="h-px w-8"
@@ -158,12 +159,11 @@ export default function WishError({ error, retry }: ErrorProps) {
               "var(--wish-font-heading), 'Playfair Display', Georgia, serif",
           }}
         >
-          Something went wrong
+          {copy.route.error.wentWrong}
         </h1>
 
         <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-relaxed text-pink-800/70 dark:text-pink-200/70">
-          We couldn&apos;t load this wish. It might have been removed or the
-          link may be incorrect.
+          {copy.route.error.body}
         </p>
 
         {/* Actions */}
@@ -173,14 +173,14 @@ export default function WishError({ error, retry }: ErrorProps) {
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-pink-500/40 active:translate-y-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#120810]"
           >
             <RotateCcw className="h-4 w-4" aria-hidden />
-            Try again
+            {copy.route.error.tryAgain}
           </button>
           <button
             onClick={() => window.location.reload()}
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-pink-500/30 px-7 py-3 text-sm font-semibold text-pink-700 transition-all hover:bg-pink-500/10 hover:shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 dark:border-pink-400/30 dark:text-pink-200 dark:hover:bg-pink-400/10 dark:focus-visible:ring-offset-[#120810]"
           >
             <RefreshCw className="h-4 w-4" aria-hidden />
-            Reload page
+            {copy.route.error.reload}
           </button>
         </div>
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { StageContainer } from "../stage-container";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 
 interface GiftBoxStageProps {
@@ -47,7 +48,7 @@ export const GiftBoxStage = ({
             whileTap={!isOpening ? { scale: 0.97 } : undefined}
             exit={{ opacity: 0, scale: 0.3, y: -80 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            aria-label="Open gift box"
+            aria-label={copy.stages.giftBox.aria}
           >
             <div className="relative h-64 w-56 sm:h-72 sm:w-64">
               {/* Box shadow */}
@@ -215,7 +216,7 @@ export const GiftBoxStage = ({
             className="text-sm font-medium"
             style={{ color: "var(--wish-foreground, #1A1A2E)", opacity: 0.6 }}
           >
-            Tap to unwrap
+            {copy.stages.giftBox.tap}
           </p>
         </motion.div>
       )}

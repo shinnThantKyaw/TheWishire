@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 
+import { copy, interpolate } from "@/config/copy";
+
 interface ScreenPlaceholderProps {
   screenNumber: number;
   name: string;
@@ -46,7 +48,7 @@ export const ScreenPlaceholder = ({
             color: primaryColor,
           }}
         >
-          Screen {screenNumber}
+          {interpolate(copy.screenPlaceholder.screen, { n: screenNumber })}
         </div>
 
         {/* Emoji */}
@@ -86,7 +88,7 @@ export const ScreenPlaceholder = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              ← Back
+              {copy.screenPlaceholder.back}
             </motion.button>
           )}
 
@@ -101,7 +103,7 @@ export const ScreenPlaceholder = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Next →
+              {copy.common.nextArrow}
             </motion.button>
           )}
         </div>

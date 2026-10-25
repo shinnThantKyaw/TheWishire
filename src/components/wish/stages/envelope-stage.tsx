@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { StageContainer } from "../stage-container";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 
 interface EnvelopeStageProps {
@@ -19,7 +20,7 @@ interface EnvelopeStageProps {
  * envelope opens, creating a sense of anticipation.
  */
 export const EnvelopeStage = ({
-  prompt = "You've got a special surprise!",
+  prompt = copy.stages.envelope.prompt,
   animation,
   onAdvance,
 }: EnvelopeStageProps) => {
@@ -67,7 +68,7 @@ export const EnvelopeStage = ({
         className="group relative cursor-pointer focus:outline-none"
         whileHover={!isOpen ? { scale: 1.03, y: -4 } : undefined}
         whileTap={!isOpen ? { scale: 0.98 } : undefined}
-        aria-label="Open envelope"
+        aria-label={copy.stages.envelope.aria}
       >
         <div className="relative h-52 w-72 sm:h-60 sm:w-80" style={{ perspective: "800px" }}>
           {/* Envelope shadow */}
@@ -206,7 +207,7 @@ export const EnvelopeStage = ({
             className="text-sm font-medium"
             style={{ color: "var(--wish-foreground, #1A1A2E)", opacity: 0.6 }}
           >
-            Tap the envelope to open
+            {copy.stages.envelope.tap}
           </p>
         </motion.div>
       )}

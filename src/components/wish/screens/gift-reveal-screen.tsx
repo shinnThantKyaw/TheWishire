@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
+import { copy } from "@/config/copy";
+
 interface GiftRevealScreenProps {
   onNext: () => void;
   onBack: () => void;
@@ -57,7 +59,7 @@ export const GiftRevealScreen = ({
           animate={{ opacity: 0.5 }}
           transition={{ delay: 0.3 }}
         >
-          Something special awaits...
+          {copy.giftReveal.teaser}
         </motion.p>
 
         {/* ── 3D Gift Box ───────────────────────── */}
@@ -66,7 +68,7 @@ export const GiftRevealScreen = ({
           className="relative mx-auto cursor-pointer border-0 bg-transparent p-0"
           whileHover={!opening ? { scale: 1.05 } : {}}
           whileTap={!opening ? { scale: 0.95 } : {}}
-          aria-label="Open the gift"
+          aria-label={copy.giftReveal.openAria}
         >
           <motion.div
             animate={
@@ -189,7 +191,7 @@ export const GiftRevealScreen = ({
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                Tap to open 💝
+                {copy.giftReveal.tapToOpen}
               </motion.span>
             </motion.p>
           )}

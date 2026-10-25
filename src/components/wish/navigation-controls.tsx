@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 
+import { copy } from "@/config/copy";
+
 interface NavigationControlsProps {
   onPrev: () => void;
   onNext: () => void;
@@ -47,7 +49,7 @@ export const NavigationControls = ({
         whileTap={!isFirst ? { scale: 0.95 } : undefined}
       >
         <span className="text-base">←</span>
-        Back
+        {copy.navigation.back}
       </motion.button>
 
       {/* Next / Continue button */}
@@ -60,7 +62,7 @@ export const NavigationControls = ({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        {isLast ? "Finish 🎉" : "Next"}
+        {isLast ? copy.navigation.finish : copy.navigation.next}
         {!isLast && <span className="text-base">→</span>}
       </motion.button>
     </motion.div>

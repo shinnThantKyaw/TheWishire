@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import type { CSSProperties } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Check, Clover, Download, Gamepad2, Gift, Heart, LockOpen, Play, Sparkle, Sparkles } from "lucide-react";
+import { copy, interpolate } from "@/config/copy";
 import type { GiftSubScreen, SpinProof, WonReward } from "@/types/experience";
 import type { GiftChapterConfig } from "@/types/wish";
 import { DEFAULT_ATTEMPTS, DEFAULT_MINI_GAME_ITEMS } from "@/lib/rewards-shared";
@@ -133,7 +134,7 @@ const GiftGate = ({
   primaryColor: string;
   foregroundColor: string;
 }) => {
-  const gate = config?.gateAction ?? { type: "tap" as const, prompt: "Tap to open your gift! 🎁" };
+  const gate = config?.gateAction ?? { type: "tap" as const, prompt: copy.gateDefaults.gift };
   const [done, setDone] = useState(false);
 
   const handleComplete = () => {
@@ -156,7 +157,7 @@ const GiftGate = ({
           color: foregroundColor,
         }}
       >
-        Here is a special surprise gift for you!
+        {copy.chapters.gift.intro}
       </h3>
 
       {gate.type === "password" && (
@@ -249,7 +250,7 @@ const PinGate = ({
       className="mt-6 flex flex-col items-center"
       animate={error && !prefersReducedMotion ? { x: [-8, 8, -6, 6, 0] } : {}}
       role="region"
-      aria-label="PIN challenge"
+      aria-label={copy.chapters.gift.pinChallengeAria}
     >
       {/* Hint card */}
       <motion.div
@@ -263,7 +264,7 @@ const PinGate = ({
         transition={{ delay: 0.2 }}
       >
         <p className="text-xs uppercase tracking-wider" style={{ color: primaryColor, opacity: 0.7 }}>
-          Hint
+          {copy.chapters.gift.hint}
         </p>
         <p className="mt-1 text-sm font-medium italic" style={{ color: foregroundColor }}>
           {hint} 💕
@@ -271,7 +272,7 @@ const PinGate = ({
       </motion.div>
 
       {/* PIN display */}
-      <div className="mb-6 flex gap-3" role="group" aria-label="PIN entry display">
+      <div className="mb-6 flex gap-3" role="group" aria-label={copy.chapters.gift.pinDisplayAria}>
         {[0, 1, 2, 3].map((i) => (
           <motion.div
             key={i}
@@ -292,7 +293,10 @@ const PinGate = ({
                   : {}
             }
             transition={{ duration: 0.3 }}
-            aria-label={`Digit ${i + 1}: ${input[i] ? "filled" : "empty"}`}
+            aria-label={interpolate(
+              input[i] ? copy.chapters.gift.digitFilledAria : copy.chapters.gift.digitEmptyAria,
+              { n: i + 1 },
+            )}
           >
             {input[i] ? "●" : "·"}
           </motion.div>
@@ -300,7 +304,7 @@ const PinGate = ({
       </div>
 
       {/* Numeric keypad */}
-      <div className="grid grid-cols-3 gap-2.5" role="group" aria-label="Numeric keypad">
+      <div className="grid grid-cols-3 gap-2.5" role="group" aria-label={copy.chapters.gift.keypadAria}>
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((digit) => (
           <motion.button
             key={digit}
@@ -314,7 +318,7 @@ const PinGate = ({
             }}
             whileHover={prefersReducedMotion ? {} : { scale: 1.05, background: `${primaryColor}15` }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.92 }}
-            aria-label={`Digit ${digit}`}
+            aria-label={interpolate(copy.chapters.gift.digitAria, { n: digit })}
           >
             {digit}
           </motion.button>
@@ -331,7 +335,7 @@ const PinGate = ({
           }}
           whileHover={prefersReducedMotion ? {} : { scale: 1.05, background: `${primaryColor}15` }}
           whileTap={prefersReducedMotion ? {} : { scale: 0.92 }}
-          aria-label="Digit 0"
+          aria-label={interpolate(copy.chapters.gift.digitAria, { n: "0" })}
         >
           0
         </motion.button>
@@ -346,7 +350,7 @@ const PinGate = ({
           }}
           whileHover={prefersReducedMotion ? {} : { scale: 1.05, background: `${foregroundColor}12` }}
           whileTap={prefersReducedMotion ? {} : { scale: 0.92 }}
-          aria-label="Backspace"
+          aria-label={copy.chapters.gift.backspaceAria}
         >
           ←
         </motion.button>
@@ -363,7 +367,7 @@ const PinGate = ({
             exit={{ opacity: 0 }}
             role="alert"
           >
-            Wrong PIN! Try again 💔
+            {copy.chapters.gift.wrongPin}
           </motion.p>
         )}
       </AnimatePresence>
@@ -449,7 +453,7 @@ const PinSuccessOverlay = ({
       transition={{ duration: 0.4 }}
       role="status"
       aria-live="polite"
-      aria-label="PIN correct"
+      aria-label={copy.chapters.gift.pinCorrectAria}
     >
       {/* Backdrop */}
       <motion.div
@@ -631,7 +635,7 @@ const PinSuccessOverlay = ({
             className="text-[0.7rem] font-medium uppercase tracking-[0.3em]"
             style={{ color: "rgba(255,255,255,0.75)" }}
           >
-            The answer is
+            {copy.chapters.gift.answerIs}
           </p>
           <span
             className="h-px w-8 sm:w-12"
@@ -763,7 +767,7 @@ const PinSuccessOverlay = ({
             times: [0, 0.6, 1],
           }}
         >
-          correct!
+          {copy.chapters.gift.correct}
         </motion.p>
 
         {/* Hand-drawn flourish underline */}
@@ -837,7 +841,7 @@ const PinSuccessOverlay = ({
           transition={{ delay: 2.4, type: "spring", stiffness: 180, damping: 16 }}
         >
           <LockOpen className="h-4 w-4 text-white" aria-hidden />
-          <p className="text-sm font-semibold tracking-wide text-white">Unlocked!</p>
+          <p className="text-sm font-semibold tracking-wide text-white">{copy.chapters.gift.unlocked}</p>
         </motion.div>
 
         {/* Gift teaser — anticipation for next screen */}
@@ -848,7 +852,7 @@ const PinSuccessOverlay = ({
           transition={{ delay: 2.7, duration: 0.8 }}
         >
           <Gift className="h-3.5 w-3.5" style={{ color: primaryColor }} aria-hidden />
-          Your gift is waiting…
+          {copy.chapters.gift.giftWaiting}
         </motion.p>
       </motion.div>
     </motion.div>
@@ -888,7 +892,7 @@ const PasswordGate = ({
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && submit()}
-        placeholder="Enter code..."
+        placeholder={copy.common.enterCode}
         className="mb-3 w-48 rounded-full border px-4 py-2.5 text-center text-sm outline-none"
         style={{
           borderColor: error ? "#ef4444" : `${primaryColor}30`,
@@ -901,11 +905,11 @@ const PasswordGate = ({
         className="rounded-full px-6 py-2 text-xs font-semibold text-white"
         style={{ background: primaryColor }}
       >
-        Unlock ✨
+        {copy.common.unlock}
       </button>
       {error && (
         <p className="mt-2 text-xs" style={{ color: "#ef4444" }}>
-          Wrong code!
+          {copy.chapters.gift.wrongCode}
         </p>
       )}
     </motion.div>
@@ -936,7 +940,7 @@ const YesNoGate = ({
           className="rounded-full px-6 py-2.5 text-sm font-semibold text-white"
           style={{ background: primaryColor }}
         >
-          Yes! 😍
+          {copy.chapters.gift.yes}
         </button>
         <button
           onClick={() => setWrong(true)}
@@ -947,7 +951,7 @@ const YesNoGate = ({
             opacity: 0.5,
           }}
         >
-          No...
+          {copy.chapters.gift.no}
         </button>
       </div>
       {wrong && (
@@ -957,7 +961,7 @@ const YesNoGate = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.6 }}
         >
-          Wrong answer! Try again 💕
+          {copy.common.wrongAnswer}
         </motion.p>
       )}
     </div>
@@ -1192,7 +1196,7 @@ const MainGiftReveal = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        🎁 Your Special Gift
+        {copy.chapters.gift.mainGiftHeading}
       </motion.h3>
 
       {/* Gift photo with decorative frame */}
@@ -1265,7 +1269,7 @@ const MainGiftReveal = ({
         >
           <img
             src={giftPhoto}
-            alt="Your special gift"
+            alt={copy.chapters.gift.giftPhotoAlt}
             className="h-full w-full object-cover"
             style={{
               filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.15))",
@@ -1351,7 +1355,7 @@ const MainGiftReveal = ({
             boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          Just for You ✨
+          {copy.chapters.gift.justForYou}
         </motion.div>
       </motion.div>
 
@@ -1383,7 +1387,7 @@ const MainGiftReveal = ({
         whileHover={!prefersReducedMotion && !continuing ? { scale: 1.05, boxShadow: `0 8px 28px ${primaryColor}50` } : {}}
         whileTap={!prefersReducedMotion && !continuing ? { scale: 0.95 } : {}}
       >
-        {continuing ? "Opening..." : "Continue →"}
+        {continuing ? copy.chapters.gift.opening : copy.common.continueArrow}
       </motion.button>
     </motion.div>
   );
@@ -1548,7 +1552,7 @@ const BonusIntro = ({
             className="text-[0.65rem] font-medium uppercase"
             style={{ color: primaryColor, letterSpacing: "0.3em" }}
           >
-            Bonus round
+            {copy.chapters.gift.bonusRound}
           </p>
           <span
             className="h-px w-6"
@@ -1569,7 +1573,7 @@ const BonusIntro = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
         >
-          But wait, there&apos;s more!
+          {copy.chapters.gift.bonusHeading}
         </motion.h3>
 
         {/* Subtitle */}
@@ -1580,7 +1584,7 @@ const BonusIntro = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.45 }}
         >
-          Here are some more surprises for you!
+          {copy.chapters.gift.bonusSubtitle}
         </motion.p>
 
         {/* Attempts chip — glass pill with clover */}
@@ -1597,8 +1601,11 @@ const BonusIntro = ({
           <Clover className="h-4 w-4" style={{ color: primaryColor }} aria-hidden />
           <p className="text-sm font-medium" style={{ color: primaryColor }}>
             {attempts > 0
-              ? `You have ${attempts} ${attempts === 1 ? "chance" : "chances"} to win!`
-              : "All chances used — your prizes await!"}
+              ? interpolate(
+                  attempts === 1 ? copy.chapters.gift.chancesOne : copy.chapters.gift.chancesMany,
+                  { count: attempts },
+                )
+              : copy.chapters.gift.allChancesUsed}
           </p>
         </motion.div>
 
@@ -1620,12 +1627,23 @@ const BonusIntro = ({
           whileTap={{ scale: 0.95 }}
         >
           <Play className="h-4 w-4 fill-current" aria-hidden />
-          Let&apos;s Play!
+          {copy.chapters.gift.letsPlay}
         </motion.button>
       </motion.div>
     </motion.div>
   );
 };
+
+// ─── Server error remap ──────────────────────────────────
+// The spin/rewards API keeps sending stable English `error` strings;
+// remap the known recipient-seen one to dictionary text and fall back
+// to the generic message for anything unknown.
+const SERVER_ERROR_COPY: Record<string, string> = {
+  "No attempts left": copy.serverErrors.noAttemptsLeft,
+};
+
+const serverErrorCopy = (error?: string): string =>
+  (error && SERVER_ERROR_COPY[error]) || copy.serverErrors.generic;
 
 // ─── Mini Game (Real-World Spin Wheel) ────────────────────
 
@@ -1772,7 +1790,7 @@ const MiniGame = ({
 
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setSpinError(data.error ?? "Something went wrong — try again");
+        setSpinError(serverErrorCopy(data.error));
         if (res.status === 403) setRemaining(0);
         setSpinning(false);
         return;
@@ -1825,7 +1843,7 @@ const MiniGame = ({
         onWin(won);
       }, spinDuration);
     } catch {
-      setSpinError("Network error — check your connection and try again");
+      setSpinError(copy.serverErrors.network);
       setSpinning(false);
     }
   }, [spinning, remaining, segmentAngle, prefersReducedMotion, onWin]);
@@ -1855,7 +1873,10 @@ const MiniGame = ({
       >
         <Clover className="h-4 w-4" style={{ color: primaryColor }} aria-hidden />
         <p className="text-sm font-semibold" style={{ color: primaryColor }}>
-          {remaining} {remaining === 1 ? "chance" : "chances"} left
+          {interpolate(
+            remaining === 1 ? copy.chapters.gift.chanceLeftOne : copy.chapters.gift.chanceLeftMany,
+            { count: remaining },
+          )}
         </p>
       </div>
 
@@ -1972,7 +1993,7 @@ const MiniGame = ({
             <div className="flex flex-col items-center">
               <Sparkles className="h-5 w-5 text-white sm:h-6 sm:w-6" aria-hidden />
               <div className="text-[8px] font-bold uppercase tracking-wide text-white/90 sm:text-[9px]">
-                Spin
+                {copy.chapters.gift.spin}
               </div>
             </div>
           </div>
@@ -2031,14 +2052,14 @@ const MiniGame = ({
             >
               <Sparkles className="h-4 w-4" aria-hidden />
             </motion.span>
-            Spinning…
+            {copy.chapters.gift.spinning}
           </>
         ) : remaining <= 0 ? (
-          "No chances left"
+          copy.chapters.gift.noChancesLeft
         ) : (
           <>
             <Sparkles className="h-4 w-4" aria-hidden />
-            SPIN!
+            {copy.chapters.gift.spinBig}
           </>
         )}
       </motion.button>
@@ -2103,7 +2124,7 @@ const MiniGame = ({
                 className="text-[0.65rem] font-medium uppercase"
                 style={{ color: primaryColor, letterSpacing: "0.3em" }}
               >
-                You won!
+                {copy.chapters.gift.youWon}
               </p>
               <p className="mt-2 text-4xl" aria-hidden="true">
                 {winner.item.emoji}
@@ -2144,7 +2165,7 @@ const MiniGame = ({
                 whileTap={{ scale: 0.96 }}
               >
                 <Download className="h-3.5 w-3.5" aria-hidden />
-                Download proof ticket
+                {copy.chapters.gift.downloadProof}
               </motion.button>
             </div>
           </motion.div>
@@ -2169,7 +2190,7 @@ const MiniGame = ({
           whileHover={{ scale: 1.04, y: -1 }}
           whileTap={{ scale: 0.96 }}
         >
-          See my rewards
+          {copy.chapters.gift.seeRewards}
           <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
         </motion.button>
       )}
@@ -2232,7 +2253,7 @@ const PrizeTicket = ({
               style={{ background: primaryColor }}
             >
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-                🎟️ Prize Ticket
+                🎟️ {copy.rewards.ticket.prizeTicket}
               </p>
             </div>
 
@@ -2265,7 +2286,7 @@ const PrizeTicket = ({
               className="mt-3 text-[11px] font-bold uppercase tracking-wider"
               style={{ color: primaryColor }}
             >
-              {proof.bonusPoints} Bonus Points
+              {interpolate(copy.rewards.ticket.bonusPoints, { points: proof.bonusPoints })}
             </p>
 
             {/* Download PNG proof (GIFT-03) */}
@@ -2288,7 +2309,7 @@ const PrizeTicket = ({
               }
             >
               <Download className="h-3 w-3" aria-hidden />
-              Download PNG
+              {copy.chapters.gift.downloadPng}
             </button>
           </div>
 
@@ -2318,7 +2339,7 @@ const PrizeTicket = ({
                 className="text-[9px] font-bold uppercase tracking-widest"
                 style={{ color: PAPER_COLORS.ink, opacity: 0.6 }}
               >
-                No.
+                {copy.chapters.gift.serialPrefix}
               </p>
               <p
                 className="text-[10px] font-bold tabular-nums"
@@ -2330,7 +2351,7 @@ const PrizeTicket = ({
                 className="mt-1 text-[8px] font-semibold uppercase tracking-wider"
                 style={{ color: PAPER_COLORS.ink, opacity: 0.5 }}
               >
-                Scan QR to verify
+                {copy.chapters.gift.scanQr}
               </p>
             </div>
           </div>
@@ -2350,7 +2371,7 @@ const PrizeTicket = ({
               opacity: 0.55,
             }}
           >
-            Redeemed
+            {copy.chapters.gift.redeemed}
           </p>
         </div>
       </div>
@@ -2394,15 +2415,18 @@ const RewardResult = ({
           color: foregroundColor,
         }}
       >
-        Prize Booth
+        {copy.chapters.gift.prizeBooth}
       </h3>
       <p
         className="mb-8 max-w-[36ch] text-center text-sm sm:mb-10"
         style={{ color: foregroundColor, opacity: 0.6 }}
       >
         {tickets.length > 0
-          ? `You won ${tickets.length} ${tickets.length === 1 ? "prize" : "prizes"}! Download your proof tickets and send them to claim your rewards.`
-          : "All your prizes are redeemed!"}
+          ? interpolate(
+              tickets.length === 1 ? copy.chapters.gift.wonSummaryOne : copy.chapters.gift.wonSummaryMany,
+              { count: tickets.length },
+            )
+          : copy.chapters.gift.allRedeemed}
       </p>
 
       {/* Ticket stack */}
@@ -2425,7 +2449,7 @@ const RewardResult = ({
         animate={{ opacity: 0.45 }}
         transition={{ delay: 0.15 + tickets.length * 0.18 }}
       >
-        ✨ Each ticket has a QR code — your sender can scan it to verify it&apos;s real.
+        {copy.chapters.gift.qrFooterNote}
       </motion.p>
 
       {/* Continue */}
@@ -2442,7 +2466,7 @@ const RewardResult = ({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        Continue
+        {copy.common.continue}
         <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
       </motion.button>
     </motion.div>

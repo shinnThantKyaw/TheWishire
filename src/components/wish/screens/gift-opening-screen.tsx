@@ -3,6 +3,8 @@
 import { useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
+import { copy, giftOpeningOccasionCopy } from "@/config/copy";
+
 interface GiftOpeningScreenProps {
   onNext: () => void;
   onBack: () => void;
@@ -14,131 +16,6 @@ interface GiftOpeningScreenProps {
   backgroundColor?: string;
   foregroundColor?: string;
 }
-
-/** Occasion-specific copy for the gift moment */
-const OCCASION_COPY: Record<
-  string,
-  {
-    heading: string;
-    subheading: string;
-    openPrompt: string;
-    contents: Array<{ emoji: string; label: string }>;
-  }
-> = {
-  birthday: {
-    heading: "A Birthday Gift, Just for You",
-    subheading:
-      "Someone who cares about you picked out something special to celebrate your birthday.",
-    openPrompt: "Tap to unwrap your gift",
-    contents: [
-      { emoji: "💌", label: "A Letter" },
-      { emoji: "📸", label: "Memories" },
-      { emoji: "🎵", label: "A Song" },
-      { emoji: "💝", label: "A Wish" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  anniversary: {
-    heading: "A Gift of Love",
-    subheading:
-      "Someone wanted to honor this beautiful journey you share with a personal surprise.",
-    openPrompt: "Tap to open your gift",
-    contents: [
-      { emoji: "💌", label: "A Letter" },
-      { emoji: "📸", label: "Our Story" },
-      { emoji: "💕", label: "A Promise" },
-      { emoji: "🌹", label: "A Rose" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  valentine: {
-    heading: "A Little Token of Love",
-    subheading:
-      "In a world full of people, someone chose to make something just for you.",
-    openPrompt: "Tap to receive your gift",
-    contents: [
-      { emoji: "💌", label: "A Love Note" },
-      { emoji: "❤️", label: "A Heart" },
-      { emoji: "🌹", label: "Roses" },
-      { emoji: "✨", label: "A Wish" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  wedding: {
-    heading: "A Gift for Your Special Day",
-    subheading:
-      "Two hearts, one beautiful journey. Someone wanted to celebrate this milestone with you.",
-    openPrompt: "Tap to open your gift",
-    contents: [
-      { emoji: "💌", label: "A Toast" },
-      { emoji: "💍", label: "Blessings" },
-      { emoji: "📸", label: "Memories" },
-      { emoji: "🥂", label: "Cheers" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  graduation: {
-    heading: "A Gift for Your Achievement",
-    subheading:
-      "All that hard work paid off. Someone is incredibly proud and wanted you to know.",
-    openPrompt: "Tap to open your gift",
-    contents: [
-      { emoji: "💌", label: "A Letter" },
-      { emoji: "🎓", label: "Pride" },
-      { emoji: "⭐", label: "A Wish" },
-      { emoji: "📖", label: "Wisdom" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  friendship: {
-    heading: "A Gift from the Heart",
-    subheading:
-      "True friends are rare. Someone wanted to say thank you for being exactly who you are.",
-    openPrompt: "Tap to open your gift",
-    contents: [
-      { emoji: "💌", label: "A Note" },
-      { emoji: "🤗", label: "A Hug" },
-      { emoji: "📸", label: "Memories" },
-      { emoji: "💛", label: "A Wish" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-  "thank-you": {
-    heading: "A Gift of Gratitude",
-    subheading:
-      "Someone wanted to express their thanks in a way that words alone can't capture.",
-    openPrompt: "Tap to open your gift",
-    contents: [
-      { emoji: "💌", label: "A Note" },
-      { emoji: "🙏", label: "Gratitude" },
-      { emoji: "🌸", label: "Warmth" },
-      { emoji: "✨", label: "A Wish" },
-      { emoji: "🖼️", label: "Photos" },
-      { emoji: "📜", label: "A Poem" },
-    ],
-  },
-};
-
-const FALLBACK_COPY = {
-  heading: "A Gift, Made with Love",
-  subheading:
-    "Someone wanted to make this moment a little more special — just for you.",
-  openPrompt: "Tap to open your gift",
-  contents: [
-    { emoji: "💌", label: "A Letter" },
-    { emoji: "📸", label: "Memories" },
-    { emoji: "🎵", label: "A Song" },
-    { emoji: "💝", label: "A Wish" },
-    { emoji: "🖼️", label: "Photos" },
-    { emoji: "📜", label: "A Poem" },
-  ],
-};
 
 /* ── Floating sparkle particle ─────────────────────────── */
 const Sparkle = ({
@@ -191,8 +68,7 @@ export const GiftOpeningScreen = ({
   const hasConfetti = useRef(false);
   const openingRef = useRef(false);
 
-  const copy =
-    OCCASION_COPY[occasion?.toLowerCase() ?? ""] ?? FALLBACK_COPY;
+  const copyForOccasion = giftOpeningOccasionCopy(occasion?.toLowerCase() ?? "");
 
   // Pre-compute sparkle data (stable across renders — no Math.random in render)
   const sparkles = useMemo(
@@ -341,7 +217,7 @@ export const GiftOpeningScreen = ({
             >
               {senderName
                 ? `${senderName} has left you a gift`
-                : "You've received a gift"}
+                : copy.giftOpening.received}
             </p>
           </div>
         </motion.div>
@@ -370,7 +246,7 @@ export const GiftOpeningScreen = ({
                 onClick={handleOpen}
                 className="absolute inset-0 z-30 cursor-pointer border-0 bg-transparent p-0"
                 style={{ width: 200, height: 180 }}
-                aria-label="Open the gift"
+                aria-label={copy.giftOpening.openAria}
               />
             )}
 
@@ -396,7 +272,7 @@ export const GiftOpeningScreen = ({
 
             {/* ── Items emerging from inside the box ── */}
             {opening &&
-              copy.contents.map((item, i) => {
+              copyForOccasion.contents.map((item, i) => {
                 const positions = [
                   { x: -75, y: -210, rotate: -12 },
                   { x: 75, y: -210, rotate: 12 },
@@ -734,7 +610,7 @@ export const GiftOpeningScreen = ({
                         fontFamily: "Georgia, 'Times New Roman', serif",
                       }}
                     >
-                      from
+                      {copy.giftOpening.fromTag}
                     </p>
                     {/* Sender name */}
                     <p
@@ -795,7 +671,7 @@ export const GiftOpeningScreen = ({
                 className="text-xs font-medium italic tracking-wide"
                 style={{ color: primaryColor, opacity: 0.7 }}
               >
-                Tap to open
+                {copy.common.tapToOpen}
               </p>
               {/* Animated underline */}
               <motion.div
@@ -854,7 +730,7 @@ export const GiftOpeningScreen = ({
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Here are gifts for you!
+              {copy.giftOpening.giftsForYou}
             </p>
 
             {/* Sender attribution */}
@@ -894,7 +770,7 @@ export const GiftOpeningScreen = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              See the gifts →
+              {copy.giftOpening.seeGifts}
             </motion.button>
           </motion.div>
         )}

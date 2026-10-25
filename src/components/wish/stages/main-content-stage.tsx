@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { StageContainer, StaggeredContainer, RevealChild } from "../stage-container";
 import { RevealWrapper } from "../reveal-wrapper";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 import type { PoemSelection, FlowMode } from "@/types/wish";
 
@@ -67,7 +68,7 @@ export const MainContentStage = ({
         {/* ── Poem ──────────────────────────────────── */}
         {hasPoem && (
           isTapToReveal ? (
-            <RevealWrapper hint="Tap to read the poem ✨">
+            <RevealWrapper hint={copy.reveal.poem}>
               <PoemCard poem={poem} />
             </RevealWrapper>
           ) : (
@@ -80,7 +81,7 @@ export const MainContentStage = ({
         {/* ── Photo grid ────────────────────────────── */}
         {hasPhotos && (
           isTapToReveal ? (
-            <RevealWrapper hint="Tap to see photos 📸">
+            <RevealWrapper hint={copy.reveal.photos}>
               <PhotoGrid photos={photos} />
             </RevealWrapper>
           ) : (
@@ -104,7 +105,7 @@ export const MainContentStage = ({
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Continue
+                {copy.common.continue}
                 <motion.span
                   className="ml-2 inline-block"
                   animate={{ x: [0, 4, 0] }}
@@ -186,14 +187,14 @@ const LetterCard = ({
       >
         {isOpen ? (
           <>
-            Fold letter
+            {copy.stages.mainContent.foldLetter}
             <motion.span animate={{ rotate: 180 }} transition={{ duration: 0.3 }}>
               ▲
             </motion.span>
           </>
         ) : (
           <>
-            Open letter
+            {copy.stages.mainContent.openLetter}
             <motion.span animate={{ rotate: 0 }} transition={{ duration: 0.3 }}>
               ▼
             </motion.span>
@@ -205,7 +206,7 @@ const LetterCard = ({
 
   if (isTapToReveal) {
     return (
-      <RevealWrapper hint="Tap to open the letter ✉️">
+      <RevealWrapper hint={copy.reveal.letter}>
         {letterContent}
       </RevealWrapper>
     );

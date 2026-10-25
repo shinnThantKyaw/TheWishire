@@ -1,5 +1,6 @@
 "use client";
 
+import { copy } from "@/config/copy";
 import type { MergedStage } from "@/types/wish";
 
 interface InteractiveModeProps {
@@ -28,12 +29,12 @@ export const InteractiveMode = ({ stages, primaryColor, onComplete }: Interactiv
           color: primaryColor,
         }}
       >
-        Interactive Mode
+        {copy.modes.interactive.title}
       </div>
       <p className="mt-4 text-center text-sm" style={{ opacity: 0.6 }}>
-        Tap materials to open each chapter.
+        {copy.modes.interactive.description}
         <br />
-        Coming in Phase 2.6.
+        {copy.modes.interactive.coming}
       </p>
 
       {/* Placeholder material items */}
@@ -59,7 +60,7 @@ export const InteractiveMode = ({ stages, primaryColor, onComplete }: Interactiv
           background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
         }}
       >
-        Skip to Closing →
+        {copy.modes.skipToClosing}
       </button>
     </div>
   );

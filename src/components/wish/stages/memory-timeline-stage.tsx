@@ -12,6 +12,7 @@ import {
   bodyFont,
 } from "../timeline/timeline-visuals";
 import { cn } from "@/lib/utils";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 import type { MemoryTimelineEntry, FlowMode } from "@/types/wish";
 
@@ -59,10 +60,10 @@ export const MemoryTimelineStage = ({
         }}
       >
         <TimelineHeader
-          eyebrow="Our Story"
-          titleLead="Memory"
-          titleAccent="Timeline"
-          subtitle="Every moment with you is a beautiful chapter in our story."
+          eyebrow={copy.stages.timeline.eyebrow}
+          titleLead={copy.stages.timeline.titleLead}
+          titleAccent={copy.stages.timeline.titleAccent}
+          subtitle={copy.stages.timeline.subtitleStory}
           primaryColor={primaryColor}
           foregroundColor={foregroundColor}
         />
@@ -128,7 +129,7 @@ export const MemoryTimelineStage = ({
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
-              Continue
+              {copy.common.continue}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </motion.button>
           </motion.div>

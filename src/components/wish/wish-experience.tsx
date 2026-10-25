@@ -17,6 +17,7 @@ import { MusicPlayer } from "./music-player";
 import { CharacterGif } from "./character-gif";
 import { Decorations } from "./decorations";
 import { NavigationControls } from "./navigation-controls";
+import { copy } from "@/config/copy";
 
 interface WishExperienceProps {
   stages: MergedStage[];
@@ -335,7 +336,7 @@ const StageRenderer = ({
               className="mt-4 text-lg font-medium"
               style={{ color: "var(--wish-foreground, #1A1A2E)", opacity: 0.6 }}
             >
-              This stage is coming soon
+              {copy.experience.stageComingSoon}
             </p>
             <motion.button
               onClick={onAdvance}
@@ -347,7 +348,7 @@ const StageRenderer = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Skip →
+              {copy.experience.skip}
             </motion.button>
           </motion.div>
         </div>

@@ -2,6 +2,7 @@
 
 import { ScreenPlaceholder } from "./screen-placeholder";
 import type { GateType } from "@/types/experience";
+import { copy } from "@/config/copy";
 
 interface UnlockScreenProps {
   gateType: GateType;
@@ -9,13 +10,6 @@ interface UnlockScreenProps {
   onBack: () => void;
   primaryColor?: string;
 }
-
-const GATE_LABELS: Record<GateType, { emoji: string; hint: string }> = {
-  padlock: { emoji: "🔒", hint: "Tap to unlock" },
-  ribbon: { emoji: "🎀", hint: "Cut the ribbon" },
-  "wax-seal": { emoji: "🔮", hint: "Break the seal" },
-  chain: { emoji: "⛓️", hint: "Break the chain" },
-};
 
 /**
  * Screen 2: Surprise Unlock.
@@ -33,12 +27,12 @@ export const UnlockScreen = ({
   onBack,
   primaryColor = "#E91E63",
 }: UnlockScreenProps) => {
-  const gate = GATE_LABELS[gateType];
+  const gate = copy.unlock.gates[gateType];
 
   return (
     <ScreenPlaceholder
       screenNumber={2}
-      name="Surprise Unlock"
+      name={copy.unlock.screenName}
       subtitle={gate.hint}
       emoji={gate.emoji}
       onNext={onNext}

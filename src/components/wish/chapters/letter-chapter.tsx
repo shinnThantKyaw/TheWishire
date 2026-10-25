@@ -2,6 +2,7 @@
 
 import {useState, useCallback, useMemo, useRef, useEffect} from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { copy } from "@/config/copy";
 
 interface LetterChapterProps {
   letter?: string;
@@ -41,7 +42,7 @@ export const LetterChapter = ({
   if (!letter) {
     return (
         <div className="flex min-h-screen items-center justify-center px-6">
-          <p style={{ color: foregroundColor, opacity: 0.4 }}>No letter yet</p>
+          <p style={{ color: foregroundColor, opacity: 0.4 }}>{copy.chapters.letter.empty}</p>
         </div>
     );
   }
@@ -79,7 +80,7 @@ export const LetterChapter = ({
                     onClick={handleToggle}
                     className="absolute inset-0 z-30 cursor-pointer border-0 bg-transparent p-0"
                     style={{ width: 320, height: 250 }}
-                    aria-label="Open envelope to read letter"
+                    aria-label={copy.chapters.letter.envelopeAria}
                 />
             )}
 
@@ -443,7 +444,7 @@ export const LetterChapter = ({
                     <path d="M22 2L11 13" />
                     <path d="M22 2L15 22L11 13L2 9L22 2Z" />
                   </svg>
-                  Open the letter
+                  {copy.chapters.letter.open}
                 </motion.button>
             ) : (
                 <motion.button
@@ -475,7 +476,7 @@ export const LetterChapter = ({
                     <path d="M22 2L11 13" />
                     <path d="M22 2L15 22L11 13L2 9L22 2Z" />
                   </svg>
-                  Fold back
+                  {copy.chapters.letter.foldBack}
                 </motion.button>
             )}
           </AnimatePresence>
@@ -640,7 +641,7 @@ const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primary
                             fontStyle: "italic",
                         }}
                     >
-                        Just for You
+                        {copy.chapters.letter.justForYou}
                     </div>
                     <div className="mb-4 flex items-center justify-center gap-2">
                         <div className="h-px w-10" style={{ background: "#d6a5b5" }} />

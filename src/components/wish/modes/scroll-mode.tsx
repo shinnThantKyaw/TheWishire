@@ -1,5 +1,6 @@
 "use client";
 
+import { copy } from "@/config/copy";
 import type { MergedStage } from "@/types/wish";
 
 interface ScrollModeProps {
@@ -28,12 +29,12 @@ export const ScrollMode = ({ stages, primaryColor, onComplete }: ScrollModeProps
           color: primaryColor,
         }}
       >
-        Scroll Mode
+        {copy.modes.scroll.title}
       </div>
       <p className="mt-4 text-center text-sm" style={{ opacity: 0.6 }}>
-        Continuous scroll with all chapters visible.
+        {copy.modes.scroll.description}
         <br />
-        Coming in Phase 2.6.
+        {copy.modes.scroll.coming}
       </p>
       <button
         onClick={onComplete}
@@ -42,7 +43,7 @@ export const ScrollMode = ({ stages, primaryColor, onComplete }: ScrollModeProps
           background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
         }}
       >
-        Skip to Closing →
+        {copy.modes.skipToClosing}
       </button>
     </div>
   );

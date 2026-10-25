@@ -1,3 +1,5 @@
+import { copy } from "@/config/copy";
+
 export default function WishLoading() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-pink-50 dark:bg-pink-950/20">
@@ -10,7 +12,7 @@ export default function WishLoading() {
 
       {/* Loading text */}
       <p className="animate-pulse text-lg font-medium text-pink-600 dark:text-pink-400">
-        Unwrapping your surprise...
+        {copy.route.loading}
       </p>
 
       {/* Progress dots */}

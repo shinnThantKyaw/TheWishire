@@ -10,6 +10,7 @@ import { PoemChapter } from "../chapters/poem-chapter";
 import { SongChapter } from "../chapters/song-chapter";
 import { TimelineChapter } from "../chapters/timeline-chapter";
 import { GiftChapter } from "../chapters/gift-chapter";
+import { copy } from "@/config/copy";
 import type { MergedStage } from "@/types/wish";
 import type { GiftChapterConfig } from "@/types/wish";
 
@@ -187,7 +188,7 @@ export const ClickThrough = ({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {isLastChapter ? "Finish →" : "Next →"}
+          {isLastChapter ? copy.modes.finishArrow : copy.common.nextArrow}
         </motion.button>
       </div>
     </div>

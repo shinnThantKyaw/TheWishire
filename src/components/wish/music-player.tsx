@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
+import { copy } from "@/config/copy";
+
 interface MusicPlayerProps {
   src: string;
   /** Start playing only after this becomes true (e.g. after intro phase). */
@@ -95,7 +97,7 @@ export const MusicPlayer = ({
             exit={{ opacity: 0, scale: 0 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            aria-label={isPlaying ? "Mute music" : "Play music"}
+            aria-label={isPlaying ? copy.music.mute : copy.music.play}
           >
             {isPlaying ? (
               <motion.span

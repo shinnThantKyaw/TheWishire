@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { copy, interpolate } from "@/config/copy";
 import type { StartAction } from "@/types/experience";
 
 interface StartScreenProps {
@@ -109,7 +110,7 @@ export const StartScreen = ({
               {/* Greeting */}
               <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
                 <span style={{ color: foregroundColor, opacity: 0.45, fontWeight: 400 }}>
-                  Hey{" "}
+                  {copy.start.hey}{" "}
                 </span>
                 <span
                   style={{
@@ -144,8 +145,8 @@ export const StartScreen = ({
               <p className="text-sm leading-relaxed opacity-70">
                 <span className="font-semibold" style={{ color: primaryColor }}>
                   {senderName}
-                </span>{" "}
-                prepared a birthday cake for you. Light the candles and start celebrating your birthday!
+                </span>
+                {interpolate(copy.start.birthdayGreeting, { senderName: "" })}
               </p>
             </div>
           </div>
@@ -516,7 +517,7 @@ const CakeCandles = ({
             animate={{ opacity: 0.4 }}
             exit={{ opacity: 0 }}
           >
-            Tap the candles to light them. ({lit.length}/{count})
+            {interpolate(copy.start.candlesGuide, { lit: lit.length, count })}
           </motion.p>
         )}
       </AnimatePresence>
@@ -531,13 +532,13 @@ const CakeCandles = ({
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
           >
             <p className="text-xl font-bold" style={{ color: primaryColor }}>
-              🎉 Happy Birthday!
+              {copy.start.candlesSuccess}
             </p>
             <p
               className="mt-1 text-xs"
               style={{ color: foregroundColor, opacity: 0.5 }}
             >
-              Get ready for your surprise...
+              {copy.start.getReady}
             </p>
           </motion.div>
         )}

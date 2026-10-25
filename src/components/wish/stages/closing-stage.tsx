@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { StageContainer } from "../stage-container";
+import { copy } from "@/config/copy";
 import type { AnimationConfig } from "@/types/template";
 
 interface ClosingStageProps {
@@ -80,7 +81,7 @@ export const ClosingStage = ({
           animate={{ scale: [1, 1.02, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
-          With love ❤️
+          {copy.stages.closing.withLove}
         </motion.p>
       </motion.div>
 
