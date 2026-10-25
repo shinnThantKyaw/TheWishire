@@ -6,6 +6,12 @@ export interface OccasionMetadata {
   available: boolean;
 }
 
+/**
+ * Occasion registry — main set per Wave 0 decision 0.2 (Myanmar scope):
+ * birthday, anniversary, valentine, girlfriend-day, boyfriend-day,
+ * thadingyut, thingyan. The rest are parked (`available: false`) for a
+ * later backlog; recipient copy for them lives in git history, not copy.ts.
+ */
 export const occasions: OccasionMetadata[] = [
   {
     id: "birthday",
@@ -19,14 +25,42 @@ export const occasions: OccasionMetadata[] = [
     name: "Anniversary",
     description: "Commemorate your special milestone",
     icon: "💕",
-    available: false,
+    available: true,
   },
   {
     id: "valentine",
     name: "Valentine's Day",
     description: "Show your love and appreciation",
     icon: "💝",
-    available: false,
+    available: true,
+  },
+  {
+    id: "girlfriend-day",
+    name: "Girlfriend Day",
+    description: "Celebrate the girl who makes days brighter",
+    icon: "💗",
+    available: true,
+  },
+  {
+    id: "boyfriend-day",
+    name: "Boyfriend Day",
+    description: "Celebrate the one on your mind",
+    icon: "💙",
+    available: true,
+  },
+  {
+    id: "thadingyut",
+    name: "Thadingyut",
+    description: "Festival of lights — welcome the end of Lent",
+    icon: "🏮",
+    available: true,
+  },
+  {
+    id: "thingyan",
+    name: "Thingyan",
+    description: "Myanmar New Year water festival",
+    icon: "🌊",
+    available: true,
   },
   {
     id: "wedding",

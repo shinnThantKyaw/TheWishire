@@ -1,4 +1,11 @@
-export type Occasion = "birthday" | "anniversary" | "valentine" | "wedding" | "graduation" | "friendship" | "thank-you";
+export type Occasion =
+  | "birthday"
+  | "anniversary"
+  | "valentine"
+  | "girlfriend-day"
+  | "boyfriend-day"
+  | "thadingyut"
+  | "thingyan";
 
 export type MediaType = "photo" | "video" | "voice";
 

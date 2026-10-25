@@ -1,13 +1,25 @@
 /**
- * copy.ts — single dictionary of recipient-facing UI strings (Wave 1, task 1.2).
+ * copy.ts — single dictionary of recipient-facing UI strings (Wave 1, tasks 1.2 + 1.5).
  *
- * English values first; Myanmar translation (task 1.5) swaps values only.
+ * Bilingual since 1.5: translated values are Burmese; values still in English
+ * are awaiting translation (see MYANMAR-COPY.md worksheet). Structure, keys,
+ * and `{slot}` placeholders never translate — swap values only.
+ *
+ * Voice model: the introduction screen speaks as the product (formal);
+ * everything from the cake screen onward is the SENDER speaking (second
+ * person). Sender strings are default suggestion texts — Wave 4 lets the
+ * creator edit them per wish.
+ *
  * Plain data + one helper — import-safe from server components, canvas
  * renderers, and API-side code (no "use client", no React).
  *
  * Frame strings use `{slot}` placeholders — see `interpolate`.
  * Plural-sensitive strings ship as explicit *One/*Many pairs rather than a
  * plural function, so translators see whole sentences.
+ *
+ * Occasions (main set per 0.2): birthday, anniversary, valentine,
+ * girlfriend-day, boyfriend-day, thadingyut, thingyan (+ fallback).
+ * wedding / graduation / friendship / thank-you are parked (git history).
  */
 
 /** Replace `{slot}` placeholders in a copy template. Unknown slots stay as-is. */
@@ -33,159 +45,159 @@ export interface GiftOpeningCopy {
 export const copy = {
   /** Short labels shared across components — dedupe targets. */
   common: {
-    continue: "Continue",
-    continueArrow: "Continue →",
-    nextArrow: "Next →",
-    tapToOpen: "Tap to open",
-    wrongAnswer: "Wrong answer! Try again 💕",
-    enterCode: "Enter code...",
-    unlock: "Unlock ✨",
+    continue: "ဆက်သွားမယ်",
+    continueArrow: "ဆက်သွားမယ် →",
+    nextArrow: "ရှေ့ဆက်မယ် →",
+    tapToOpen: "ဖွင့်ရန် နှိပ်ပါ",
+    wrongAnswer: "အဖြေမှားနေပါတယ်! ထပ်ကြိုးစားကြည့်ပါဦးနော် 💕",
+    enterCode: "ကုဒ်ထည့်ပါ...",
+    unlock: "ဖွင့်မည် ✨",
     wishire: "Wishire",
   },
 
   /** `src/app/w/[slug]` route shell. */
   route: {
-    loading: "Unwrapping your surprise...",
-    notFoundTitle: "Wish not found",
-    metaTitle: "{title} — from {sender} to {recipient}",
-    metaDescription: "{sender} made you a special surprise!",
+    loading: "သင့်ရဲ့ surprise လေးကို ဖွင့်နေပါပြီ...",
+    notFoundTitle: "Wish မတွေ့ပါ",
+    metaTitle: "{title} — {sender} မှ {recipient} အတွက်",
+    metaDescription: "{sender} က သင့်အတွက် surprise လေးတစ်ခု ပြင်ဆင်ထားပါတယ်!",
     error: {
-      hiccup: "A little hiccup",
-      wentWrong: "Something went wrong",
-      body: "We couldn't load this wish. It might have been removed or the link may be incorrect.",
-      tryAgain: "Try again",
-      reload: "Reload page",
+      hiccup: "အနည်းငယ် အမှားအယွင်းရှိနေပါတယ်",
+      wentWrong: "တစ်ခုခု မှားနေပါတယ်",
+      body: "ဒီ wish ကို ဖွင့်လို့ မရပါ။ ပျက်သွားတာ ဖြစ်နိုင်သလို လင့်ခ်မှားနေတာလည်း ဖြစ်နိုင်ပါတယ်။",
+      tryAgain: "ထပ်စမ်းကြည့်ပါ",
+      reload: "pageကို ပြန်ဖတ်ကြည့်ပါ",
     },
   },
 
   /** Public verify page (`/w/[slug]/verify/[token]`). */
   verify: {
-    metaTitle: "Verify Reward Proof — Wishire",
-    heading: "Proof of reward",
-    authentic: "Authentic prize ticket",
-    unverified: "Ticket could not be verified",
-    issuedNote: "This ticket was issued by Wishire and matches the official record.",
-    wonOn: "Won on",
-    serial: "Serial",
-    forLabel: "For",
-    forValue: "{recipient} — “{title}” from {sender}",
-    signatureOk: "Signature verified · record stored on Wishire",
+    metaTitle: "ဆုရရှိကြောင်းသက်သေ စစ်ဆေးရန် — Wishire",
+    heading: "ဆုရရှိကြောင်းသက်သေ",
+    authentic: "ဆုရရှိကြောင်းလက်မှတ်",
+    unverified: "လက်မှတ်ကို စစ်ဆေးလို့မရနိုင်ပါ",
+    issuedNote: "ဤလက်မှတ်ကို Wishire မှ ထုတ်ပေးခြင်း ဖြစ်ပြီး တရားဝင်မှတ်တမ်းနှင့် ကိုက်ညီပါသည်။",
+    wonOn: "ရရှိခဲ့သည့်ရက်",
+    serial: "အမှတ်စဉ်",
+    forLabel: "အတွက်",
+    forValue: "{recipient} — “{title}” ({sender} ထံမှ)",
+    signatureOk: "လက်မှတ် မှန်ကန်သည် · မှတ်တမ်းကို Wishire တွင် သိမ်းဆည်းထားသည်",
     signatureFail:
-      "The signature on this ticket does not match the official record. It may have been altered. Contact the sender if you think this is a mistake.",
+      "ဤလက်မှတ်၏ လက်မှတ်သည် တရားဝင်မှတ်တမ်းနှင့် မကိုက်ညီပါ။ ပြင်ဆင်ခံရထားတာ အတုလုပ်ထားတာမျိုး ဖြစ်နိုင်ပါသည်။ တစ်ခုခုမှားနေတယ်လို့ ထင်ရင် ပေးပို့သူကို ဆက်သွယ်ပါ။",
   },
 
   /** Default gate prompts when creator set no custom one. */
   gateDefaults: {
-    yesNo: "Are you ready to see your surprise? 💕",
-    tap: "Tap to reveal your surprise! 🎁",
-    gift: "Tap to open your gift! 🎁",
+    yesNo: "သင့်ရဲ့ surprise လေးကို ကြည့်ဖို့ အဆင့်သင့်ပဲလား?💕",
+    tap: "surprise လေးကို ကြည့်ဖို့ ဒီကို နှိပ်လိုက်ပါ",
+    gift: "လက်ဆောင်ပုံးလေးကို ဖွင့်ဖို့ နှိပ်လိုက်ပါ",
   },
 
   experience: {
-    stageComingSoon: "This stage is coming soon",
-    skip: "Skip →",
+    stageComingSoon: "ဤအဆင့်ကို မကြာမီ ရောက်လာပါမည်",
+    skip: "ကျော်ရန် →",
   },
 
   navigation: {
-    back: "Back",
-    next: "Next",
-    finish: "Finish 🎉",
+    back: "နောက်သို့",
+    next: "ရှေ့သို့",
+    finish: "ပြီးပါပြီ 🎉",
   },
 
   /** RevealWrapper tap hints. */
   reveal: {
-    default: "Tap to reveal ✨",
-    poem: "Tap to read the poem ✨",
-    photos: "Tap to see photos 📸",
-    letter: "Tap to open the letter ✉️",
+    default: "ဖော်ပြရန် နှိပ်ပါ ✨",
+    poem: "ကဗျာဖတ်ရန် နှိပ်ပါ ✨",
+    photos: "ဓာတ်ပုံကြည့်ရန် နှိပ်ပါ 📸",
+    letter: "စာဖတ်ရန် နှိပ်ပါ ✉️",
   },
 
   music: {
-    mute: "Mute music",
-    play: "Play music",
+    mute: "သီချင်းပိတ်ရန်",
+    play: "သီချင်းဖွင့်ရန်",
   },
 
   characterGif: {
-    defaultAlt: "Character",
+    defaultAlt: "ဇာတ်ကောင်",
   },
 
-  /** Screen 3 — Surprise Start / Are You Ready. */
+  /** Screen 3 — Surprise Start / Are You Ready. Sender voice. */
   start: {
-    hey: "Hey",
+    hey: "ဟိုင်း",
     birthdayGreeting:
-      "{senderName} prepared a birthday cake for you. Light the candles and start celebrating your birthday!",
-    candlesGuide: "Tap the candles to light them. ({lit}/{count})",
-    candlesSuccess: "🎉 Happy Birthday!",
-    getReady: "Get ready for your surprise...",
-    yesButton: "Yes, I'm ready! 😍",
-    notYet: "Not yet...",
-    secretCode: "Type the secret code to continue",
-    letsGo: "Let's go! 🎉",
-    wrongCode: "Wrong code — try again!",
+      "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+    candlesGuide: "ဖယောင်းတိုင်တွေ မီးရှို့ဖို့ နှိပ်ပါ။ ({lit}/{count})",
+    candlesSuccess: "🎉 မွေးနေ့မင်္ဂလာ ရှိပါစေ!",
+    getReady: "သင့်အံ့သြဖွယ်အတွက် အဆင်သင့်ဖြစ်ပါပြီ...",
+    yesButton: "ဟုတ်ကဲ့၊ အဆင်သင့်ပါ! 😍",
+    notYet: "မကြာခင်မှ...",
+    secretCode: "ဆက်လက်ဆောင်ရွက်ဖို့ လျှို့ဝှက်ကုဒ် ရိုက်ထည့်ပါ",
+    letsGo: "သွားကြရအောင်! 🎉",
+    wrongCode: "ကုဒ်မှားနေတယ် — ထပ်စမ်းကြည့်ပါ!",
   },
 
-  /** Screen 1 — Introduction (occasion-keyed config + fixed copy). */
+  /** Screen 1 — Introduction (occasion-keyed config + fixed copy). Product voice (formal). */
   introduction: {
-    hey: "Hey {recipientName}!",
-    subtitle: "Someone made something special just for you.",
-    senderLine: "{senderName} prepared a special surprise for you to celebrate {celebrationText}.",
-    cutRibbon: "Cut the ribbon to unwrap your surprise",
-    opening: "Opening your surprise...",
-    cutRibbonAria: "Cut the ribbon to open your surprise",
+    hey: "မင်္ဂလာပါ {recipientName}ရေ",
+    subtitle: "သင့်အတွက် surprise လေးတစ်ခု စောင့်ကြိုနေပါတယ်နော်...",
+    senderLine: "{celebrationText}အတွက် {senderName}က အမှတ်တရ surprise လေးတစ်ခု စီစဉ်ပေးထားပါတယ်။",
+    cutRibbon: "ရိုးကြိုးဖြတ်ပြီး သင့်အံ့သြဖွယ်ကို ဖွင့်ပါ",
+    opening: "သင့်အံ့သြဖွယ်ကို ဖွင့်နေပါပြီ...",
+    cutRibbonAria: "ရိုးကြိုးဖြတ်ပြီး အံ့သြဖွယ်ဖွင့်ရန်",
     logoAlt: "Wishire",
     occasions: {
       birthday: {
         emoji: "🎂",
-        label: "Birthday",
-        celebrationText: "your birthday",
+        label: "မွေးနေ့",
+        celebrationText: "သင့်ရဲ့မွေးနေ",
         description:
-          "Someone who cares about you deeply wanted to take a moment to celebrate the day you were born — and everything you bring to the world.",
+          "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုချစ်တဲ့သူတွေ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးက သူတို့ထဲက တစ်ယောက်ယောက်က သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
       },
       anniversary: {
         emoji: "💕",
-        label: "Anniversary",
-        celebrationText: "your anniversary",
+        label: "နှစ်ပတ်လည်နေ့",
+        celebrationText: "သင်တို့ရဲ့ anniversary",
         description:
-          "Love is worth celebrating, and someone wanted to remind you just how much this journey together means to them.",
+          "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုသိပ်ချစ်တဲ့သူတစ်ယောက်တော့ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးကတော့ သူက သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
       },
       valentine: {
         emoji: "❤️",
-        label: "Valentine's Day",
-        celebrationText: "Valentine's Day",
+        label: "ချစ်သူနေ့",
+        celebrationText: "ချစ်သူများနေ့",
         description:
-          "In a world full of people, someone chose to write their feelings just for you. This is a little token of love, made with heart.",
+          "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုသိပ်ချစ်တဲ့သူတစ်ယောက်တော့ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးကတော့ သူက သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
       },
-      wedding: {
-        emoji: "💍",
-        label: "Wedding",
-        celebrationText: "your special day",
+      "girlfriend-day": {
+        emoji: "💗",
+        label: "ချစ်သူမများနေ့",
+        celebrationText: "ချစ်သူမများနေ့",
         description:
-          "Two hearts, one beautiful journey. Someone wanted to celebrate this incredible milestone with a personal touch.",
+          "တချို့လူတွေက ဘယ်လိုပဲရှိရှိ သူတို့ရှိတာနဲ့ ဒီလောကကြီးကို ပိုပြီးနူးညံ့အောင်လုပ်ပေးတယ်။ ဒီနေ့မှာ မင်းလို နေ့ရက်တိုင်းကို ပိုလင်းစေတဲ့သူကို ဂုဏ်ပြုချင်တဲ့သူတစ်ယောက် ရှိခဲ့တာပါ။",
       },
-      graduation: {
-        emoji: "🎓",
-        label: "Graduation",
-        celebrationText: "your graduation",
+      "boyfriend-day": {
+        emoji: "💙",
+        label: "ချစ်သူလေးများနေ့",
+        celebrationText: "ချစ်သူလေးများနေ့",
         description:
-          "All those late nights, hard work, and determination have paid off. Someone is incredibly proud of you and wanted you to know.",
+          "အားလုံးက ပြောကြတာမဟုတ်ပေမယ့် တစ်ယောက်ယောက်က မင်းကို မင်းထင်တာထက် ပိုပြီး မကြာခဏ တွေးနေတယ်။ ဒီနေ့မှာ ဒါကို တရားဝင်ကြေညာချင်တယ် — ဒီနေ့က မင်းနေ့ပါ။",
       },
-      friendship: {
-        emoji: "🤝",
-        label: "Friendship",
-        celebrationText: "our friendship",
+      thadingyut: {
+        emoji: "🏮",
+        label: "သီတင်းကျွတ်",
+        celebrationText: "သီတင်းကျွတ်ပွဲတော်",
         description:
-          "True friends are rare and precious. Someone wanted to take a moment to say thank you for being exactly who you are.",
+          "သီတင်းကျွတ်ပွဲတော်ရောက်ပြီး မီးအလှတွေ ထွန်းညှိကြတဲ့အချိန်မှာ တစ်ယောက်ယောက်က မင်းရဲ့သီတင်းကျွတ်ကို ပိုတောက်ပစေမယ့် မင်းအတွက်ပဲ ဖန်တီးထားတဲ့ အံ့သြဖွယ်လေး ပေးချင်ခဲ့တာပါ။",
       },
-      "thank-you": {
-        emoji: "💌",
-        label: "Thank You",
-        celebrationText: "this special moment",
+      thingyan: {
+        emoji: "🌊",
+        label: "သင်္ကြန်",
+        celebrationText: "သင်္ကြန်ပွဲတော်",
         description:
-          "Gratitude is one of the most beautiful feelings, and someone wanted to express theirs in a way that words alone can't capture.",
+          "နှစ်သစ်၊ အသစ်အသစ်အရာတွေနဲ့ စတင်ခြင်း။ တစ်ယောက်ယောက်က မင်းဆီကို ပျော်ရွှင်မှုရေစက်လေးတွေ ပို့ချင်ခဲ့တယ် — အဟောင်းနှစ်ကို ဆေးကြောပစ်ပြီး လာမယ့်အရာတွေကို ကြိုဆိုဖို့ အံ့သြဖွယ်လေး။",
       },
       fallback: {
         emoji: "🎁",
-        label: "Special Moment",
+        label: "အထူးအခိုက်အတံ့",
         celebrationText: "this special moment",
         description:
           "Someone wanted to create a little moment of joy, just for you. Take your time and enjoy what comes next.",
@@ -197,210 +209,208 @@ export const copy = {
 
   /** Screen 2 — Surprise Unlock. */
   unlock: {
-    screenName: "Surprise Unlock",
+    screenName: "အံ့သြဖွယ် ဖွင့်ရန်",
     gates: {
-      padlock: { emoji: "🔒", hint: "Tap to unlock" },
-      ribbon: { emoji: "🎀", hint: "Cut the ribbon" },
-      "wax-seal": { emoji: "🔮", hint: "Break the seal" },
-      chain: { emoji: "⛓️", hint: "Break the chain" },
+      padlock: { emoji: "🔒", hint: "ဖွင့်ရန် နှိပ်ပါ" },
+      ribbon: { emoji: "🎀", hint: "ရိုးကြိုးဖြတ်ပါ" },
+      "wax-seal": { emoji: "🔮", hint: "တံဆိပ်ခတ်ဖျက်ပါ" },
+      chain: { emoji: "⛓️", hint: "သံကြိုးဖြဲပါ" },
     },
   },
 
   screenPlaceholder: {
-    screen: "Screen {n}",
-    back: "← Back",
+    screen: "စတေးဂျ် {n}",
+    back: "← နောက်သို့",
   },
 
   giftReveal: {
-    teaser: "Something special awaits...",
-    tapToOpen: "Tap to open 💝",
-    openAria: "Open the gift",
+    teaser: "အထူးအရာတစ်ခု စောင့်နေပါတယ်...",
+    tapToOpen: "ဖွင့်ရန် နှိပ်ပါ 💝",
+    openAria: "လက်ဆောင်ဖွင့်ရန်",
   },
 
-  /** Screen 4 — Gift Opening (occasion-keyed box copy). */
+  /** Screen 4 — Gift Opening (occasion-keyed box copy). Sender voice. */
   giftOpening: {
-    received: "You've received a gift",
-    fromTag: "from",
-    giftsForYou: "Here are gifts for you!",
-    seeGifts: "See the gifts →",
-    openAria: "Open the gift",
+    received: "သင့်ဆီ လက်ဆောင်တစ်ခု ရောက်နေပါတယ်",
+    fromTag: "မှ",
+    giftsForYou: "သင့်အတွက် လက်ဆောင်တွေ ဒီမှာပါ!",
+    seeGifts: "လက်ဆောင်တွေ ကြည့်မည် →",
+    openAria: "လက်ဆောင်ဖွင့်ရန်",
     occasions: {
       birthday: {
-        heading: "A Birthday Gift, Just for You",
+        heading: "{recipientName} အတွက် မွေးနေ့လက်ဆောင်",
         subheading:
-          "Someone who cares about you picked out something special to celebrate your birthday.",
-        openPrompt: "Tap to unwrap your gift",
+          "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+        openPrompt: "လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Letter" },
-          { emoji: "📸", label: "Memories" },
-          { emoji: "🎵", label: "A Song" },
-          { emoji: "💝", label: "A Wish" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "စာ" },
+          { emoji: "📸", label: "အမှတ်တရများ" },
+          { emoji: "🎵", label: "သီချင်း" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
       anniversary: {
-        heading: "A Gift of Love",
-        subheading:
-          "Someone wanted to honor this beautiful journey you share with a personal surprise.",
-        openPrompt: "Tap to open your gift",
+        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Letter" },
-          { emoji: "📸", label: "Our Story" },
-          { emoji: "💕", label: "A Promise" },
-          { emoji: "🌹", label: "A Rose" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "စာ" },
+          { emoji: "📸", label: "ကျွန်တော်တို့၏ ဇာတ်လမ်း" },
+          { emoji: "💕", label: "ကတိ" },
+          { emoji: "🌹", label: "နှင်းဆီ" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
       valentine: {
-        heading: "A Little Token of Love",
-        subheading: "In a world full of people, someone chose to make something just for you.",
-        openPrompt: "Tap to receive your gift",
+        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "လက်ဆောင်လက်ခံရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Love Note" },
-          { emoji: "❤️", label: "A Heart" },
-          { emoji: "🌹", label: "Roses" },
-          { emoji: "✨", label: "A Wish" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "အချစ်စာ" },
+          { emoji: "❤️", label: "နှလုံးသား" },
+          { emoji: "🌹", label: "နှင်းဆီပွင့်များ" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
-      wedding: {
-        heading: "A Gift for Your Special Day",
-        subheading:
-          "Two hearts, one beautiful journey. Someone wanted to celebrate this milestone with you.",
-        openPrompt: "Tap to open your gift",
+      "girlfriend-day": {
+        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Toast" },
-          { emoji: "💍", label: "Blessings" },
-          { emoji: "📸", label: "Memories" },
-          { emoji: "🥂", label: "Cheers" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "အချစ်စာ" },
+          { emoji: "❤️", label: "နှလုံးသား" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
-      graduation: {
-        heading: "A Gift for Your Achievement",
-        subheading: "All that hard work paid off. Someone is incredibly proud and wanted you to know.",
-        openPrompt: "Tap to open your gift",
+      "boyfriend-day": {
+        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Letter" },
-          { emoji: "🎓", label: "Pride" },
-          { emoji: "⭐", label: "A Wish" },
-          { emoji: "📖", label: "Wisdom" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "မှတ်စု" },
+          { emoji: "🤗", label: "ဖက်ထွေးမှု" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
-      friendship: {
-        heading: "A Gift from the Heart",
-        subheading:
-          "True friends are rare. Someone wanted to say thank you for being exactly who you are.",
-        openPrompt: "Tap to open your gift",
+      thadingyut: {
+        heading: "{recipientName} အတွက် သီတင်းကျွတ်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ သီတင်းကျွတ်အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Note" },
-          { emoji: "🤗", label: "A Hug" },
-          { emoji: "📸", label: "Memories" },
-          { emoji: "💛", label: "A Wish" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "စာ" },
+          { emoji: "🎵", label: "သီချင်း" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
-      "thank-you": {
-        heading: "A Gift of Gratitude",
-        subheading:
-          "Someone wanted to express their thanks in a way that words alone can't capture.",
-        openPrompt: "Tap to open your gift",
+      thingyan: {
+        heading: "{recipientName} အတွက် သင်္ကြန်လက်ဆောင်",
+        subheading: "{recipientName}ရေ ဒါကတော့ သင်္ကြန်အတွက် လက်ဆောင်လေးပါ။",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Note" },
-          { emoji: "🙏", label: "Gratitude" },
-          { emoji: "🌸", label: "Warmth" },
-          { emoji: "✨", label: "A Wish" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "📸", label: "အမှတ်တရများ" },
+          { emoji: "💌", label: "စာ" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
       fallback: {
         heading: "A Gift, Made with Love",
         subheading: "Someone wanted to make this moment a little more special — just for you.",
-        openPrompt: "Tap to open your gift",
+        openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "A Letter" },
-          { emoji: "📸", label: "Memories" },
-          { emoji: "🎵", label: "A Song" },
-          { emoji: "💝", label: "A Wish" },
-          { emoji: "🖼️", label: "Photos" },
-          { emoji: "📜", label: "A Poem" },
+          { emoji: "💌", label: "စာ" },
+          { emoji: "📸", label: "အမှတ်တရများ" },
+          { emoji: "🎵", label: "သီချင်း" },
+          { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
+          { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
+          { emoji: "📜", label: "ကဗျာ" },
         ],
       },
     } satisfies Record<string, GiftOpeningCopy>,
   },
 
-  /** Screen 12 — Closing finale. `{name}` slots are filled with recipient name or empty. */
+  /** Screen 12 — Closing finale. `{name}` slots are filled with recipient name or empty. Sender voice. */
   closing: {
     headlines: {
-      birthday: { withName: "Happy Birthday, {name}!", plain: "Happy Birthday!" },
-      anniversary: { withName: "With All My Love, {name}", plain: "With All My Love" },
-      valentine: { withName: "With All My Love, {name}", plain: "With All My Love" },
-      graduation: { withName: "So Proud of You, {name}!", plain: "Congratulations!" },
-      wedding: { withName: "Cheers to You, {name}!", plain: "Cheers to You!" },
-      friendship: { withName: "Lucky to Know You, {name}!", plain: "Lucky to Have You" },
-      "thank-you": { withName: "Thank You, {name}!", plain: "Thank You!" },
+      birthday: { withName: "Happy Birthday ပါ {name}ရေ!", plain: "Happy Birthday!" },
+      anniversary: { withName: "ချစ်ခြင်းမေတ္တာဖြင့် {name}", plain: "ချစ်ခြင်းမေတ္တာဖြင့်" },
+      valentine: { withName: "ချစ်ခြင်းမေတ္တာဖြင့် {name}", plain: "ချစ်ခြင်းမေတ္တာဖြင့်" },
+      "girlfriend-day": {
+        withName: "ချစ်သူမများနေ့ မင်္ဂလာပါ {name} ရေ!",
+        plain: "ချစ်သူမများနေ့ မင်္ဂလာပါ!",
+      },
+      "boyfriend-day": {
+        withName: "ချစ်သူလေးများနေ့ မင်္ဂလာပါ {name} ရေ!",
+        plain: "ချစ်သူလေးများနေ့ မင်္ဂလာပါ!",
+      },
+      thadingyut: { withName: "သီတင်းကျွတ်မင်္ဂလာ ရှိပါစေ {name} ရေ!", plain: "သီတင်းကျွတ်မင်္ဂလာ ရှိပါစေ!" },
+      thingyan: { withName: "သင်္ကြန်နှစ်သစ် မင်္ဂလာပါ {name} ရေ!", plain: "သင်္ကြန်နှစ်သစ် မင်္ဂလာပါ!" },
       fallback: { withName: "With Love, {name}", plain: "With Love" },
     } satisfies Record<string, { withName: string; plain: string }>,
     thankYou:
       "Thank you for being part of this beautiful journey. Every chapter was written with love — just for you. May all your wishes come true!",
-    theEnd: "The End",
-    withLoveFrom: "With love from",
-    madeWithLoveBy: "Made with love by",
-    experienceAgain: "✨ Experience Again",
-    createOwn: "🎁 Create Your Own Wish",
+    theEnd: "ဇာတ်သိမ်း",
+    withLoveFrom: "အချစ်ဖြင့်",
+    madeWithLoveBy: "အချစ်ဖြင့် ဖန်တီးသူ",
+    experienceAgain: "✨ ထပ်စမ်းကြည့်ရန်",
+    createOwn: "🎁 သင့်ကိုယ်ပိုင် Wish ဖန်တီးရန်",
   },
 
   stages: {
     envelope: {
-      prompt: "You've got a special surprise!",
-      tap: "Tap the envelope to open",
-      aria: "Open envelope",
+      prompt: "အထူးအံ့သြဖွယ်တစ်ခု ရောက်နေပါတယ်!",
+      tap: "စာအိတ်ကို ဖွင့်ရန် နှိပ်ပါ",
+      aria: "စာအိတ်ဖွင့်ရန်",
     },
     giftBox: {
-      tap: "Tap to unwrap",
-      aria: "Open gift box",
+      tap: "ဖွင့်ရန် နှိပ်ပါ",
+      aria: "လက်ဆောင်ဘူးဖွင့်ရန်",
     },
     cake: {
-      makeWish: "Make a wish! 🎂",
-      happyBirthday: "Happy Birthday! 🎉",
-      candleBlowAria: "Blow out candle {n}",
-      candleBlownAria: "Candle {n} blown out",
+      makeWish: "ဆုတောင်းပါ! 🎂",
+      happyBirthday: "မွေးနေ့မင်္ဂလာ ရှိပါစေ! 🎉",
+      candleBlowAria: "ဖယောင်းတိုင် {n} မှုတ်ရန်",
+      candleBlownAria: "ဖယောင်းတိုင် {n} ၏ မီး ပိတ်ပြီးပါပြီ",
     },
     mainContent: {
-      foldLetter: "Fold letter",
-      openLetter: "Open letter",
+      foldLetter: "စာ ခေါက်ရန်",
+      openLetter: "စာ ဖွင့်ရန်",
     },
     /** Shared two-tone header used by memory-timeline stage + timeline chapter. */
     timeline: {
-      eyebrow: "Our Story",
-      titleLead: "Memory",
-      titleAccent: "Timeline",
+      eyebrow: "ကျွန်တော်တို့၏ ဇာတ်လမ်း",
+      titleLead: "အမှတ်တရ",
+      titleAccent: "မှတ်တမ်း",
       subtitleStory: "Every moment with you is a beautiful chapter in our story.",
       subtitleMine: "Every moment with you is a beautiful chapter in my life story.",
     },
     closing: {
-      withLove: "With love ❤️",
+      withLove: "အချစ်ဖြင့် ❤️",
     },
   },
 
   /** Screen — Fancy Facts sample content (birthday demo set, see inventory flag). */
   facts: {
-    subtitle: "Fun facts, lucky charms, and birthday magic",
+    subtitle: "ပျော်စရာအချက်များ၊ ကံကောင်းလက်ဆောင်များနှင့် မွေးနေ့မှော်",
     sample: [
       {
         id: "zodiac",
-        category: "Zodiac",
+        category: "ရာသီခွင်",
         title: "Born under a lucky star",
         detail:
-          "Your zodiac sign reveals hidden strengths — curiosity, creativity, and a heart that never stops dreaming.",
+          "သင်ရဲ့ရာသီခွင်က ပြောပြနေတဲ့ သင့်ရဲ့အားသာချက်များ — စူးစမ်းလိုစိတ်ရှိခြင်း၊ ဖန်တီးနိုင်စွမ်းကောင်းမွန်ခြင်း၊ ရဲရင့်တက်ကြွခြင်း",
       },
       {
         id: "birthstone",
@@ -442,150 +452,153 @@ export const copy = {
 
   chapters: {
     letter: {
-      empty: "No letter yet",
-      open: "Open the letter",
-      foldBack: "Fold back",
-      justForYou: "Just for You",
-      envelopeAria: "Open envelope to read letter",
+      empty: "စာ မရှိသေးပါ",
+      open: "စာဖွင့်ရန်",
+      foldBack: "ပြန်ခေါက်ရန်",
+      justForYou: "မင်းအတွက်ပဲ",
+      envelopeAria: "စာဖတ်ရန် စာအိတ်ဖွင့်ရန်",
     },
     photos: {
-      chapterNumber: "Chapter 02",
-      title: "Our Memories",
-      subtitle: "A little collection of moments I never want to forget.",
-      collectionOf: "A collection of",
-      coverAccent: "A STORY WORTH KEEPING",
-      desktopHint: "Click sides or use arrow keys",
-      mobileHint: "Swipe or tap the sides to flip",
-      previous: "Previous",
-      next: "Next",
-      closeAlbum: "Close album",
+      chapterNumber: "အခန်း ၀၂",
+      title: "ကိုယ်တို့ရဲ့ အမှတ်တရလေးတွေ",
+      subtitle: "ဒါကတော့ ကိုယ်တို့နှစ်ယောက်ရဲ့ အမှတ်တရပုံလေးတွေ စုထားတဲ့ ဓာတ်ပုံအယ်လ်ဘမ်လေးပါ",
+      collectionOf: "စုစည်းမှု",
+      coverAccent: "တန်ဖိုးဖြတ်လို့မရတဲ့ အမှတ်တရလေးများ",
+      desktopHint: "ဘေးဘက်များကို နှိပ်ပါ သို့မဟုတ် မြှားခလုတ်များ သုံးပါ",
+      mobileHint: "လှန်ကြည့်ရန် ဘေးဘက်များကို ဆွဲပါ သို့မဟုတ် နှိပ်ပါ",
+      previous: "ယခင်",
+      next: "နောက်",
+      closeAlbum: "အယ်လ်ဘမ် ပိတ်ရန်",
       movingMemory: "Moving Memory",
-      momentAlive: "A Moment That Came Alive",
+      momentAlive: "တို့ရဲ့မှတ်ညာဏ်ထဲမှ အမြဲရှင်သန်နေမယ့်အခိုက်အတန့်လေးတွေ",
       worthKeeping: "one of those moments worth keeping",
-      theBeginning: "The beginning",
-      memoryN: "Memory {n}",
-      moreToCome: "More memories to come...",
-      openingMemories: "Opening your memories",
+      theBeginning: "အားလုံးရဲ့အစ",
+      memoryN: "အမှတ်တရ {n}",
+      moreToCome: "နောက်မှာ အများကြီး ကျန်သေးတယ်နော်",
       moreMemories: "More memories...",
-      openAlbumAria: "Open memory album",
-      prevPageAria: "Previous page",
-      nextPageAria: "Next page",
+      openingMemories: "သင့်အမှတ်တရတွေ ဖွင့်နေပါပြီ",
+      openAlbumAria: "အမှတ်တရအယ်လ်ဘမ် ဖွင့်ရန်",
+      prevPageAria: "ယခင်စာမျက်နှာ",
+      nextPageAria: "နောက်စာမျက်နှာ",
     },
     poem: {
-      empty: "No poem yet",
+      empty: "ကဗျာ မရှိသေးပါ",
     },
     song: {
       eyebrow: "🎵 သီချင်း",
       emptyHeading: "The Turntable is Waiting",
       emptyBody:
-        "No melody has been placed on the record yet — but the rest of your surprise is waiting just ahead.",
-      heading: "A Song, Just for You",
-      nowPlaying: "Now Playing",
-      fallbackTitle: "A song picked for you",
-      playAria: "Play {title}",
-      tapToPlay: "▶ Tap to play",
-      pauseAria: "Pause the song",
-      playAriaButton: "Play the song",
-      playing: "Playing",
-      paused: "Paused",
-      buffering: "Buffering…",
-      replay: "Replay",
-      watchYouTube: "Watch on YouTube",
+        "လောလောဆယ် ရွေးထားတဲ့ သီချင်း မရှိသေးပါဘူး။ ဒါပေမယ့် နောက်မှာ တခြား surprise တွေ စောင့်နေပါတယ်နော်",
+      heading: "{recipientName}နားထောင်ဖို့",
+      nowPlaying: "ဖွင့်နေသည်",
+      fallbackTitle: "မင်းအတွက် ရွေးချယ်ထားတဲ့ သီချင်း",
+      playAria: "{title} ဖွင့်ရန်",
+      tapToPlay: "▶️ ဖွင့်ရန် နှိပ်ပါ",
+      pauseAria: "သီချင်း ရပ်ရန်",
+      playAriaButton: "သီချင်းဖွင့်ရန်",
+      playing: "ဖွင့်နေသည်",
+      paused: "ရပ်ထားသည်",
+      buffering: "တင်နေသည်…",
+      replay: "ပြန်ဖွင့်ရန်",
+      watchYouTube: "YouTube တွင် ကြည့်ရန်",
     },
     timeline: {
-      empty: "No memories yet",
-      chapterLabel: "Our Story",
+      empty: "အမှတ်တရ မရှိသေးပါ",
+      chapterLabel: "ကျွန်တော်တို့၏ ဇာတ်လမ်း",
     },
-    /** Screen 9 — Gift & Rewards chapter (largest group). */
+    /** Screen 9 — Gift & Rewards chapter (largest group). Sender voice. */
     gift: {
-      intro: "Here is a special surprise gift for you!",
-      mainGiftHeading: "🎁 Your Special Gift",
-      letsPlay: "Let's Play!",
-      hint: "Hint",
-      wrongPin: "Wrong PIN! Try again 💔",
-      answerIs: "The answer is",
-      correct: "correct!",
-      unlocked: "Unlocked!",
-      giftWaiting: "Your gift is waiting…",
-      wrongCode: "Wrong code!",
-      yes: "Yes! 😍",
-      no: "No...",
-      justForYou: "Just for You ✨",
-      opening: "Opening...",
-      bonusRound: "Bonus round",
-      bonusHeading: "But wait, there's more!",
-      bonusSubtitle: "Here are some more surprises for you!",
-      chancesOne: "You have {count} chance to win!",
-      chancesMany: "You have {count} chances to win!",
-      allChancesUsed: "All chances used — your prizes await!",
-      spin: "Spin",
-      spinning: "Spinning…",
-      spinBig: "SPIN!",
-      noChancesLeft: "No chances left",
-      chanceLeftOne: "{count} chance left",
-      chanceLeftMany: "{count} chances left",
-      youWon: "You won!",
-      downloadProof: "Download proof ticket",
-      seeRewards: "See my rewards",
-      downloadPng: "Download PNG",
-      serialPrefix: "No.",
-      scanQr: "Scan QR to verify",
-      qrFooterNote: "✨ Each ticket has a QR code — your sender can scan it to verify it's real.",
-      redeemed: "Redeemed",
-      prizeBooth: "Prize Booth",
+      intro: "ဒါက မင်းအတွက် အထူးလက်ဆောင်တစ်ခုပါ!",
+      mainGiftHeading: "🎁 မင်းအတွက် အထူးလက်ဆောင်",
+      hint: "အကြံပြုချက်",
+      wrongPin: "PIN မှားနေတယ်! ထပ်စမ်းကြည့်ပါ 💔",
+      answerIs: "အဖြေက",
+      correct: "မှန်ပါတယ်!",
+      unlocked: "ဖွင့်ပြီးပါပြီ!",
+      giftWaiting: "မင်းရဲ့လက်ဆောင် စောင့်နေတယ်…",
+      wrongCode: "ကုဒ်မှားတယ်!",
+      yes: "ဟုတ်ကဲ့! 😍",
+      no: "မဟုတ်ဘူး...",
+      justForYou: "မင်းအတွက်ပဲ ✨",
+      opening: "ဖွင့်နေပြီ...",
+      letsPlay: "ကစားရအောင်!",
+      bonusRound: "ဘောနပ်စ်အဆင့်",
+      bonusHeading: "စောင့်ပါဦး၊ နောက်ထပ်ရှိသေးတယ်!",
+      bonusSubtitle: "နောက်ထပ်အံ့သြဖွယ်တွေ ဒီမှာပါ!",
+      chancesOne: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",
+      chancesMany: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",
+      allChancesUsed: "အခွင့်အရေးအားလုံး ပြီးပါပြီ — မင့်ဆုလက်ဆောင်တွေ စောင့်နေတယ်!",
+      spin: "လှည့်မည်",
+      spinning: "လှည့်နေသည်…",
+      spinBig: "လှည့်!",
+      noChancesLeft: "အခွင့်အရေး မကျန်တော့ဘူး",
+      chanceLeftOne: "အခွင့်အရေး {count} ခု ကျန်တယ်",
+      chanceLeftMany: "အခွင့်အရေး {count} ခု ကျန်တယ်",
+      youWon: "မင်းနိုင်တယ်!",
+      downloadProof: "အထောက်အထားလက်မှတ် ဒေါင်းလုဒ်လုပ်ရန်",
+      seeRewards: "ဆုတွေ ကြည့်မည်",
+      downloadPng: "PNG ဒေါင်းလုဒ်လုပ်ရန်",
+      serialPrefix: "အမှတ်",
+      scanQr: "QR စကင်ဖတ် စစ်ဆေးရန်",
+      qrFooterNote: "✨ လက်မှတ်တိုင်းမှာ QR ကုဒ်ပါတယ် — မင်းကိုပေးပို့သူက scan လုပ်ရင် အမှန်ဟုတ်မဟုတ် စစ်ဆေးလို့ရတယ်။",
+      redeemed: "လဲယူပြီး",
+      prizeBooth: "ဆုအခန်း",
       wonSummaryOne:
-        "You won {count} prize! Download your proof tickets and send them to claim your rewards.",
+        "ဆု {count} ခု ရခဲ့တယ်! အထောက်အထားလက်မှတ်တွေ ဒေါင်းလုဒ်လုပ်ပြီး ဆုရယူဖို့ ပေးပို့ပါ။",
       wonSummaryMany:
-        "You won {count} prizes! Download your proof tickets and send them to claim your rewards.",
-      allRedeemed: "All your prizes are redeemed!",
-      giftPhotoAlt: "Your special gift",
-      pinChallengeAria: "PIN challenge",
-      pinDisplayAria: "PIN entry display",
-      keypadAria: "Numeric keypad",
-      digitAria: "Digit {n}",
-      digitFilledAria: "Digit {n}: filled",
-      digitEmptyAria: "Digit {n}: empty",
-      backspaceAria: "Backspace",
-      pinCorrectAria: "PIN correct",
+        "ဆု {count} ခု ရခဲ့တယ်! အထောက်အထားလက်မှတ်တွေ ဒေါင်းလုဒ်လုပ်ပြီး ဆုရယူဖို့ ပေးပို့ပါ။",
+      allRedeemed: "မင့်ဆုအားလုံး လဲယူပြီးပါပြီ!",
+      giftPhotoAlt: "မင်းရဲ့အထူးလက်ဆောင်",
+      pinChallengeAria: "PIN စမ်းသပ်မှု",
+      pinDisplayAria: "PIN ထည့်ရာ ပြသမှု",
+      keypadAria: "ဂဏန်းခလုတ်",
+      digitAria: "ဂဏန်း {n}",
+      digitFilledAria: "ဂဏန်း {n}: ဖြည့်ပြီး",
+      digitEmptyAria: "ဂဏန်း {n}: ကွက်နေသည်",
+      backspaceAria: "ဖျက်ရန်",
+      pinCorrectAria: "PIN မှန်ပါသည်",
     },
   },
 
   modes: {
-    finishArrow: "Finish →",
-    chapter05: "Chapter 05",
+    finishArrow: "ပြီးဆုံး →",
+    chapter05: "အခန်း ၀၅",
     scroll: {
-      title: "Scroll Mode",
-      description: "Continuous scroll with all chapters visible.",
-      coming: "Coming in Phase 2.6.",
+      title: "စာမျက်နှာ လျှောက်မုဒ်",
+      description: "အခန်းအားလုံးကို ဆက်တိုက် လျှောက်ကြည့်နိုင်ပါတယ်။",
+      coming: "Phase 2.6 မှာ ရောက်လာပါမည်။",
     },
     interactive: {
-      title: "Interactive Mode",
-      description: "Tap materials to open each chapter.",
-      coming: "Coming in Phase 2.6.",
+      title: "အပြန်အလှန် ဆက်သွယ်မုဒ်",
+      description: "ပစ္စည်းတွေကို နှိပ်ပြီး အခန်းတစ်ခုချင်း ဖွင့်ပါ။",
+      coming: "Phase 2.6 မှာ ရောက်လာပါမည်။",
     },
-    skipToClosing: "Skip to Closing →",
+    skipToClosing: "တိုက်ရိုက် ဇာတ်သိမ်းသို့ →",
   },
 
-  /** GIFT-03 — default prize pool text; probabilities live in rewards-shared. */
+  /**
+   * GIFT-03 — default prize pool. Labels/descriptions are the single source
+   * for rewards-shared.ts (server) — probabilities live in rewards-shared.
+   */
   rewards: {
     pool: [
-      { id: "1", label: "Love Note", emoji: "💌", description: "A sweet note" },
-      { id: "2", label: "Flowers", emoji: "🌸", description: "Virtual flowers" },
-      { id: "3", label: "Chocolate", emoji: "🍫", description: "Sweet treat" },
-      { id: "4", label: "Warm Hug", emoji: "🤗", description: "Extra warm hug" },
-      { id: "5", label: "Sweet Song", emoji: "🎵", description: "A song for you" },
-      { id: "6", label: "Star Gift", emoji: "⭐", description: "Special prize" },
-      { id: "7", label: "Lucky Cat", emoji: "🐱", description: "Lucky companion" },
-      { id: "8", label: "Golden Star", emoji: "🌟", description: "Rarest prize" },
+      { id: "1", label: "အချစ်စာ", emoji: "💌", description: "ချစ်စရာစာလေး" },
+      { id: "2", label: "ပန်းတွေ", emoji: "🌸", description: "အွန်လိုင်းပန်းတွေ" },
+      { id: "3", label: "ချောကလက်", emoji: "🍫", description: "ချစ်စရာအစားအစာ" },
+      { id: "4", label: "နွေးထွေးတဲ့ ဖက်ထွေးမှု", emoji: "🤗", description: "နောက်ထပ်နွေးထွေးတဲ့ ဖက်ထွေးမှု" },
+      { id: "5", label: "ချစ်စရာသီချင်း", emoji: "🎵", description: "မင်းအတွက် သီချင်း" },
+      { id: "6", label: "ကြယ်လက်ဆောင်", emoji: "⭐", description: "အထူးဆု" },
+      { id: "7", label: "ကံကောင်းကြောင်", emoji: "🐱", description: "ကံကောင်းအဖော်" },
+      { id: "8", label: "ရွှေကြယ်", emoji: "🌟", description: "ရှားပါးဆုံးဆု" },
     ],
     ticket: {
-      prizeTicket: "PRIZE TICKET",
-      proofOfReward: "WISHIRE · PROOF OF REWARD",
-      bonusPoints: "{points} BONUS POINTS",
-      serial: "No. {serial}",
-      wonOn: "Won on {date}",
-      claimFooter: "Send this ticket to your wish sender to claim your prize.",
-      scanToVerify: "SCAN TO VERIFY",
+      prizeTicket: "ဆုလက်မှတ်",
+      proofOfReward: "WISHIRE · ဆုအထောက်အထား",
+      bonusPoints: "{points} ဘောနပ်စ်အမှတ်",
+      serial: "အမှတ် {serial}",
+      wonOn: "{date} ရရှိခဲ့သည်",
+      claimFooter: "ဆုရယူဖို့ ဒီလက်မှတ်ကို မင်းရဲ့ wish ပေးပို့သူဆီ ပို့ပါ။",
+      scanToVerify: "စစ်ဆေးရန် စကင်ဖတ်ပါ",
     },
   },
 
@@ -594,9 +607,9 @@ export const copy = {
    * Server keeps sending English; unknown errors fall back to `generic`.
    */
   serverErrors: {
-    noAttemptsLeft: "No attempts left",
-    generic: "Something went wrong — try again",
-    network: "Network error — check your connection and try again",
+    noAttemptsLeft: "ကြိုးစားခွင့် မကျန်တော့ဘူး",
+    generic: "တစ်ခုခု မှားသွားတယ် — ထပ်ကြိုးစားပါ",
+    network: "ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာ — ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်ကြိုးစားပါ",
   },
 } as const;
 
