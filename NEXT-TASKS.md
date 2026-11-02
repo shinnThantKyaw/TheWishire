@@ -28,6 +28,22 @@
 | ~~1.5~~ | **DONE 2026-10-25:** Burmese wired into copy.ts (worksheet `MYANMAR-COPY.md` = source of record). Follow-ups closed: Q1 A → server pool builds from `copy.rewards.pool`; Q2 A → dates stay en-US; Q3 approved. Occasion set swapped to 7 main (birthday, anniversary, valentine, girlfriend-day, boyfriend-day, thadingyut, thingyan); wedding/graduation/friendship/thank-you parked (git history). `Occasion` union + occasions.ts updated. Sender-voice strings (cake screen onward) = Wave 4 editable suggestion defaults. Section C new-occasion Burmese = drafts pending final review | done | 1.2, 0.2 | Untranslated blanks stay English |
 | 1.6 | Visual pass: all screens at 1366×768, 1920×900, mobile — Myanmar wrapping, truncation, contrast | 1.5–2h | 1.5 | Dark mode too |
 
+### 1.6 Visual test checklist (user runs on Windows — `npm run dev` → localhost:3000)
+
+**Status: WAITING ON USER (2026-10-25) — taking a break; resume here.**
+
+- **Viewports:** 1366×768 + 1920×900 = no horizontal scroll, no clipped/overlapping content, no height overflow; quick 390px mobile pass too.
+- **Slugs:** `/w/happy-birthday-sarah` (main), `/w/demo-scroll`, `/w/demo-interactive`, `/w/demo-pages`.
+- **Padauk/font (1.3/1.4):** song eyebrow `🎵 သီချင်း` + `{nickname}နားထောင်ဖို့`; poem Burmese glyphs + line-height; gift contents labels; long-Burmese wrapping (intro descriptions, gift subheadings, closing) — no tofu, no overflow.
+- **Voice/slots (1.5):** intro hey = `မင်္ဂလာပါ Sarahရေ`; senderLine `{occasion}အတွက် Alexက…` reads naturally; cake greeting + gift subheading = sender nick voice with name injected; Section C drafts (gf-day/bf-day/thadingyut/thingyan) reviewed.
+- **Occasion switch** (changes intro/gift-opening/closing only): `node -e "const{PrismaClient}=require('@prisma/client');const p=new PrismaClient();p.wish.update({where:{slug:'happy-birthday-sarah'},data:{occasion:process.argv[1]}}).then(()=>p.$disconnect())" thingyan` — try `girlfriend-day`,`boyfriend-day`,`thadingyut`,`thingyan`,`anniversary`,`valentine` → **reset to `birthday`**.
+- **Gift run:** PIN `1609` → gift → Let's Play → spin (Burmese wheel) → PNG ticket (Burmese) → QR → verify page → Prize Booth.
+- **Dark mode:** app pages spot-check.
+- **Do NOT flag (intentional English blanks):** fallback occasion texts, closing thankYou + fallback headline, timeline subtitles, facts sample (except zodiac), photos movingMemory/worthKeeping/moreMemories, song emptyHeading, brand Wishire.
+- Findings → fix in next session → then Wave 2 (2.1 multiple-choice challenge).
+
+**WSL dev recipe (works):** `NEXT_TEST_WASM=1 npm run dev -- --webpack` — WASM skips Next 16 lockfile (drvfs lock fails); Turbopack needs native so `--webpack` mandatory.
+
 **Wave 1 total: ~11–14h**
 
 ---
