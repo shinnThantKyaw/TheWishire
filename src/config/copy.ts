@@ -106,7 +106,7 @@ export const copy = {
 
   /** RevealWrapper tap hints. */
   reveal: {
-    default: "ဖော်ပြရန် နှိပ်ပါ ✨",
+    default: "Tap to reveal ✨",
     poem: "ကဗျာဖတ်ရန် နှိပ်ပါ ✨",
     photos: "ဓာတ်ပုံကြည့်ရန် နှိပ်ပါ 📸",
     letter: "စာဖတ်ရန် နှိပ်ပါ ✉️",
@@ -126,24 +126,24 @@ export const copy = {
     hey: "ဟိုင်း",
     birthdayGreeting:
       "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
-    candlesGuide: "ဖယောင်းတိုင်တွေ မီးရှို့ဖို့ နှိပ်ပါ။ ({lit}/{count})",
-    candlesSuccess: "🎉 မွေးနေ့မင်္ဂလာ ရှိပါစေ!",
-    getReady: "သင့်အံ့သြဖွယ်အတွက် အဆင်သင့်ဖြစ်ပါပြီ...",
-    yesButton: "ဟုတ်ကဲ့၊ အဆင်သင့်ပါ! 😍",
-    notYet: "မကြာခင်မှ...",
-    secretCode: "ဆက်လက်ဆောင်ရွက်ဖို့ လျှို့ဝှက်ကုဒ် ရိုက်ထည့်ပါ",
-    letsGo: "သွားကြရအောင်! 🎉",
-    wrongCode: "ကုဒ်မှားနေတယ် — ထပ်စမ်းကြည့်ပါ!",
+    candlesGuide: "မီးညှိဖို့အတွက်ဖယောင်းတိုင်တွေကိုနှိပ်ပါ။ ({lit}/{count})",
+    candlesSuccess: "🎉 Happy Birthday!",
+    getReady: "Get ready for your surprise...",
+    yesButton: "Yes, I'm ready! 😍",
+    notYet: "Not yet...",
+    secretCode: "လျှို့ဝှက်ကုဒ် ရိုက်ထည့်ပါ",
+    letsGo: "Let's go! 🎉",
+    wrongCode: "ကုဒ်မှားနေပါတယ်နော် — ထပ်ကြိုးကြည့်ပါ!",
   },
 
   /** Screen 1 — Introduction (occasion-keyed config + fixed copy). Product voice (formal). */
   introduction: {
-    hey: "မင်္ဂလာပါ {recipientName}ရေ",
+    hey: "ဟိုင်း {recipientName} ရေ",
     subtitle: "သင့်အတွက် surprise လေးတစ်ခု စောင့်ကြိုနေပါတယ်နော်...",
     senderLine: "{celebrationText}အတွက် {senderName}က အမှတ်တရ surprise လေးတစ်ခု စီစဉ်ပေးထားပါတယ်။",
-    cutRibbon: "ရိုးကြိုးဖြတ်ပြီး သင့်အံ့သြဖွယ်ကို ဖွင့်ပါ",
-    opening: "သင့်အံ့သြဖွယ်ကို ဖွင့်နေပါပြီ...",
-    cutRibbonAria: "ရိုးကြိုးဖြတ်ပြီး အံ့သြဖွယ်ဖွင့်ရန်",
+    cutRibbon: "သင့်ရဲ့လက်ဆောင်လေးကိုကြည့်ဖို့ ဖဲကြိုးကိုဖြတ်လိုက်ပါ",
+    opening: "Opening your surprise...",
+    cutRibbonAria: "သင့်ရဲ့လက်ဆောင်လေးကိုကြည့်ဖို့ ဖဲကြိုးကိုဖြတ်လိုက်ပါ",
     logoAlt: "Wishire",
     occasions: {
       birthday: {
@@ -155,14 +155,14 @@ export const copy = {
       },
       anniversary: {
         emoji: "💕",
-        label: "နှစ်ပတ်လည်နေ့",
+        label: "Anniversary",
         celebrationText: "သင်တို့ရဲ့ anniversary",
         description:
           "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုသိပ်ချစ်တဲ့သူတစ်ယောက်တော့ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးကတော့ သူက သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
       },
       valentine: {
         emoji: "❤️",
-        label: "ချစ်သူနေ့",
+        label: "ချစ်သူများနေ့",
         celebrationText: "ချစ်သူများနေ့",
         description:
           "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုသိပ်ချစ်တဲ့သူတစ်ယောက်တော့ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးကတော့ သူက သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
@@ -197,7 +197,7 @@ export const copy = {
       },
       fallback: {
         emoji: "🎁",
-        label: "အထူးအခိုက်အတံ့",
+        label: "Special Moment",
         celebrationText: "this special moment",
         description:
           "Someone wanted to create a little moment of joy, just for you. Take your time and enjoy what comes next.",
@@ -209,22 +209,22 @@ export const copy = {
 
   /** Screen 2 — Surprise Unlock. */
   unlock: {
-    screenName: "အံ့သြဖွယ် ဖွင့်ရန်",
+    screenName: "Surprise Unlock",
     gates: {
       padlock: { emoji: "🔒", hint: "ဖွင့်ရန် နှိပ်ပါ" },
-      ribbon: { emoji: "🎀", hint: "ရိုးကြိုးဖြတ်ပါ" },
-      "wax-seal": { emoji: "🔮", hint: "တံဆိပ်ခတ်ဖျက်ပါ" },
-      chain: { emoji: "⛓️", hint: "သံကြိုးဖြဲပါ" },
+      ribbon: { emoji: "🎀", hint: "ဖဲကြိုးကိုဖြတ်ပါ" },
+      "wax-seal": { emoji: "🔮", hint: "Break the seal" },
+      chain: { emoji: "⛓️", hint: "ကြိုးကိုဖြတ်ပါ" },
     },
   },
 
   screenPlaceholder: {
-    screen: "စတေးဂျ် {n}",
+    screen: "Screen {n}",
     back: "← နောက်သို့",
   },
 
   giftReveal: {
-    teaser: "အထူးအရာတစ်ခု စောင့်နေပါတယ်...",
+    teaser: "Something special awaits...",
     tapToOpen: "ဖွင့်ရန် နှိပ်ပါ 💝",
     openAria: "လက်ဆောင်ဖွင့်ရန်",
   },
@@ -269,7 +269,7 @@ export const copy = {
         subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "လက်ဆောင်လက်ခံရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "အချစ်စာ" },
+          { emoji: "💌", label: "A Love Note" },
           { emoji: "❤️", label: "နှလုံးသား" },
           { emoji: "🌹", label: "နှင်းဆီပွင့်များ" },
           { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
@@ -282,7 +282,7 @@ export const copy = {
         subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
-          { emoji: "💌", label: "အချစ်စာ" },
+          { emoji: "💌", label: "A Love Note" },
           { emoji: "❤️", label: "နှလုံးသား" },
           { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
           { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
@@ -295,7 +295,7 @@ export const copy = {
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "မှတ်စု" },
-          { emoji: "🤗", label: "ဖက်ထွေးမှု" },
+          { emoji: "🤗", label: "ထွေးပိုက်မှု" },
           { emoji: "🤫", label: "လျှို့ဝှက်ချက်!" },
           { emoji: "🖼️", label: "ဓာတ်ပုံများ" },
           { emoji: "📜", label: "ကဗျာ" },
@@ -361,10 +361,10 @@ export const copy = {
     } satisfies Record<string, { withName: string; plain: string }>,
     thankYou:
       "Thank you for being part of this beautiful journey. Every chapter was written with love — just for you. May all your wishes come true!",
-    theEnd: "ဇာတ်သိမ်း",
-    withLoveFrom: "အချစ်ဖြင့်",
-    madeWithLoveBy: "အချစ်ဖြင့် ဖန်တီးသူ",
-    experienceAgain: "✨ ထပ်စမ်းကြည့်ရန်",
+    theEnd: "The End",
+    withLoveFrom: "ချစ်ခြင်း‌ မေတ္တာဖြင့်",
+    madeWithLoveBy: "Made with love by",
+    experienceAgain: "✨ အစကပြန်သွားမယ်",
     createOwn: "🎁 သင့်ကိုယ်ပိုင် Wish ဖန်တီးရန်",
   },
 
