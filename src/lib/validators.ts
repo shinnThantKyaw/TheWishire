@@ -132,8 +132,53 @@ export const WishContentSchema = z.object({
     .optional(),
 });
 
+// ── Experience settings (mirrors src/types/experience.ts) ──
+
+/** Flow modes including legacy aliases stored in older wish configs. */
+export const FlowModeSchema = z.enum([
+  "click-through",
+  "scroll",
+  "interactive",
+  "buttons",
+  "tap-to-reveal",
+]);
+
+/** Gate/start action union (StartAction in src/types/experience.ts). */
+export const StartActionSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("candles"), count: z.number().int().min(1) }),
+  z.object({ type: z.literal("yes-no"), prompt: z.string() }),
+  z.object({ type: z.literal("password"), answer: z.string() }),
+  z.object({ type: z.literal("pin"), pin: z.string(), hint: z.string() }),
+  z.object({ type: z.literal("tap"), prompt: z.string() }),
+]);
+
+/** Bonus mini-game config (MiniGameConfig in src/types/experience.ts). */
+export const MiniGameConfigSchema = z.object({
+  type: z.enum(["spin-wheel", "lucky-draw"]),
+  attempts: z.number().int().min(1),
+  items: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string(),
+      emoji: z.string(),
+      description: z.string(),
+      probability: z.number(),
+    })
+  ),
+});
+
+/** Gift & rewards chapter config (GiftChapterConfig in src/types/wish.ts). */
+export const GiftChapterConfigSchema = z.object({
+  gateAction: StartActionSchema.optional(),
+  mainGiftMessage: z.string().optional(),
+  mainGiftPhotoIds: z.array(z.string()).optional(),
+  miniGame: MiniGameConfigSchema.optional(),
+});
+
 export const WishSettingsSchema = z.object({
   intensity: z.enum(["subtle", "celebration"]),
+  flowMode: FlowModeSchema,
+  giftChapter: GiftChapterConfigSchema.optional(),
   enableGiftBox: z.boolean(),
   enableCake: z.boolean(),
   enableRibbon: z.boolean(),
