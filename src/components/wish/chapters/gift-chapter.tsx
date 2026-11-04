@@ -557,7 +557,7 @@ const PinSuccessOverlay = ({
               x: Math.cos((p.angle * Math.PI) / 180) * p.distance,
               y: Math.sin((p.angle * Math.PI) / 180) * p.distance,
               opacity: [0, 1, 1, 0],
-              rotate: 360 + Math.random() * 720,
+              rotate: 360 + CONFETTI_SPINS[p.id % CONFETTI_SPINS.length] * 720,
               scale: [0, 1.2, 1, 0.8],
             }}
             transition={{
@@ -1026,6 +1026,10 @@ const YesNoGate = ({
 
 const CONFETTI_COLORS = ["#E91E63", "#F48FB1", "#FF80AB", "#FFD54F", "#69F0AE", "#40C4FF", "#B388FF"];
 
+// Random particle spins sampled once at module load so render stays pure
+// (react-hooks/purity) while each confetti piece still tumbles differently.
+const CONFETTI_SPINS = Array.from({ length: 64 }, () => Math.random());
+
 const MainGiftReveal = ({
   config,
   recipientName,
@@ -1048,9 +1052,9 @@ const MainGiftReveal = ({
   const giftPhoto = config?.mainGiftPhotoIds?.[0] ?? "/Gift.jpg";
   const message = config?.mainGiftMessage;
   const [continuing, setContinuing] = useState(false);
-  // Playful "do you like it?" exchange — dislike button shrinks away,
-  // like button flips to its kidding label, tease lines appear one by one.
-  const [dislikeState, setDislikeState] = useState<"idle" | "shrinking" | "gone">("idle");
+  // Playful "do you like it?" exchange — one click = one step:
+  // dislike shrinks a notch, like grows a notch, next tease line appears.
+  // The final step removes the dislike button and reveals the last line.
   const [teaseCount, setTeaseCount] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
@@ -1062,14 +1066,12 @@ const MainGiftReveal = ({
   ];
 
   const handleDislike = () => {
-    if (dislikeState !== "idle") return;
-    setDislikeState("shrinking");
-    const step = prefersReducedMotion ? 0 : 650;
-    setTimeout(() => setDislikeState("gone"), prefersReducedMotion ? 0 : 950);
-    teaseLines.forEach((_, i) => {
-      setTimeout(() => setTeaseCount((c) => c + 1), (prefersReducedMotion ? 0 : 1100) + i * step);
-    });
+    setTeaseCount((c) => Math.min(c + 1, teaseLines.length));
   };
+
+  const denyGone = teaseCount >= teaseLines.length;
+  const denyScale = [1, 0.82, 0.66, 0.52][Math.min(teaseCount, 3)];
+  const agreeScale = 1 + teaseCount * 0.06;
 
   // Pre-compute celebration particles (stable across renders)
   const confettiWave1 = useMemo(
@@ -1175,7 +1177,7 @@ const MainGiftReveal = ({
                 x: Math.cos((p.angle * Math.PI) / 180) * p.distance,
                 y: Math.sin((p.angle * Math.PI) / 180) * p.distance + 80,
                 opacity: [1, 1, 0],
-                rotate: Math.random() * 720 - 360,
+                rotate: CONFETTI_SPINS[p.id % CONFETTI_SPINS.length] * 720 - 360,
               }}
               transition={{
                 duration: p.duration,
@@ -1206,7 +1208,7 @@ const MainGiftReveal = ({
                 y: Math.sin((p.angle * Math.PI) / 180) * p.distance + 120,
                 opacity: [0, 1, 1, 0],
                 scale: [0, 1.3, 1, 0.6],
-                rotate: 360 + Math.random() * 540,
+                rotate: 360 + CONFETTI_SPINS[p.id % CONFETTI_SPINS.length] * 540,
               }}
               transition={{
                 duration: p.duration,
@@ -1267,7 +1269,7 @@ const MainGiftReveal = ({
 
       {/* Heading */}
       <motion.h3
-        className="mb-2 text-xl font-bold"
+        className="mb-3 max-w-md px-4 text-center text-xl font-bold sm:text-2xl"
         style={{
           fontFamily: "var(--wish-font-heading), Playfair Display, serif",
           background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}aa)`,
@@ -1284,7 +1286,7 @@ const MainGiftReveal = ({
 
       {/* Gift photo with decorative frame */}
       <motion.div
-        className="relative mb-6 mt-4"
+        className="relative mb-4 mt-6"
         initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.8, rotate: prefersReducedMotion ? 0 : -3 }}
         animate={{ opacity: 1, scale: 1, rotate: 0 }}
         transition={{ delay: 0.4, type: "spring", stiffness: 100, damping: 12 }}
@@ -1445,7 +1447,7 @@ const MainGiftReveal = ({
       {/* Message */}
       {message && (
         <motion.p
-          className="mb-6 max-w-xs px-4 text-center text-sm italic leading-relaxed"
+          className="mb-4 max-w-xs px-4 text-center text-sm italic leading-relaxed"
           style={{ color: foregroundColor, opacity: 0.75 }}
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
           animate={{ opacity: 0.75, y: 0 }}
@@ -1455,49 +1457,53 @@ const MainGiftReveal = ({
         </motion.p>
       )}
 
-      {/* Tease lines — appear one by one after the dislike button vanishes */}
-      <div className="mt-5 flex min-h-[6.5rem] w-full max-w-xs flex-col items-center justify-start gap-2">
-        {teaseLines.slice(0, teaseCount).map((line, i) => (
-          <motion.p
-            key={i}
-            className="text-center text-sm leading-relaxed"
-            style={{ color: foregroundColor }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 0.75, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {line}
-          </motion.p>
-        ))}
+      {/* Tease line — one slot: the current line replaces the previous one */}
+      <div className="mt-2 flex min-h-[3rem] w-full max-w-xs flex-col items-center justify-center">
+        <AnimatePresence mode="wait">
+          {teaseCount > 0 && (
+            <motion.p
+              key={teaseCount}
+              className="text-center text-sm leading-relaxed"
+              style={{ color: foregroundColor }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 0.75, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.3 }}
+            >
+              {teaseLines[teaseCount - 1]}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Playful response buttons */}
       <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-        {dislikeState !== "gone" && (
-          <motion.button
-            onClick={handleDislike}
-            className="rounded-full border px-6 py-3 text-sm font-medium"
-            style={{
-              borderColor: `${foregroundColor}25`,
-              color: foregroundColor,
-              background: `${foregroundColor}08`,
-            }}
-            animate={
-              dislikeState === "shrinking"
-                ? { scale: [1, 0.7, 0.4, 0], opacity: [1, 1, 0.5, 0] }
-                : { scale: 1, opacity: 1 }
-            }
-            transition={
-              dislikeState === "shrinking"
-                ? { duration: 0.9, ease: "easeIn" }
-                : { duration: 0.3 }
-            }
-            whileHover={dislikeState === "idle" && !prefersReducedMotion ? { scale: 1.05 } : {}}
-            whileTap={dislikeState === "idle" && !prefersReducedMotion ? { scale: 0.95 } : {}}
-          >
-            {copy.chapters.gift.dislike}
-          </motion.button>
-        )}
+        <AnimatePresence>
+          {!denyGone && (
+            <motion.button
+              onClick={handleDislike}
+              className="rounded-full border px-6 py-3 text-sm font-medium"
+              style={{
+                borderColor: `${foregroundColor}25`,
+                color: foregroundColor,
+                background: `${foregroundColor}08`,
+              }}
+              animate={{ scale: prefersReducedMotion ? 1 : denyScale }}
+              exit={
+                prefersReducedMotion ? { opacity: 0 } : { scale: 0, opacity: 0 }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 260, damping: 18 }
+              }
+              whileHover={!prefersReducedMotion ? { scale: denyScale * 1.05 } : {}}
+              whileTap={!prefersReducedMotion ? { scale: denyScale * 0.95 } : {}}
+            >
+              {copy.chapters.gift.dislike}
+            </motion.button>
+          )}
+        </AnimatePresence>
 
         <motion.button
           onClick={handleContinue}
@@ -1508,14 +1514,24 @@ const MainGiftReveal = ({
             boxShadow: `0 6px 20px ${primaryColor}40`,
           }}
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          whileHover={!prefersReducedMotion && !continuing ? { scale: 1.05, boxShadow: `0 8px 28px ${primaryColor}50` } : {}}
-          whileTap={!prefersReducedMotion && !continuing ? { scale: 0.95 } : {}}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: prefersReducedMotion ? 1 : agreeScale,
+          }}
+          transition={{
+            opacity: { delay: 0.8, duration: 0.4 },
+            y: { delay: 0.8, duration: 0.4 },
+            scale: prefersReducedMotion
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 240, damping: 16 },
+          }}
+          whileHover={!prefersReducedMotion && !continuing ? { scale: agreeScale * 1.05, boxShadow: `0 8px 28px ${primaryColor}50` } : {}}
+          whileTap={!prefersReducedMotion && !continuing ? { scale: agreeScale * 0.95 } : {}}
         >
           {continuing
             ? copy.chapters.gift.opening
-            : dislikeState === "idle"
+            : teaseCount === 0
               ? copy.chapters.gift.like
               : copy.chapters.gift.likeKidding}
         </motion.button>
@@ -1818,25 +1834,31 @@ const MiniGame = ({
     ease: "linear" | [number, number, number, number];
   }>({ duration: 0, ease: "linear" });
 
-  // Adopt server-restored count when the restore fetch resolves after mount
-  useEffect(() => {
+  // Adopt server-restored count when the restore fetch resolves after mount.
+  // Adjust-state-during-render pattern (React docs) — avoids setState-in-effect.
+  const [adoptedRemaining, setAdoptedRemaining] = useState(initialRemaining);
+  if (initialRemaining !== adoptedRemaining) {
+    setAdoptedRemaining(initialRemaining);
     if (initialRemaining !== undefined) setRemaining(initialRemaining);
-  }, [initialRemaining]);
+  }
 
   // Mirror of `rotation` for use inside the async spin callback without
   // stale closures — always the wheel's latest target angle.
   const rotationRef = useRef(0);
 
-  // Ephemeral viewer id — caps attempts per anonymous viewer server-side
+  // Ephemeral viewer id — caps attempts per anonymous viewer server-side.
+  // Resolved lazily inside event handlers (impure code must not run in render).
   const playerIdRef = useRef<string>("");
-  if (typeof window !== "undefined" && !playerIdRef.current) {
+  const getPlayerId = (): string => {
+    if (playerIdRef.current) return playerIdRef.current;
     let id = sessionStorage.getItem("wish_player_id");
     if (!id) {
       id = crypto.randomUUID();
       sessionStorage.setItem("wish_player_id", id);
     }
     playerIdRef.current = id;
-  }
+    return id;
+  };
 
   // Carnival palette — vibrant, high-contrast segments
   const segmentColors = useMemo(
@@ -1925,7 +1947,7 @@ const MiniGame = ({
       const res = await fetch(`/api/w/${wishSlug}/spin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerId: playerIdRef.current }),
+        body: JSON.stringify({ playerId: getPlayerId() }),
       });
 
       if (!res.ok) {
