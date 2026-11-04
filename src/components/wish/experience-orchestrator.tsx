@@ -36,6 +36,10 @@ interface ExperienceOrchestratorProps {
   senderName: string;
   /** Recipient's name (shown in introduction, etc.). */
   recipientName: string;
+  /** Creator's casual name for sender-voice copy slots. Falls back to senderName. */
+  senderNickname?: string;
+  /** Recipient's casual name for sender-voice copy slots. Falls back to recipientName. */
+  recipientNickname?: string;
   /** The occasion (birthday, anniversary, etc.). */
   occasion: string;
   /** How chapters are navigated. */
@@ -93,6 +97,8 @@ export const ExperienceOrchestrator = ({
   theme,
   senderName,
   recipientName,
+  senderNickname,
+  recipientNickname,
   occasion,
   flowMode = "click-through",
   musicUrl,
@@ -143,6 +149,7 @@ export const ExperienceOrchestrator = ({
         return (
           <StartScreen
             recipientName={recipientName}
+            recipientNickname={recipientNickname}
             startAction={resolvedStartAction}
             onNext={actions.next}
             onBack={actions.back}
@@ -159,8 +166,10 @@ export const ExperienceOrchestrator = ({
             onNext={actions.next}
             onBack={actions.back}
             recipientName={recipientName}
+            recipientNickname={recipientNickname}
             occasion={occasion}
             senderName={senderName}
+            senderNickname={senderNickname}
             primaryColor={theme.colors.primary}
             secondaryColor={theme.colors.secondary}
             backgroundColor={theme.colors.background}
@@ -180,6 +189,8 @@ export const ExperienceOrchestrator = ({
                 giftConfig={giftConfig}
                 recipientName={recipientName}
                 senderName={senderName}
+                recipientNickname={recipientNickname}
+                senderNickname={senderNickname}
                 primaryColor={primaryColor}
                 onNext={actions.next}
                 onBack={actions.back}

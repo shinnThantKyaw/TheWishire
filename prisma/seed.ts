@@ -45,8 +45,8 @@ async function main() {
       where: { slug: wishDef.slug },
       update: {
         title: wishDef.title,
-        recipientName: "Sarah",
-        senderName: "Alex",
+        recipientName: "ဂျူလီယာ",
+        senderName: "ကိုသျှား",
         templateId: "birthday-classic",
         occasion: "birthday",
         config,
@@ -56,8 +56,8 @@ async function main() {
       create: {
         userId: user.id,
         title: wishDef.title,
-        recipientName: "Sarah",
-        senderName: "Alex",
+        recipientName: "ဂျူလီယာ",
+        senderName: "ကိုသျှား",
         templateId: "birthday-classic",
         occasion: "birthday",
         config,

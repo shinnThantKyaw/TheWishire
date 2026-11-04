@@ -25,6 +25,10 @@ export interface WishConfig {
   stages: StageContent[];
   content: WishContent;
   settings: WishSettings;
+  /** Casual names for copy slots (cake, gift, chapters). Fall back to the
+   *  DB-level recipientName/senderName when unset. */
+  recipientNickname?: string;
+  senderNickname?: string;
 }
 
 

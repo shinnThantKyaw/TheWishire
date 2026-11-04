@@ -60,6 +60,8 @@ export default async function WishPage({ params }: Props) {
       theme={template.theme}
       senderName={wish.senderName}
       recipientName={wish.recipientName}
+      senderNickname={config.senderNickname}
+      recipientNickname={config.recipientNickname}
       occasion={wish.occasion}
       flowMode={config.settings.flowMode}
       musicUrl={config.content.musicUrl}

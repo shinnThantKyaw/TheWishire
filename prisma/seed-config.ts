@@ -7,7 +7,7 @@ import type { WishConfig, WishSettings } from "@/types/wish";
  */
 
 export const SHARED_CONTENT: WishConfig["content"] = {
-  letter: `Dear Sarah,
+  letter: `Dear ဂျူလီယာ,
 
 Happy 25th Birthday! 🎂
 
@@ -18,7 +18,7 @@ You've always been the person everyone turns to when things get tough. Your kind
 Here's to 25 more years of laughter, adventure, and memories together.
 
 ချစ်ခြင်းမေတ္တာဖြင့်
-Alex ❤️`,
+ကိုကို ❤️`,
   poem: {
     id: "birthday-wish-1",
     title: "A Birthday Wish",
@@ -133,7 +133,7 @@ export const TEST_WISHES: Array<{
 }> = [
   {
     slug: "happy-birthday-sarah",
-    title: "Happy Birthday, Sarah!",
+    title: "Happy Birthday, ဂျူလီယာ!",
     flowMode: "scroll",
     label: "Scroll layout (original)",
   },
@@ -161,6 +161,9 @@ export const TEST_WISHES: Array<{
 export const buildWishConfig = (flowMode: FlowMode): WishConfig => ({
   stages: SHARED_STAGES,
   content: SHARED_CONTENT,
+  // Casual names for sender-voice copy slots; DB columns hold the full names
+  recipientNickname: "ကလေး",
+  senderNickname: "ကိုကို",
   settings: {
     ...SHARED_SETTINGS_BASE,
     intensity: "celebration",

@@ -7,6 +7,8 @@ import type { PoemSelection } from "@/types/wish";
 interface PoemChapterProps {
     poem?: PoemSelection;
     recipientName?: string;
+    /** Casual name for sender-voice copy; falls back to recipientName. */
+    recipientNickname?: string;
     primaryColor?: string;
     foregroundColor?: string;
 }
@@ -24,6 +26,7 @@ interface PoemChapterProps {
 export const PoemChapter = ({
     poem,
     recipientName = "",
+    recipientNickname = recipientName,
     primaryColor = "#E91E63",
     foregroundColor = "#1A1A2E",
 }: PoemChapterProps) => {
@@ -141,7 +144,7 @@ export const PoemChapter = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-                {interpolate(copy.chapters.poem.heading, { recipientName })}
+                {interpolate(copy.chapters.poem.heading, { recipientNickname })}
             </motion.h2>
 
             {/* Main manuscript card */}

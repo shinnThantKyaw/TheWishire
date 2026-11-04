@@ -206,6 +206,8 @@ export const WishConfigSchema = z.object({
   ),
   content: WishContentSchema,
   settings: WishSettingsSchema,
+  recipientNickname: z.string().optional(),
+  senderNickname: z.string().optional(),
 });
 
 // ──────────────────────────────────────────────

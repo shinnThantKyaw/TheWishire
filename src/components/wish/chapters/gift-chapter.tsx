@@ -15,6 +15,10 @@ interface GiftChapterProps {
   config?: GiftChapterConfig;
   recipientName?: string;
   senderName?: string;
+  /** Casual names for sender-voice copy; fall back to the full names.
+   *  senderName itself stays full-name for the ticket claim footer. */
+  recipientNickname?: string;
+  senderNickname?: string;
   onNextSubScreen: () => void;
   primaryColor?: string;
   foregroundColor?: string;
@@ -29,6 +33,8 @@ export const GiftChapter = ({
   config,
   recipientName = "",
   senderName = "",
+  recipientNickname = recipientName,
+  senderNickname = senderName,
   onNextSubScreen,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
@@ -78,6 +84,8 @@ export const GiftChapter = ({
             config={config}
             recipientName={recipientName}
             senderName={senderName}
+            recipientNickname={recipientNickname}
+            senderNickname={senderNickname}
             onComplete={onNextSubScreen}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
@@ -89,6 +97,8 @@ export const GiftChapter = ({
             config={config}
             recipientName={recipientName}
             senderName={senderName}
+            recipientNickname={recipientNickname}
+            senderNickname={senderNickname}
             onComplete={onNextSubScreen}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
@@ -99,6 +109,7 @@ export const GiftChapter = ({
             key="bonus-intro"
             config={config}
             recipientName={recipientName}
+            recipientNickname={recipientNickname}
             onComplete={onNextSubScreen}
             attemptsLeft={initialRemaining}
             primaryColor={primaryColor}
@@ -138,6 +149,8 @@ const GiftGate = ({
   config,
   recipientName,
   senderName,
+  recipientNickname,
+  senderNickname,
   onComplete,
   primaryColor,
   foregroundColor,
@@ -145,6 +158,8 @@ const GiftGate = ({
   config?: GiftChapterConfig;
   recipientName?: string;
   senderName?: string;
+  recipientNickname?: string;
+  senderNickname?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -184,8 +199,8 @@ const GiftGate = ({
         style={{ color: foregroundColor, opacity: 0.65 }}
       >
         {interpolate(copy.chapters.gift.introSub, {
-          recipientName: recipientName ?? "",
-          senderName: senderName ?? "",
+          recipientNickname: recipientNickname ?? recipientName ?? "",
+          senderNickname: senderNickname ?? senderName ?? "",
         })}
       </p>
 
@@ -193,7 +208,7 @@ const GiftGate = ({
         <PasswordGate answer={gate.answer} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
       {gate.type === "pin" && (
-        <PinGate pin={gate.pin} hint={gate.hint} recipientName={recipientName} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
+        <PinGate pin={gate.pin} hint={gate.hint} recipientName={recipientName} recipientNickname={recipientNickname} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
       {gate.type === "yes-no" && (
         <YesNoGate prompt={gate.prompt} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
@@ -222,6 +237,7 @@ const PinGate = ({
   pin,
   hint,
   recipientName,
+  recipientNickname,
   onComplete,
   primaryColor,
   foregroundColor,
@@ -229,6 +245,7 @@ const PinGate = ({
   pin: string;
   hint: string;
   recipientName?: string;
+  recipientNickname?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -409,6 +426,7 @@ const PinGate = ({
           <PinSuccessOverlay
             pin={pin}
             recipientName={recipientName ?? ""}
+            recipientNickname={recipientNickname ?? recipientName ?? ""}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
             prefersReducedMotion={!!prefersReducedMotion}
@@ -424,12 +442,14 @@ const PinGate = ({
 const PinSuccessOverlay = ({
   pin,
   recipientName,
+  recipientNickname = recipientName,
   primaryColor,
   foregroundColor,
   prefersReducedMotion,
 }: {
   pin: string;
   recipientName: string;
+  recipientNickname?: string;
   primaryColor: string;
   foregroundColor: string;
   prefersReducedMotion: boolean;
@@ -886,7 +906,7 @@ const PinSuccessOverlay = ({
           transition={{ delay: 2.7, duration: 0.8 }}
         >
           <Gift className="h-3.5 w-3.5" style={{ color: primaryColor }} aria-hidden />
-          {interpolate(copy.chapters.gift.giftWaiting, { recipientName })}
+          {interpolate(copy.chapters.gift.giftWaiting, { recipientNickname })}
         </motion.p>
       </motion.div>
     </motion.div>
@@ -1010,6 +1030,8 @@ const MainGiftReveal = ({
   config,
   recipientName,
   senderName,
+  recipientNickname = recipientName,
+  senderNickname = senderName,
   onComplete,
   primaryColor,
   foregroundColor,
@@ -1017,6 +1039,8 @@ const MainGiftReveal = ({
   config?: GiftChapterConfig;
   recipientName: string;
   senderName: string;
+  recipientNickname?: string;
+  senderNickname?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -1032,7 +1056,7 @@ const MainGiftReveal = ({
 
   const teaseLines = [
     copy.chapters.gift.teaseReal,
-    interpolate(copy.chapters.gift.teaseDisappointed, { senderName }),
+    interpolate(copy.chapters.gift.teaseDisappointed, { senderNickname }),
     copy.chapters.gift.teaseKidding,
     copy.chapters.gift.teasePlease,
   ];
@@ -1255,7 +1279,7 @@ const MainGiftReveal = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        {interpolate(copy.chapters.gift.mainGiftHeading, { recipientName })}
+        {interpolate(copy.chapters.gift.mainGiftHeading, { recipientNickname })}
       </motion.h3>
 
       {/* Gift photo with decorative frame */}
@@ -1414,7 +1438,7 @@ const MainGiftReveal = ({
             boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          {interpolate(copy.chapters.gift.justForYou, { recipientName })}
+          {interpolate(copy.chapters.gift.justForYou, { recipientNickname })}
         </motion.div>
       </motion.div>
 
@@ -1505,6 +1529,7 @@ const MainGiftReveal = ({
 const BonusIntro = ({
   config,
   recipientName,
+  recipientNickname = recipientName,
   onComplete,
   attemptsLeft,
   primaryColor,
@@ -1512,6 +1537,7 @@ const BonusIntro = ({
 }: {
   config?: GiftChapterConfig;
   recipientName?: string;
+  recipientNickname?: string;
   onComplete: () => void;
   /** Server-restored attempts left — keeps this screen honest vs the wheel. */
   attemptsLeft?: number;
@@ -1683,7 +1709,7 @@ const BonusIntro = ({
           transition={{ delay: 0.35 }}
         >
           {interpolate(copy.chapters.gift.bonusHeading, {
-            recipientName: recipientName ?? "",
+            recipientNickname: recipientNickname ?? recipientName ?? "",
           })}
         </motion.h3>
 

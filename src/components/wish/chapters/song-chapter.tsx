@@ -59,6 +59,9 @@ const VINYL_KEYFRAMES = `
 
 interface SongChapterProps {
   song?: SongSelection;
+  recipientName?: string;
+  /** Casual name for sender-voice copy; falls back to recipientName. */
+  recipientNickname?: string;
   primaryColor?: string;
   foregroundColor?: string;
 }
@@ -134,6 +137,8 @@ const VinylDisc = ({
  */
 export const SongChapter = ({
   song,
+  recipientName = "",
+  recipientNickname = recipientName,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
 }: SongChapterProps) => {
@@ -504,7 +509,7 @@ export const SongChapter = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduceMotion ? 0 : 0.6, duration: reduceMotion ? 0 : 1 }}
             >
-              {copy.chapters.song.heading}
+              {interpolate(copy.chapters.song.heading, { recipientNickname })}
             </motion.h2>
 
             {/* Now Playing row — small spinning vinyl + label */}

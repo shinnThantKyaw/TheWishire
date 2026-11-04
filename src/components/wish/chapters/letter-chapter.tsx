@@ -7,6 +7,8 @@ import { copy, interpolate } from "@/config/copy";
 interface LetterChapterProps {
   letter?: string;
   recipientName?: string;
+  /** Casual name for sender-voice copy; falls back to recipientName. */
+  recipientNickname?: string;
   primaryColor?: string;
   foregroundColor?: string;
 }
@@ -14,6 +16,7 @@ interface LetterChapterProps {
 export const LetterChapter = ({
                                 letter,
                                 recipientName = "",
+                                recipientNickname = recipientName,
                                 primaryColor = "#E91E63",
                                 foregroundColor = "#1A1A2E",
                               }: LetterChapterProps) => {
@@ -104,6 +107,7 @@ export const LetterChapter = ({
                   letterLines={letterLines}
                   primaryColor={primaryColor}
                   recipientName={recipientName}
+                  recipientNickname={recipientNickname}
                   uid={uid}
               />
 
@@ -501,10 +505,11 @@ interface LetterPaperProps {
     letterLines: string[];
     primaryColor: string;
     recipientName: string;
+    recipientNickname: string;
     uid: string;
 }
 
-const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primaryColor, recipientName, uid }: LetterPaperProps) => {
+const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primaryColor, recipientName, recipientNickname, uid }: LetterPaperProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -645,7 +650,7 @@ const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primary
                             fontStyle: "italic",
                         }}
                     >
-                        {interpolate(copy.chapters.letter.justForYou, { recipientName })}
+                        {interpolate(copy.chapters.letter.justForYou, { recipientNickname })}
                     </div>
                     <div className="mb-4 flex items-center justify-center gap-2">
                         <div className="h-px w-10" style={{ background: "#d6a5b5" }} />

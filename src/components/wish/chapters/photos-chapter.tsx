@@ -15,6 +15,9 @@ interface PhotosChapterProps {
     videoUrl?: string;
     senderName?: string;
     recipientName?: string;
+    /** Casual names for sender-voice copy; fall back to the full names. */
+    senderNickname?: string;
+    recipientNickname?: string;
     primaryColor?: string;
     foregroundColor?: string;
 }
@@ -37,6 +40,8 @@ export const PhotosChapter = ({
                                   videoUrl,
                                   senderName = "",
                                   recipientName = "",
+                                  senderNickname = senderName,
+                                  recipientNickname = recipientName,
                                   primaryColor = "#E91E63",
                                   foregroundColor = "#1A1A2E",
                               }: PhotosChapterProps) => {
@@ -234,13 +239,13 @@ export const PhotosChapter = ({
                             fontSize: "clamp(1.5rem, 3.5vh, 2.25rem)",
                         }}
                     >
-                        {interpolate(copy.chapters.photos.title, { senderName })}
+                        {interpolate(copy.chapters.photos.title, { senderNickname })}
                     </h2>
                     <p
                         className="mx-auto mt-3 max-w-md text-sm leading-6"
                         style={{ color: foregroundColor, opacity: 0.56 }}
                     >
-                        {interpolate(copy.chapters.photos.subtitle, { senderName, recipientName })}
+                        {interpolate(copy.chapters.photos.subtitle, { senderNickname, recipientNickname })}
                     </p>
                 </motion.div>
             </div>
@@ -638,7 +643,7 @@ export const PhotosChapter = ({
                   className="text-[9px] font-semibold uppercase tracking-[0.32em]"
                   style={{ color: foregroundColor, opacity: 0.42 }}
               >
-                {interpolate(copy.chapters.photos.title, { senderName })}
+                {interpolate(copy.chapters.photos.title, { senderNickname })}
               </span>
                             <span
                                 className="mt-0.5 text-xs"

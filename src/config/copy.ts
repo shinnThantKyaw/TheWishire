@@ -122,9 +122,9 @@ export const copy = {
 
   /** Screen 3 — Surprise Start / Are You Ready. Sender voice. */
   start: {
-    hey: "{recipientName}ရေ",
+    hey: "{recipientNickname}ရေ",
     birthdayGreeting:
-      "ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+      "ဒါကတော့ {recipientNickname}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
     candlesGuide: "မီးညှိဖို့အတွက်ဖယောင်းတိုင်တွေကိုနှိပ်ပါ။ ({lit}/{count})",
     candlesSuccess: "🎉 Happy Birthday!",
     getReady: "Get ready for your surprise...",
@@ -231,15 +231,15 @@ export const copy = {
     received: "သင့်ဆီ လက်ဆောင်တစ်ခု ရောက်နေပါတယ်",
     fromTag: "မှ",
     boxIntro:
-      "ကဲ ဒါကတော့ {recipientName}အတွက် {senderName}ပြင်ပေးထားတဲ့ လက်ဆောင်ပုံးလေးပေါ့။ ဘာတွေပါလဲသိချင်နေပြီလား။ ဒါဆို ဖွင့်ဖောက်ကြည့်လိုက်နော်။",
-    giftsForYou: "{recipientName}အတွက် လက်ဆောင်တွေကတော့ ဒါတွေပါပဲကွယ်",
+      "ကဲ ဒါကတော့ {recipientNickname}အတွက် {senderNickname}ပြင်ပေးထားတဲ့ လက်ဆောင်ပုံးလေးပေါ့။ ဘာတွေပါလဲသိချင်နေပြီလား။ ဒါဆို ဖွင့်ဖောက်ကြည့်လိုက်နော်။",
+    giftsForYou: "{recipientNickname}အတွက် လက်ဆောင်တွေကတော့ ဒါတွေပါပဲကွယ်",
     seeGifts: "ကြည့်မယ် →",
     openAria: "လက်ဆောင်ဖွင့်ရန်",
     occasions: {
       birthday: {
-        heading: "{recipientName} အတွက် မွေးနေ့လက်ဆောင်",
+        heading: "{recipientNickname} အတွက် မွေးနေ့လက်ဆောင်",
         subheading:
-          "ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+          "ဒါကတော့ {recipientNickname}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
         openPrompt: "လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "စာ" },
@@ -251,8 +251,8 @@ export const copy = {
         ],
       },
       anniversary: {
-        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ {recipientNickname}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "စာ" },
@@ -264,8 +264,8 @@ export const copy = {
         ],
       },
       valentine: {
-        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ {recipientNickname}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "လက်ဆောင်လက်ခံရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "A Love Note" },
@@ -277,8 +277,8 @@ export const copy = {
         ],
       },
       "girlfriend-day": {
-        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ {recipientNickname}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "A Love Note" },
@@ -289,8 +289,8 @@ export const copy = {
         ],
       },
       "boyfriend-day": {
-        heading: "{recipientName} အတွက် ချစ်သက်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် ချစ်သက်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ {recipientNickname}အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "မှတ်စု" },
@@ -301,8 +301,8 @@ export const copy = {
         ],
       },
       thadingyut: {
-        heading: "{recipientName} အတွက် သီတင်းကျွတ်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ သီတင်းကျွတ်အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် သီတင်းကျွတ်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ သီတင်းကျွတ်အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "စာ" },
@@ -313,8 +313,8 @@ export const copy = {
         ],
       },
       thingyan: {
-        heading: "{recipientName} အတွက် သင်္ကြန်လက်ဆောင်",
-        subheading: "{recipientName}ရေ ဒါကတော့ သင်္ကြန်အတွက် လက်ဆောင်လေးပါ။",
+        heading: "{recipientNickname} အတွက် သင်္ကြန်လက်ဆောင်",
+        subheading: "{recipientNickname}ရေ ဒါကတော့ သင်္ကြန်အတွက် လက်ဆောင်လေးပါ။",
         openPrompt: "သင့်လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "📸", label: "အမှတ်တရများ" },
@@ -454,13 +454,13 @@ export const copy = {
       empty: "စာ မရှိသေးပါ",
       open: "စာအိတ်ဖွင့်ဖတ်မယ်",
       foldBack: "ပြန်ခေါက်မယ်",
-      justForYou: "{recipientName}အတွက်",
+      justForYou: "{recipientNickname}အတွက်",
       envelopeAria: "စာဖတ်ရန် စာအိတ်ဖွင့်ရန်",
     },
     photos: {
-      title: "{senderName}ရဲ့ အမှတ်တရလေးတွေ",
+      title: "{senderNickname}ရဲ့ အမှတ်တရလေးတွေ",
       subtitle:
-        "ဒါကတော့ {senderName}နဲ့ {recipientName}တို့ရဲ့ အမှတ်တရပုံလေးတွေ စုထားတဲ့ ဓာတ်ပုံအယ်လ်ဘမ်လေးပါ",
+        "ဒါကတော့ {senderNickname}နဲ့ {recipientNickname}တို့ရဲ့ အမှတ်တရပုံလေးတွေ စုထားတဲ့ ဓာတ်ပုံအယ်လ်ဘမ်လေးပါ",
       coverEyebrow: "📸 A Collection Of",
       coverTitle: "Our Memories",
       coverAccent: "⭐ Moments Worth Remembering ⭐",
@@ -483,14 +483,14 @@ export const copy = {
     },
     poem: {
       empty: "ကဗျာ မရှိသေးပါ",
-      heading: "ဒါကတော့ {recipientName}အတွက် ကဗျာလေးပါ",
+      heading: "ဒါကတော့ {recipientNickname}အတွက် ကဗျာလေးပါ",
     },
     song: {
       eyebrow: "🎵 သီချင်း",
       emptyHeading: "The Turntable is Waiting",
       emptyBody:
         "လောလောဆယ် ရွေးထားတဲ့ သီချင်း မရှိသေးပါဘူး။ ဒါပေမယ့် နောက်မှာ တခြား surprise တွေ စောင့်နေပါတယ်နော်",
-      heading: "{recipientName}နားထောင်ဖို့",
+      heading: "{recipientNickname}နားထောင်ဖို့",
       nowPlaying: "ဖွင့်နေသည်",
       fallbackTitle: "မင်းအတွက် သီချင်းလေး",
       playAria: "{title} ဖွင့်ရန်",
@@ -511,30 +511,30 @@ export const copy = {
     gift: {
       intro: "Suprise!",
       introSub:
-        "ဒါကတော့ {recipientName}အတွက် {senderName}ပေမယ့်လက်ဆောင်လေးပါ။ ဘာလဲသိချင်ရင် အောက်က passcode လေးကို မှန်အောင်ဖြေနော် 😜",
+        "ဒါကတော့ {recipientNickname}အတွက် {senderNickname}ပေမယ့်လက်ဆောင်လေးပါ။ ဘာလဲသိချင်ရင် အောက်က passcode လေးကို မှန်အောင်ဖြေနော် 😜",
       mainGiftHeading:
-        "{recipientName}အတွက်လက်ဆောင်လေးကတော့ဒါလေးပါ။ {recipientName}သဘောကျမယ်လို့ မျှော်လင့်ပါတယ်နော်",
+        "{recipientNickname}အတွက်လက်ဆောင်လေးကတော့ဒါလေးပါ။ {recipientNickname}သဘောကျမယ်လို့ မျှော်လင့်ပါတယ်နော်",
       hint: "အရိပ်အမြွက်",
       wrongPin: "PIN မှားနေတယ်! ထပ်စမ်းကြည့်ပါ 💔",
       answerIs: "အဖြေက",
       correct: "မှန်ပါတယ်!",
       unlocked: "ဖွင့်ပြီးပါပြီ!",
-      giftWaiting: "{recipientName}အတွက်လက်ဆောင်လေးကို ကြည့်လို့ရပါပြီ",
+      giftWaiting: "{recipientNickname}အတွက်လက်ဆောင်လေးကို ကြည့်လို့ရပါပြီ",
       wrongCode: "ကုဒ်မှားတယ်!",
       yes: "ဟုတ်ကဲ့! 😍",
       no: "မဟုတ်ဘူး...",
-      justForYou: "{recipientName}အတွက်",
+      justForYou: "{recipientNickname}အတွက်",
       opening: "ဖွင့်နေပြီ...",
       dislike: "သဘောမကျဘူး",
       like: "အရမ်းသဘောကျတယ်",
       likeKidding: "စတာပါ သဘောကျတယ်နော်",
       teaseReal: "တကယ်သဘောမကျဘူးလားဟင်🙁",
-      teaseDisappointed: "အဲ့တာဆို {senderName}ကတော့ စိတ်မကောင်းဖြစ်သွားပြီ🙁",
+      teaseDisappointed: "အဲ့တာဆို {senderNickname}ကတော့ စိတ်မကောင်းဖြစ်သွားပြီ🙁",
       teaseKidding: "စနေတာ မလားဟင် 🥺၊",
       teasePlease: "သဘောကျလိုက်ပေါနော် 🥺",
       letsPlay: "ကစားရအောင်!",
       bonusRound: "Bonus",
-      bonusHeading: "{recipientName}သဘောကျတမယ်ဆိုတာ သိပြီးသားပဲ ဟဲ",
+      bonusHeading: "{recipientNickname}သဘောကျတမယ်ဆိုတာ သိပြီးသားပဲ ဟဲ",
       bonusSubtitle: "ဒါတင်မကသေးဘူး၊ နောက်မှာ ဘောနပ်စ် ဂိမ်းလေးတွေရှိသေးတယ်နော် 😜",
       chancesOne: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",
       chancesMany: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",

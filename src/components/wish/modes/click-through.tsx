@@ -21,6 +21,8 @@ interface ClickThroughProps {
   giftConfig?: GiftChapterConfig;
   recipientName?: string;
   senderName?: string;
+  recipientNickname?: string;
+  senderNickname?: string;
   primaryColor: string;
   onNext: () => void;
   onBack: () => void;
@@ -43,6 +45,8 @@ export const ClickThrough = ({
   giftConfig,
   recipientName = "",
   senderName = "",
+  recipientNickname,
+  senderNickname,
   primaryColor,
   onNext,
   onBack,
@@ -113,6 +117,7 @@ export const ClickThrough = ({
               <LetterChapter
                 letter={letterStage?.content.letter}
                 recipientName={recipientName}
+                recipientNickname={recipientNickname}
                 primaryColor={primaryColor}
               />
             )}
@@ -122,6 +127,8 @@ export const ClickThrough = ({
                 videoUrl={photosStage?.content.videoUrl}
                 senderName={senderName}
                 recipientName={recipientName}
+                senderNickname={senderNickname}
+                recipientNickname={recipientNickname}
                 primaryColor={primaryColor}
               />
             )}
@@ -129,12 +136,15 @@ export const ClickThrough = ({
               <PoemChapter
                 poem={poemStage?.content.poem}
                 recipientName={recipientName}
+                recipientNickname={recipientNickname}
                 primaryColor={primaryColor}
               />
             )}
             {chapterIndex === 3 && (
               <SongChapter
                 song={songStage?.content.song}
+                recipientName={recipientName}
+                recipientNickname={recipientNickname}
                 primaryColor={primaryColor}
               />
             )}
@@ -150,6 +160,8 @@ export const ClickThrough = ({
                 config={giftConfig}
                 recipientName={recipientName}
                 senderName={senderName}
+                recipientNickname={recipientNickname}
+                senderNickname={senderNickname}
                 onNextSubScreen={onNextGiftSubScreen}
                 primaryColor={primaryColor}
               />

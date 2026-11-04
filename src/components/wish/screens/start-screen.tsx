@@ -7,6 +7,8 @@ import type { StartAction } from "@/types/experience";
 
 interface StartScreenProps {
   recipientName: string;
+  /** Casual name for sender-voice copy; falls back to recipientName. */
+  recipientNickname?: string;
   startAction: StartAction;
   onNext: () => void;
   onBack: () => void;
@@ -22,6 +24,7 @@ interface StartScreenProps {
  */
 export const StartScreen = ({
   recipientName,
+  recipientNickname = recipientName,
   startAction,
   onNext,
   onBack,
@@ -115,7 +118,7 @@ export const StartScreen = ({
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  {interpolate(copy.start.hey, { recipientName })}
+                  {interpolate(copy.start.hey, { recipientNickname })}
                 </span>
               </h1>
 
@@ -138,7 +141,7 @@ export const StartScreen = ({
 
               {/* Sender message */}
               <p className="text-sm leading-relaxed opacity-70">
-                {interpolate(copy.start.birthdayGreeting, { recipientName })}
+                {interpolate(copy.start.birthdayGreeting, { recipientNickname })}
               </p>
             </div>
           </div>

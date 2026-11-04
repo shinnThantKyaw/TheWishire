@@ -11,6 +11,9 @@ interface GiftOpeningScreenProps {
   recipientName?: string;
   occasion?: string;
   senderName?: string;
+  /** Casual names for sender-voice copy; fall back to the full names. */
+  recipientNickname?: string;
+  senderNickname?: string;
   primaryColor?: string;
   secondaryColor?: string;
   backgroundColor?: string;
@@ -58,6 +61,8 @@ export const GiftOpeningScreen = ({
   recipientName,
   occasion,
   senderName,
+  recipientNickname = recipientName ?? "",
+  senderNickname = senderName ?? "",
   primaryColor = "#E91E63",
   secondaryColor = "#F48FB1",
   backgroundColor = "#FFF0F5",
@@ -214,7 +219,7 @@ export const GiftOpeningScreen = ({
               }}
             >
               {senderName && recipientName
-                ? interpolate(copy.giftOpening.boxIntro, { recipientName, senderName })
+                ? interpolate(copy.giftOpening.boxIntro, { recipientNickname, senderNickname })
                 : copy.giftOpening.received}
             </p>
           </div>
@@ -719,7 +724,7 @@ export const GiftOpeningScreen = ({
 
             {/* Main heading */}
             <p
-              className="text-xl  font-bold tracking-wide sm:text-2xl"
+              className="text-center text-xl font-bold tracking-wide sm:text-2xl"
               style={{
                 fontFamily: "var(--wish-font-heading), Georgia, serif",
                 background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
@@ -729,7 +734,7 @@ export const GiftOpeningScreen = ({
               }}
             >
               {interpolate(copy.giftOpening.giftsForYou, {
-                recipientName: recipientName ?? "",
+                recipientNickname,
               })}
             </p>
 
