@@ -37,6 +37,12 @@ export interface ExperienceActions {
   goToPhase: (phase: ExperiencePhase) => void;
   /** Jump to a specific chapter (sets phase to "chapters"). */
   goToChapter: (index: ChapterIndex) => void;
+  /**
+   * Scroll-position sync: record which chapter is most visible without
+   * resetting giftSubScreen (unlike goToChapter) — scrolling away from the
+   * gift island must not wipe spin-wheel/wallet state.
+   */
+  observeChapter: (index: ChapterIndex) => void;
   /** Advance within the gift chapter sub-screens. */
   nextGiftSubScreen: () => void;
   /** Restart the entire experience. */
@@ -164,6 +170,11 @@ export const useExperienceState = (flowMode: FlowMode = "click-through") => {
     setGiftSubScreen("challenge");
   }, []);
 
+  const observeChapter = useCallback((index: ChapterIndex) => {
+    setPhase("chapters");
+    setChapterIndex(index);
+  }, []);
+
   const nextGiftSubScreen = useCallback(() => {
     const nextSub = getNextGiftSubScreen(giftSubScreen);
     if (nextSub) {
@@ -201,10 +212,11 @@ export const useExperienceState = (flowMode: FlowMode = "click-through") => {
       back,
       goToPhase,
       goToChapter,
+      observeChapter,
       nextGiftSubScreen,
       restart,
     }),
-    [next, back, goToPhase, goToChapter, nextGiftSubScreen, restart],
+    [next, back, goToPhase, goToChapter, observeChapter, nextGiftSubScreen, restart],
   );
 
   return { state, actions };

@@ -201,7 +201,15 @@ export const ExperienceOrchestrator = ({
             return (
               <ScrollMode
                 stages={stages}
+                giftConfig={giftConfig}
+                recipientName={recipientName}
+                senderName={senderName}
+                recipientNickname={recipientNickname}
+                senderNickname={senderNickname}
                 primaryColor={primaryColor}
+                giftSubScreen={state.giftSubScreen}
+                onNextGiftSubScreen={actions.nextGiftSubScreen}
+                onSectionVisible={actions.observeChapter}
                 onComplete={actions.next}
               />
             );
@@ -290,8 +298,15 @@ export const ExperienceOrchestrator = ({
         <motion.div
           // giftSubScreen intentionally NOT in the key — GiftChapter owns its
           // sub-screen transitions internally; remounting here would wipe
-          // chapter state (e.g. won spin-wheel rewards) on every sub-screen change
-          key={`${activePhase}-${state.chapterIndex}`}
+          // chapter state (e.g. won spin-wheel rewards) on every sub-screen change.
+          // Scroll mode also excludes chapterIndex: observeChapter updates it
+          // on every scroll, and a key change would remount the whole page
+          // (scroll jumps to top, gift island state lost).
+          key={
+            normalizedFlowMode === "scroll"
+              ? activePhase
+              : `${activePhase}-${state.chapterIndex}`
+          }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
