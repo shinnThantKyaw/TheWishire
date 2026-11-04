@@ -19,6 +19,8 @@ interface ClickThroughProps {
   giftSubScreen: GiftSubScreen;
   stages: MergedStage[];
   giftConfig?: GiftChapterConfig;
+  recipientName?: string;
+  senderName?: string;
   primaryColor: string;
   onNext: () => void;
   onBack: () => void;
@@ -38,8 +40,9 @@ export const ClickThrough = ({
   chapterIndex,
   giftSubScreen,
   stages,
-
   giftConfig,
+  recipientName = "",
+  senderName = "",
   primaryColor,
   onNext,
   onBack,
@@ -109,6 +112,7 @@ export const ClickThrough = ({
             {chapterIndex === 0 && (
               <LetterChapter
                 letter={letterStage?.content.letter}
+                recipientName={recipientName}
                 primaryColor={primaryColor}
               />
             )}
@@ -116,12 +120,15 @@ export const ClickThrough = ({
               <PhotosChapter
                 photos={photosStage?.content.photos ?? []}
                 videoUrl={photosStage?.content.videoUrl}
+                senderName={senderName}
+                recipientName={recipientName}
                 primaryColor={primaryColor}
               />
             )}
             {chapterIndex === 2 && (
               <PoemChapter
                 poem={poemStage?.content.poem}
+                recipientName={recipientName}
                 primaryColor={primaryColor}
               />
             )}
@@ -135,13 +142,14 @@ export const ClickThrough = ({
               <TimelineChapter
                 entries={timelineStage?.content.memoryTimeline ?? []}
                 primaryColor={primaryColor}
-                chapterLabel="Chapter 05"
               />
             )}
             {chapterIndex === GIFT_CHAPTER_INDEX && (
               <GiftChapter
                 giftSubScreen={giftSubScreen}
                 config={giftConfig}
+                recipientName={recipientName}
+                senderName={senderName}
                 onNextSubScreen={onNextGiftSubScreen}
                 primaryColor={primaryColor}
               />

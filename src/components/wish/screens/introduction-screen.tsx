@@ -48,6 +48,10 @@ export const IntroductionScreen = ({
 
     const currentOccasion = introductionOccasionCopy(occasion.toLowerCase());
 
+    // senderLine holds {senderName} mid-sentence — split so the name renders
+    // bold in place instead of being prefixed before the whole line.
+    const [senderLineBefore, senderLineAfter] = copy.introduction.senderLine.split("{senderName}");
+
     const handleCut = () => {
         if (cutting || cutDone) return;
 
@@ -332,16 +336,18 @@ export const IntroductionScreen = ({
                                 border: `1px solid rgba(255,255,255,0.6)`,
                             }}
                         >
-                            {/* Sender highlight */}
+                            {/* Sender highlight — name sits inside the sentence */}
                             <p className="text-sm leading-relaxed opacity-75">
+                                {interpolate(senderLineBefore ?? "", {
+                                    celebrationText: currentOccasion.celebrationText,
+                                })}
                                 <span
                                     className="font-semibold"
                                     style={{ color: primaryColor }}
                                 >
                                     {senderName}
                                 </span>
-                                {interpolate(copy.introduction.senderLine, {
-                                    senderName: "",
+                                {interpolate(senderLineAfter ?? "", {
                                     celebrationText: currentOccasion.celebrationText,
                                 })}
                             </p>
@@ -376,17 +382,6 @@ export const IntroductionScreen = ({
                         </div>
                     </div>
                 </motion.div>
-
-                {/* ── Quote ────────────────────────────── */}
-                <motion.p
-                    className="mt-4 max-w-xs text-[13px] italic opacity-40"
-                    style={{ color: foregroundColor }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.4 }}
-                    transition={{ duration: 0.3, delay: 0.65 }}
-                >
-                    &ldquo;{copy.introduction.quote}&rdquo;
-                </motion.p>
 
                 {/* ── Ribbon + Scissors ────────────────── */}
                 <motion.div

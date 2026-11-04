@@ -46,7 +46,6 @@ export const copy = {
   /** Short labels shared across components — dedupe targets. */
   common: {
     continue: "ဆက်သွားမယ်",
-    continueArrow: "ဆက်သွားမယ် →",
     nextArrow: "ရှေ့ဆက်မယ် →",
     tapToOpen: "ဖွင့်ရန် နှိပ်ပါ",
     wrongAnswer: "အဖြေမှားနေပါတယ်! ထပ်ကြိုးစားကြည့်ပါဦးနော် 💕",
@@ -123,9 +122,9 @@ export const copy = {
 
   /** Screen 3 — Surprise Start / Are You Ready. Sender voice. */
   start: {
-    hey: "ဟိုင်း",
+    hey: "{recipientName}ရေ",
     birthdayGreeting:
-      "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+      "ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
     candlesGuide: "မီးညှိဖို့အတွက်ဖယောင်းတိုင်တွေကိုနှိပ်ပါ။ ({lit}/{count})",
     candlesSuccess: "🎉 Happy Birthday!",
     getReady: "Get ready for your surprise...",
@@ -138,7 +137,7 @@ export const copy = {
 
   /** Screen 1 — Introduction (occasion-keyed config + fixed copy). Product voice (formal). */
   introduction: {
-    hey: "ဟိုင်း {recipientName} ရေ",
+    hey: "မင်္ဂလာပါ {recipientName} ရေ",
     subtitle: "သင့်အတွက် surprise လေးတစ်ခု စောင့်ကြိုနေပါတယ်နော်...",
     senderLine: "{celebrationText}အတွက် {senderName}က အမှတ်တရ surprise လေးတစ်ခု စီစဉ်ပေးထားပါတယ်။",
     cutRibbon: "သင့်ရဲ့လက်ဆောင်လေးကိုကြည့်ဖို့ ဖဲကြိုးကိုဖြတ်လိုက်ပါ",
@@ -149,7 +148,7 @@ export const copy = {
       birthday: {
         emoji: "🎂",
         label: "မွေးနေ့",
-        celebrationText: "သင့်ရဲ့မွေးနေ",
+        celebrationText: "သင့်ရဲ့မွေးနေ့",
         description:
           "အစစအရာရာ ပျက်စီးဆွေးမြည့်ပြီး အမှောင်ထုကြီးစိုးနေတတ်တဲ့ ဒီလောကကြီးမှာ အနည်းဆုံးတော့ သင့်ကိုချစ်တဲ့သူတွေ ရှိနေပါသေးတယ်။ ဒီ surprise gift လေးက သူတို့ထဲက တစ်ယောက်ယောက်က သင့်ဆီကို ပေးပို့လိုက်တဲ့ ချစ်ခြင်းမေတ္တာတစ်ခုပေါ့လေ။ ကဲ ကြည့်ဖို့အဆင့်သင့်ဖြစ်ပြီဆိုရင် အောက်က ဖဲကြိုးလေးကို ဖြတ်လိုက်တော့နော်။",
       },
@@ -203,8 +202,6 @@ export const copy = {
           "Someone wanted to create a little moment of joy, just for you. Take your time and enjoy what comes next.",
       },
     } satisfies Record<string, OccasionCopyConfig>,
-    quote:
-      "The best things in life are the people you love, the places you’ve been, and the memories you’ve made along the way.",
   },
 
   /** Screen 2 — Surprise Unlock. */
@@ -233,14 +230,16 @@ export const copy = {
   giftOpening: {
     received: "သင့်ဆီ လက်ဆောင်တစ်ခု ရောက်နေပါတယ်",
     fromTag: "မှ",
-    giftsForYou: "သင့်အတွက် လက်ဆောင်တွေ ဒီမှာပါ!",
-    seeGifts: "လက်ဆောင်တွေ ကြည့်မည် →",
+    boxIntro:
+      "ကဲ ဒါကတော့ {recipientName}အတွက် {senderName}ပြင်ပေးထားတဲ့ လက်ဆောင်ပုံးလေးပေါ့။ ဘာတွေပါလဲသိချင်နေပြီလား။ ဒါဆို ဖွင့်ဖောက်ကြည့်လိုက်နော်။",
+    giftsForYou: "{recipientName}အတွက် လက်ဆောင်တွေကတော့ ဒါတွေပါပဲကွယ်",
+    seeGifts: "ကြည့်မယ် →",
     openAria: "လက်ဆောင်ဖွင့်ရန်",
     occasions: {
       birthday: {
         heading: "{recipientName} အတွက် မွေးနေ့လက်ဆောင်",
         subheading:
-          "{recipientName}ရေ ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
+          "ဒါကတော့ {recipientName}အတွက် မွေးနေ့ကိတ်လေးပါ။ ကဲ မွေးနေ့ပွဲလေးစလိုက်ရအောင် ဖယောင်းတိုင်လေးတွေ မီးညှိလိုက်တော့နော်။",
         openPrompt: "လက်ဆောင်ကို ဖွင့်ရန် နှိပ်ပါ",
         contents: [
           { emoji: "💌", label: "စာ" },
@@ -453,17 +452,18 @@ export const copy = {
   chapters: {
     letter: {
       empty: "စာ မရှိသေးပါ",
-      open: "စာဖွင့်ရန်",
-      foldBack: "ပြန်ခေါက်ရန်",
-      justForYou: "မင်းအတွက်ပဲ",
+      open: "စာအိတ်ဖွင့်ဖတ်မယ်",
+      foldBack: "ပြန်ခေါက်မယ်",
+      justForYou: "{recipientName}အတွက်",
       envelopeAria: "စာဖတ်ရန် စာအိတ်ဖွင့်ရန်",
     },
     photos: {
-      chapterNumber: "အခန်း ၀၂",
-      title: "ကိုယ်တို့ရဲ့ အမှတ်တရလေးတွေ",
-      subtitle: "ဒါကတော့ ကိုယ်တို့နှစ်ယောက်ရဲ့ အမှတ်တရပုံလေးတွေ စုထားတဲ့ ဓာတ်ပုံအယ်လ်ဘမ်လေးပါ",
-      collectionOf: "စုစည်းမှု",
-      coverAccent: "တန်ဖိုးဖြတ်လို့မရတဲ့ အမှတ်တရလေးများ",
+      title: "{senderName}ရဲ့ အမှတ်တရလေးတွေ",
+      subtitle:
+        "ဒါကတော့ {senderName}နဲ့ {recipientName}တို့ရဲ့ အမှတ်တရပုံလေးတွေ စုထားတဲ့ ဓာတ်ပုံအယ်လ်ဘမ်လေးပါ",
+      coverEyebrow: "📸 A Collection Of",
+      coverTitle: "Our Memories",
+      coverAccent: "⭐ Moments Worth Remembering ⭐",
       desktopHint: "ဘေးဘက်များကို နှိပ်ပါ သို့မဟုတ် မြှားခလုတ်များ သုံးပါ",
       mobileHint: "လှန်ကြည့်ရန် ဘေးဘက်များကို ဆွဲပါ သို့မဟုတ် နှိပ်ပါ",
       previous: "ယခင်",
@@ -483,6 +483,7 @@ export const copy = {
     },
     poem: {
       empty: "ကဗျာ မရှိသေးပါ",
+      heading: "ဒါကတော့ {recipientName}အတွက် ကဗျာလေးပါ",
     },
     song: {
       eyebrow: "🎵 သီချင်း",
@@ -491,7 +492,7 @@ export const copy = {
         "လောလောဆယ် ရွေးထားတဲ့ သီချင်း မရှိသေးပါဘူး။ ဒါပေမယ့် နောက်မှာ တခြား surprise တွေ စောင့်နေပါတယ်နော်",
       heading: "{recipientName}နားထောင်ဖို့",
       nowPlaying: "ဖွင့်နေသည်",
-      fallbackTitle: "မင်းအတွက် ရွေးချယ်ထားတဲ့ သီချင်း",
+      fallbackTitle: "မင်းအတွက် သီချင်းလေး",
       playAria: "{title} ဖွင့်ရန်",
       tapToPlay: "▶️ ဖွင့်ရန် နှိပ်ပါ",
       pauseAria: "သီချင်း ရပ်ရန်",
@@ -508,34 +509,44 @@ export const copy = {
     },
     /** Screen 9 — Gift & Rewards chapter (largest group). Sender voice. */
     gift: {
-      intro: "ဒါက မင်းအတွက် အထူးလက်ဆောင်တစ်ခုပါ!",
-      mainGiftHeading: "🎁 မင်းအတွက် အထူးလက်ဆောင်",
-      hint: "အကြံပြုချက်",
+      intro: "Suprise!",
+      introSub:
+        "ဒါကတော့ {recipientName}အတွက် {senderName}ပေမယ့်လက်ဆောင်လေးပါ။ ဘာလဲသိချင်ရင် အောက်က passcode လေးကို မှန်အောင်ဖြေနော် 😜",
+      mainGiftHeading:
+        "{recipientName}အတွက်လက်ဆောင်လေးကတော့ဒါလေးပါ။ {recipientName}သဘောကျမယ်လို့ မျှော်လင့်ပါတယ်နော်",
+      hint: "အရိပ်အမြွက်",
       wrongPin: "PIN မှားနေတယ်! ထပ်စမ်းကြည့်ပါ 💔",
       answerIs: "အဖြေက",
       correct: "မှန်ပါတယ်!",
       unlocked: "ဖွင့်ပြီးပါပြီ!",
-      giftWaiting: "မင်းရဲ့လက်ဆောင် စောင့်နေတယ်…",
+      giftWaiting: "{recipientName}အတွက်လက်ဆောင်လေးကို ကြည့်လို့ရပါပြီ",
       wrongCode: "ကုဒ်မှားတယ်!",
       yes: "ဟုတ်ကဲ့! 😍",
       no: "မဟုတ်ဘူး...",
-      justForYou: "မင်းအတွက်ပဲ ✨",
+      justForYou: "{recipientName}အတွက်",
       opening: "ဖွင့်နေပြီ...",
+      dislike: "သဘောမကျဘူး",
+      like: "အရမ်းသဘောကျတယ်",
+      likeKidding: "စတာပါ သဘောကျတယ်နော်",
+      teaseReal: "တကယ်သဘောမကျဘူးလားဟင်🙁",
+      teaseDisappointed: "အဲ့တာဆို {senderName}ကတော့ စိတ်မကောင်းဖြစ်သွားပြီ🙁",
+      teaseKidding: "စနေတာ မလားဟင် 🥺၊",
+      teasePlease: "သဘောကျလိုက်ပေါနော် 🥺",
       letsPlay: "ကစားရအောင်!",
-      bonusRound: "ဘောနပ်စ်အဆင့်",
-      bonusHeading: "စောင့်ပါဦး၊ နောက်ထပ်ရှိသေးတယ်!",
-      bonusSubtitle: "နောက်ထပ်အံ့သြဖွယ်တွေ ဒီမှာပါ!",
+      bonusRound: "Bonus",
+      bonusHeading: "{recipientName}သဘောကျတမယ်ဆိုတာ သိပြီးသားပဲ ဟဲ",
+      bonusSubtitle: "ဒါတင်မကသေးဘူး၊ နောက်မှာ ဘောနပ်စ် ဂိမ်းလေးတွေရှိသေးတယ်နော် 😜",
       chancesOne: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",
       chancesMany: "ဆုရဖို့ အခွင့်အရေး {count} ခု ရှိတယ်!",
       allChancesUsed: "အခွင့်အရေးအားလုံး ပြီးပါပြီ — မင့်ဆုလက်ဆောင်တွေ စောင့်နေတယ်!",
-      spin: "လှည့်မည်",
+      spin: "လှည့်မယ်",
       spinning: "လှည့်နေသည်…",
-      spinBig: "လှည့်!",
+      spinBig: "လှည့်မယ်",
       noChancesLeft: "အခွင့်အရေး မကျန်တော့ဘူး",
       chanceLeftOne: "အခွင့်အရေး {count} ခု ကျန်တယ်",
       chanceLeftMany: "အခွင့်အရေး {count} ခု ကျန်တယ်",
-      youWon: "မင်းနိုင်တယ်!",
-      downloadProof: "အထောက်အထားလက်မှတ် ဒေါင်းလုဒ်လုပ်ရန်",
+      youWon: "ဒီဆုလေးရပါတယ်နော်",
+      downloadProof: "ဆုရရှိကြောင်း သက်သေ ဒေါင်းလုဒ်လုပ်ရန်",
       seeRewards: "ဆုတွေ ကြည့်မည်",
       downloadPng: "PNG ဒေါင်းလုဒ်လုပ်ရန်",
       serialPrefix: "အမှတ်",
@@ -562,7 +573,6 @@ export const copy = {
 
   modes: {
     finishArrow: "ပြီးဆုံး →",
-    chapter05: "အခန်း ၀၅",
     scroll: {
       title: "စာမျက်နှာ လျှောက်မုဒ်",
       description: "အခန်းအားလုံးကို ဆက်တိုက် လျှောက်ကြည့်နိုင်ပါတယ်။",
@@ -593,11 +603,12 @@ export const copy = {
     ],
     ticket: {
       prizeTicket: "ဆုလက်မှတ်",
-      proofOfReward: "WISHIRE · ဆုအထောက်အထား",
-      bonusPoints: "{points} ဘောနပ်စ်အမှတ်",
+      proofOfReward: "WISHIRE · ဆုရရှိကြောင်း သက်သေအထောက်အထား",
+      bonusPoints: "ဘောနပ်စ်အမှတ် {points}",
       serial: "အမှတ် {serial}",
-      wonOn: "{date} ရရှိခဲ့သည်",
-      claimFooter: "ဆုရယူဖို့ ဒီလက်မှတ်ကို မင်းရဲ့ wish ပေးပို့သူဆီ ပို့ပါ။",
+      wonOn: "{date} တွင် ရရှိခဲ့သည်",
+      claimFooter:
+        "ဆုရယူဖို့ ဒီလက်မှတ်ကို မင်းရဲ့ {sender} (မင်းကို ဒီ suprise link လေးပို့ပေးတဲ့သူ)ဆီ ပို့ပါ။",
       scanToVerify: "စစ်ဆေးရန် စကင်ဖတ်ပါ",
     },
   },

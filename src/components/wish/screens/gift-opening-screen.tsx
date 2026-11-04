@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-import { copy, giftOpeningOccasionCopy } from "@/config/copy";
+import { copy, giftOpeningOccasionCopy, interpolate } from "@/config/copy";
 
 interface GiftOpeningScreenProps {
   onNext: () => void;
@@ -14,7 +14,6 @@ interface GiftOpeningScreenProps {
   primaryColor?: string;
   secondaryColor?: string;
   backgroundColor?: string;
-  foregroundColor?: string;
 }
 
 /* ── Floating sparkle particle ─────────────────────────── */
@@ -62,7 +61,6 @@ export const GiftOpeningScreen = ({
   primaryColor = "#E91E63",
   secondaryColor = "#F48FB1",
   backgroundColor = "#FFF0F5",
-  foregroundColor = "#1A1A2E",
 }: GiftOpeningScreenProps) => {
   const [opening, setOpening] = useState(false);
   const hasConfetti = useRef(false);
@@ -199,7 +197,7 @@ export const GiftOpeningScreen = ({
           </div>
           {/* Frosted glass pill */}
           <div
-            className="mx-auto max-w-[200px] rounded-full px-5 py-2.5 backdrop-blur-md"
+            className="mx-auto max-w-[320px] rounded-2xl px-5 py-2.5 backdrop-blur-md sm:max-w-[380px]"
             style={{
               background: `linear-gradient(135deg, rgba(255,255,255,0.75), rgba(255,255,255,0.4))`,
               boxShadow: `0 4px 24px ${primaryColor}12, 0 1px 4px rgba(0,0,0,0.04)`,
@@ -207,7 +205,7 @@ export const GiftOpeningScreen = ({
             }}
           >
             <p
-              className="text-sm font-semibold tracking-wide"
+              className="text-sm font-semibold leading-relaxed tracking-wide"
               style={{
                 background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
                 backgroundClip: "text",
@@ -215,8 +213,8 @@ export const GiftOpeningScreen = ({
                 WebkitTextFillColor: "transparent",
               }}
             >
-              {senderName
-                ? `${senderName} has left you a gift`
+              {senderName && recipientName
+                ? interpolate(copy.giftOpening.boxIntro, { recipientName, senderName })
                 : copy.giftOpening.received}
             </p>
           </div>
@@ -227,7 +225,7 @@ export const GiftOpeningScreen = ({
           LAYER 2: Gift box (absolute center — NEVER moves)
           ══════════════════════════════════════════════════ */}
       <div
-        className="absolute inset-x-0 z-10"
+        className="absolute mt-14 inset-x-0 z-10"
         style={{ top: "42%", transform: "translateY(-50%)" }}
       >
         <div className="flex justify-center px-5">
@@ -634,7 +632,7 @@ export const GiftOpeningScreen = ({
       <AnimatePresence>
         {!opening && (
           <motion.div
-            className="absolute inset-x-0 z-20 flex flex-col items-center"
+            className="absolute mt-14 inset-x-0 z-20 flex flex-col items-center"
             style={{ top: "calc(var(--gift-box-top, 42%) + 100px)" }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -721,7 +719,7 @@ export const GiftOpeningScreen = ({
 
             {/* Main heading */}
             <p
-              className="text-xl font-bold tracking-wide sm:text-2xl"
+              className="text-xl  font-bold tracking-wide sm:text-2xl"
               style={{
                 fontFamily: "var(--wish-font-heading), Georgia, serif",
                 background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
@@ -730,31 +728,10 @@ export const GiftOpeningScreen = ({
                 WebkitTextFillColor: "transparent",
               }}
             >
-              {copy.giftOpening.giftsForYou}
+              {interpolate(copy.giftOpening.giftsForYou, {
+                recipientName: recipientName ?? "",
+              })}
             </p>
-
-            {/* Sender attribution */}
-            {senderName && (
-              <p
-                className="mt-2.5 text-sm italic"
-                style={{
-                  fontFamily: "var(--wish-font-heading), Georgia, serif",
-                  color: foregroundColor,
-                  opacity: 0.45,
-                }}
-              >
-                with love,{" "}
-                <span
-                  style={{
-                    color: primaryColor,
-                    fontWeight: 600,
-                    fontStyle: "normal",
-                  }}
-                >
-                  {senderName}
-                </span>
-              </p>
-            )}
 
             {/* Button */}
             <motion.button

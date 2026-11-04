@@ -16,7 +16,7 @@ interface TimelineChapterProps {
   entries: MemoryTimelineEntry[];
   primaryColor?: string;
   foregroundColor?: string;
-  /** e.g. "Chapter 04" — shown as the timeline eyebrow */
+  /** Eyebrow above the timeline title (defaults to the Burmese story label — no chapter numbers). */
   chapterLabel?: string;
 }
 

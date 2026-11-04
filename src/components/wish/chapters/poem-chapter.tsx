@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { copy } from "@/config/copy";
+import { copy, interpolate } from "@/config/copy";
 import type { PoemSelection } from "@/types/wish";
 
 interface PoemChapterProps {
     poem?: PoemSelection;
+    recipientName?: string;
     primaryColor?: string;
     foregroundColor?: string;
 }
@@ -22,6 +23,7 @@ interface PoemChapterProps {
  */
 export const PoemChapter = ({
     poem,
+    recipientName = "",
     primaryColor = "#E91E63",
     foregroundColor = "#1A1A2E",
 }: PoemChapterProps) => {
@@ -124,6 +126,23 @@ export const PoemChapter = ({
                     />
                 );
             })}
+
+            {/* Column: recipient heading + manuscript card */}
+            <div className="relative flex w-full max-w-xl flex-col items-center">
+            <motion.h2
+                className="relative mb-6 w-full text-center"
+                style={{
+                    fontFamily: "var(--font-padauk), Georgia, serif",
+                    fontSize: "clamp(1.1rem, 2.6vh, 1.5rem)",
+                    fontWeight: 600,
+                    color: foregroundColor,
+                }}
+                initial={reduceMotion ? false : { opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+                {interpolate(copy.chapters.poem.heading, { recipientName })}
+            </motion.h2>
 
             {/* Main manuscript card */}
             <motion.div
@@ -478,6 +497,7 @@ export const PoemChapter = ({
                     style={{ background: `${primaryColor}15` }}
                 />
             </motion.div>
+            </div>
         </div>
     );
 };

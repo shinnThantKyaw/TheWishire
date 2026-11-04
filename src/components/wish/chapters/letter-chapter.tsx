@@ -2,16 +2,18 @@
 
 import {useState, useCallback, useMemo, useRef, useEffect} from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { copy } from "@/config/copy";
+import { copy, interpolate } from "@/config/copy";
 
 interface LetterChapterProps {
   letter?: string;
+  recipientName?: string;
   primaryColor?: string;
   foregroundColor?: string;
 }
 
 export const LetterChapter = ({
                                 letter,
+                                recipientName = "",
                                 primaryColor = "#E91E63",
                                 foregroundColor = "#1A1A2E",
                               }: LetterChapterProps) => {
@@ -101,6 +103,7 @@ export const LetterChapter = ({
                   hasInteracted={hasInteracted}
                   letterLines={letterLines}
                   primaryColor={primaryColor}
+                  recipientName={recipientName}
                   uid={uid}
               />
 
@@ -497,10 +500,11 @@ interface LetterPaperProps {
     hasInteracted: boolean;
     letterLines: string[];
     primaryColor: string;
+    recipientName: string;
     uid: string;
 }
 
-const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primaryColor, uid }: LetterPaperProps) => {
+const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primaryColor, recipientName, uid }: LetterPaperProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -641,7 +645,7 @@ const LetterPaper = ({ isOpen, paperVisible, hasInteracted, letterLines, primary
                             fontStyle: "italic",
                         }}
                     >
-                        {copy.chapters.letter.justForYou}
+                        {interpolate(copy.chapters.letter.justForYou, { recipientName })}
                     </div>
                     <div className="mb-4 flex items-center justify-center gap-2">
                         <div className="h-px w-10" style={{ background: "#d6a5b5" }} />

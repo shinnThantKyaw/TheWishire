@@ -15,6 +15,8 @@ interface TicketOptions {
   item: { label: string; emoji: string; description: string };
   proof: SpinProof;
   primaryColor: string;
+  /** Creator's name — used in the claim footer ("the one who sent you this link"). */
+  senderName: string;
   wishSlug: string;
 }
 
@@ -68,6 +70,7 @@ export const downloadRewardTicketPng = async ({
   item,
   proof,
   primaryColor,
+  senderName,
   wishSlug,
 }: TicketOptions): Promise<void> => {
   const fonts = await resolveCanvasFonts();
@@ -165,7 +168,7 @@ export const downloadRewardTicketPng = async ({
   // Footer
   ctx.globalAlpha = 0.5;
   ctx.font = `12px ${fonts.padauk}, Georgia, serif`;
-  ctx.fillText(copy.rewards.ticket.claimFooter, 36, H - 36);
+  ctx.fillText(interpolate(copy.rewards.ticket.claimFooter, { sender: senderName }), 36, H - 36);
   ctx.globalAlpha = 1;
 
   // ── Perforation ────────────────────────────────────────

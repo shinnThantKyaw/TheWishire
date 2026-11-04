@@ -13,6 +13,8 @@ import { copy, interpolate } from "@/config/copy";
 interface PhotosChapterProps {
     photos: { id: string; url: string; type: "photo" }[];
     videoUrl?: string;
+    senderName?: string;
+    recipientName?: string;
     primaryColor?: string;
     foregroundColor?: string;
 }
@@ -33,6 +35,8 @@ const DESKTOP_PHOTO_MAX_HEIGHT = `min(calc(${ALBUM_HEIGHT} - clamp(0.8rem, 2vh, 
 export const PhotosChapter = ({
                                   photos,
                                   videoUrl,
+                                  senderName = "",
+                                  recipientName = "",
                                   primaryColor = "#E91E63",
                                   foregroundColor = "#1A1A2E",
                               }: PhotosChapterProps) => {
@@ -222,12 +226,6 @@ export const PhotosChapter = ({
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.7, ease: easeSettle }}
                 >
-          <span
-              className="mb-3 inline-block text-[10px] font-semibold uppercase tracking-[0.35em]"
-              style={{ color: primaryColor }}
-          >
-            {copy.chapters.photos.chapterNumber}
-          </span>
                     <h2
                         className="font-semibold"
                         style={{
@@ -236,13 +234,13 @@ export const PhotosChapter = ({
                             fontSize: "clamp(1.5rem, 3.5vh, 2.25rem)",
                         }}
                     >
-                        {copy.chapters.photos.title}
+                        {interpolate(copy.chapters.photos.title, { senderName })}
                     </h2>
                     <p
                         className="mx-auto mt-3 max-w-md text-sm leading-6"
                         style={{ color: foregroundColor, opacity: 0.56 }}
                     >
-                        {copy.chapters.photos.subtitle}
+                        {interpolate(copy.chapters.photos.subtitle, { senderName, recipientName })}
                     </p>
                 </motion.div>
             </div>
@@ -313,9 +311,12 @@ export const PhotosChapter = ({
                                 />
 
                                 <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-white">
-                  <span className="mb-3 text-[9px] uppercase tracking-[0.45em] opacity-75">
-                    {copy.chapters.photos.collectionOf}
-                  </span>
+                                    <span className="mb-2 text-lg leading-none" aria-hidden="true">
+                                        🎞️
+                                    </span>
+                                    <span className="mb-3 text-[9px] uppercase tracking-[0.45em] opacity-75">
+                                        {copy.chapters.photos.coverEyebrow}
+                                    </span>
                                     <h3
                                         className="text-center text-4xl italic leading-tight sm:text-5xl"
                                         style={{
@@ -323,15 +324,15 @@ export const PhotosChapter = ({
                                                 "var(--wish-font-heading), 'Playfair Display', Georgia, serif",
                                         }}
                                     >
-                                        {copy.chapters.photos.title}
+                                        {copy.chapters.photos.coverTitle}
                                     </h3>
                                     <div
                                         className="my-5 h-px w-14"
                                         style={{ background: "rgba(255,255,255,.5)" }}
                                     />
                                     <span className="text-[10px] tracking-[0.3em] opacity-85">
-                    {copy.chapters.photos.coverAccent}
-                  </span>
+                                        {copy.chapters.photos.coverAccent}
+                                    </span>
                                 </div>
 
                                 {photos[0] && (
@@ -637,7 +638,7 @@ export const PhotosChapter = ({
                   className="text-[9px] font-semibold uppercase tracking-[0.32em]"
                   style={{ color: foregroundColor, opacity: 0.42 }}
               >
-                {copy.chapters.photos.title}
+                {interpolate(copy.chapters.photos.title, { senderName })}
               </span>
                             <span
                                 className="mt-0.5 text-xs"

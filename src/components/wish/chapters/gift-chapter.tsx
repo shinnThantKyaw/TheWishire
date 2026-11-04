@@ -13,6 +13,8 @@ import { downloadRewardTicketPng } from "@/lib/reward-ticket";
 interface GiftChapterProps {
   giftSubScreen: GiftSubScreen;
   config?: GiftChapterConfig;
+  recipientName?: string;
+  senderName?: string;
   onNextSubScreen: () => void;
   primaryColor?: string;
   foregroundColor?: string;
@@ -25,6 +27,8 @@ interface GiftChapterProps {
 export const GiftChapter = ({
   giftSubScreen,
   config,
+  recipientName = "",
+  senderName = "",
   onNextSubScreen,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
@@ -72,6 +76,8 @@ export const GiftChapter = ({
           <GiftGate
             key="challenge"
             config={config}
+            recipientName={recipientName}
+            senderName={senderName}
             onComplete={onNextSubScreen}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
@@ -81,6 +87,8 @@ export const GiftChapter = ({
           <MainGiftReveal
             key="main-gift"
             config={config}
+            recipientName={recipientName}
+            senderName={senderName}
             onComplete={onNextSubScreen}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
@@ -90,6 +98,7 @@ export const GiftChapter = ({
           <BonusIntro
             key="bonus-intro"
             config={config}
+            recipientName={recipientName}
             onComplete={onNextSubScreen}
             attemptsLeft={initialRemaining}
             primaryColor={primaryColor}
@@ -100,6 +109,7 @@ export const GiftChapter = ({
           <MiniGame
             key="mini-game"
             config={config}
+            senderName={senderName}
             onComplete={onNextSubScreen}
             onWin={handleWin}
             initialRemaining={initialRemaining}
@@ -111,6 +121,7 @@ export const GiftChapter = ({
           <RewardResult
             key="reward-result"
             wonItems={wonItems}
+            senderName={senderName}
             onComplete={onNextSubScreen}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
@@ -125,11 +136,15 @@ export const GiftChapter = ({
 
 const GiftGate = ({
   config,
+  recipientName,
+  senderName,
   onComplete,
   primaryColor,
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
+  recipientName?: string;
+  senderName?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -149,7 +164,12 @@ const GiftGate = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
     >
-      <div className="mb-4 text-4xl">🎁</div>
+      <img
+        src="/Logo/Logo.png"
+        alt={copy.common.wishire}
+        className="mb-4 h-14 w-14 object-contain"
+        draggable={false}
+      />
       <h3
         className="mb-2 text-lg font-bold"
         style={{
@@ -159,12 +179,21 @@ const GiftGate = ({
       >
         {copy.chapters.gift.intro}
       </h3>
+      <p
+        className="mb-1 max-w-sm px-4 text-center text-sm leading-relaxed"
+        style={{ color: foregroundColor, opacity: 0.65 }}
+      >
+        {interpolate(copy.chapters.gift.introSub, {
+          recipientName: recipientName ?? "",
+          senderName: senderName ?? "",
+        })}
+      </p>
 
       {gate.type === "password" && (
         <PasswordGate answer={gate.answer} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
       {gate.type === "pin" && (
-        <PinGate pin={gate.pin} hint={gate.hint} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
+        <PinGate pin={gate.pin} hint={gate.hint} recipientName={recipientName} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
       {gate.type === "yes-no" && (
         <YesNoGate prompt={gate.prompt} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
@@ -192,12 +221,14 @@ const GiftGate = ({
 const PinGate = ({
   pin,
   hint,
+  recipientName,
   onComplete,
   primaryColor,
   foregroundColor,
 }: {
   pin: string;
   hint: string;
+  recipientName?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -377,6 +408,7 @@ const PinGate = ({
         {success && (
           <PinSuccessOverlay
             pin={pin}
+            recipientName={recipientName ?? ""}
             primaryColor={primaryColor}
             foregroundColor={foregroundColor}
             prefersReducedMotion={!!prefersReducedMotion}
@@ -391,11 +423,13 @@ const PinGate = ({
 
 const PinSuccessOverlay = ({
   pin,
+  recipientName,
   primaryColor,
   foregroundColor,
   prefersReducedMotion,
 }: {
   pin: string;
+  recipientName: string;
   primaryColor: string;
   foregroundColor: string;
   prefersReducedMotion: boolean;
@@ -852,7 +886,7 @@ const PinSuccessOverlay = ({
           transition={{ delay: 2.7, duration: 0.8 }}
         >
           <Gift className="h-3.5 w-3.5" style={{ color: primaryColor }} aria-hidden />
-          {copy.chapters.gift.giftWaiting}
+          {interpolate(copy.chapters.gift.giftWaiting, { recipientName })}
         </motion.p>
       </motion.div>
     </motion.div>
@@ -974,11 +1008,15 @@ const CONFETTI_COLORS = ["#E91E63", "#F48FB1", "#FF80AB", "#FFD54F", "#69F0AE", 
 
 const MainGiftReveal = ({
   config,
+  recipientName,
+  senderName,
   onComplete,
   primaryColor,
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
+  recipientName: string;
+  senderName: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -986,7 +1024,28 @@ const MainGiftReveal = ({
   const giftPhoto = config?.mainGiftPhotoIds?.[0] ?? "/Gift.jpg";
   const message = config?.mainGiftMessage;
   const [continuing, setContinuing] = useState(false);
+  // Playful "do you like it?" exchange — dislike button shrinks away,
+  // like button flips to its kidding label, tease lines appear one by one.
+  const [dislikeState, setDislikeState] = useState<"idle" | "shrinking" | "gone">("idle");
+  const [teaseCount, setTeaseCount] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+
+  const teaseLines = [
+    copy.chapters.gift.teaseReal,
+    interpolate(copy.chapters.gift.teaseDisappointed, { senderName }),
+    copy.chapters.gift.teaseKidding,
+    copy.chapters.gift.teasePlease,
+  ];
+
+  const handleDislike = () => {
+    if (dislikeState !== "idle") return;
+    setDislikeState("shrinking");
+    const step = prefersReducedMotion ? 0 : 650;
+    setTimeout(() => setDislikeState("gone"), prefersReducedMotion ? 0 : 950);
+    teaseLines.forEach((_, i) => {
+      setTimeout(() => setTeaseCount((c) => c + 1), (prefersReducedMotion ? 0 : 1100) + i * step);
+    });
+  };
 
   // Pre-compute celebration particles (stable across renders)
   const confettiWave1 = useMemo(
@@ -1196,7 +1255,7 @@ const MainGiftReveal = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        {copy.chapters.gift.mainGiftHeading}
+        {interpolate(copy.chapters.gift.mainGiftHeading, { recipientName })}
       </motion.h3>
 
       {/* Gift photo with decorative frame */}
@@ -1355,7 +1414,7 @@ const MainGiftReveal = ({
             boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          {copy.chapters.gift.justForYou}
+          {interpolate(copy.chapters.gift.justForYou, { recipientName })}
         </motion.div>
       </motion.div>
 
@@ -1372,23 +1431,71 @@ const MainGiftReveal = ({
         </motion.p>
       )}
 
-      {/* Continue button */}
-      <motion.button
-        onClick={handleContinue}
-        disabled={continuing}
-        className="rounded-full px-8 py-3 text-sm font-semibold text-white shadow-lg disabled:opacity-70"
-        style={{
-          background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
-          boxShadow: `0 6px 20px ${primaryColor}40`,
-        }}
-        initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-        whileHover={!prefersReducedMotion && !continuing ? { scale: 1.05, boxShadow: `0 8px 28px ${primaryColor}50` } : {}}
-        whileTap={!prefersReducedMotion && !continuing ? { scale: 0.95 } : {}}
-      >
-        {continuing ? copy.chapters.gift.opening : copy.common.continueArrow}
-      </motion.button>
+      {/* Tease lines — appear one by one after the dislike button vanishes */}
+      <div className="mt-5 flex min-h-[6.5rem] w-full max-w-xs flex-col items-center justify-start gap-2">
+        {teaseLines.slice(0, teaseCount).map((line, i) => (
+          <motion.p
+            key={i}
+            className="text-center text-sm leading-relaxed"
+            style={{ color: foregroundColor }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 0.75, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {line}
+          </motion.p>
+        ))}
+      </div>
+
+      {/* Playful response buttons */}
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+        {dislikeState !== "gone" && (
+          <motion.button
+            onClick={handleDislike}
+            className="rounded-full border px-6 py-3 text-sm font-medium"
+            style={{
+              borderColor: `${foregroundColor}25`,
+              color: foregroundColor,
+              background: `${foregroundColor}08`,
+            }}
+            animate={
+              dislikeState === "shrinking"
+                ? { scale: [1, 0.7, 0.4, 0], opacity: [1, 1, 0.5, 0] }
+                : { scale: 1, opacity: 1 }
+            }
+            transition={
+              dislikeState === "shrinking"
+                ? { duration: 0.9, ease: "easeIn" }
+                : { duration: 0.3 }
+            }
+            whileHover={dislikeState === "idle" && !prefersReducedMotion ? { scale: 1.05 } : {}}
+            whileTap={dislikeState === "idle" && !prefersReducedMotion ? { scale: 0.95 } : {}}
+          >
+            {copy.chapters.gift.dislike}
+          </motion.button>
+        )}
+
+        <motion.button
+          onClick={handleContinue}
+          disabled={continuing}
+          className="rounded-full px-8 py-3 text-sm font-semibold text-white shadow-lg disabled:opacity-70"
+          style={{
+            background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)`,
+            boxShadow: `0 6px 20px ${primaryColor}40`,
+          }}
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          whileHover={!prefersReducedMotion && !continuing ? { scale: 1.05, boxShadow: `0 8px 28px ${primaryColor}50` } : {}}
+          whileTap={!prefersReducedMotion && !continuing ? { scale: 0.95 } : {}}
+        >
+          {continuing
+            ? copy.chapters.gift.opening
+            : dislikeState === "idle"
+              ? copy.chapters.gift.like
+              : copy.chapters.gift.likeKidding}
+        </motion.button>
+      </div>
     </motion.div>
   );
 };
@@ -1397,12 +1504,14 @@ const MainGiftReveal = ({
 
 const BonusIntro = ({
   config,
+  recipientName,
   onComplete,
   attemptsLeft,
   primaryColor,
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
+  recipientName?: string;
   onComplete: () => void;
   /** Server-restored attempts left — keeps this screen honest vs the wheel. */
   attemptsLeft?: number;
@@ -1573,7 +1682,9 @@ const BonusIntro = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
         >
-          {copy.chapters.gift.bonusHeading}
+          {interpolate(copy.chapters.gift.bonusHeading, {
+            recipientName: recipientName ?? "",
+          })}
         </motion.h3>
 
         {/* Subtitle */}
@@ -1586,6 +1697,7 @@ const BonusIntro = ({
         >
           {copy.chapters.gift.bonusSubtitle}
         </motion.p>
+
 
         {/* Attempts chip — glass pill with clover */}
         <motion.div
@@ -1649,6 +1761,7 @@ const serverErrorCopy = (error?: string): string =>
 
 const MiniGame = ({
   config,
+  senderName,
   onComplete,
   onWin,
   initialRemaining,
@@ -1656,6 +1769,7 @@ const MiniGame = ({
   foregroundColor,
 }: {
   config?: GiftChapterConfig;
+  senderName?: string;
   onComplete: () => void;
   onWin: (won: WonReward) => void;
   /** Server-restored attempts left (from GET /api/w/[slug]/rewards). */
@@ -1944,23 +2058,9 @@ const MiniGame = ({
                 key={i}
                 transform={`translate(${seg.labelX}, ${seg.labelY}) rotate(${seg.labelRotation})`}
               >
+                {/* Label sits ABOVE the emoji icon */}
                 <text
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="white"
-                  fontSize="14"
-                  fontWeight="bold"
-                  style={{
-                    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                    paintOrder: "stroke",
-                    stroke: "rgba(0,0,0,0.3)",
-                    strokeWidth: "3px",
-                  }}
-                >
-                  {seg.item.emoji}
-                </text>
-                <text
-                  y="18"
+                  y="-6"
                   textAnchor="middle"
                   dominantBaseline="middle"
                   fill="white"
@@ -1977,26 +2077,47 @@ const MiniGame = ({
                     ? `${seg.item.label.slice(0, 7)}…`
                     : seg.item.label}
                 </text>
+                <text
+                  y="12"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="white"
+                  fontSize="14"
+                  fontWeight="bold"
+                  style={{
+                    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+                    paintOrder: "stroke",
+                    stroke: "rgba(0,0,0,0.3)",
+                    strokeWidth: "3px",
+                  }}
+                >
+                  {seg.item.emoji}
+                </text>
               </g>
             ))}
           </motion.svg>
 
-          {/* Center hub — pink chrome, Sparkles mark */}
-          <div
-            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full sm:h-20 sm:w-20"
+          {/* Center hub — pink chrome, Sparkles mark. Clickable = spin. */}
+          <motion.button
+            type="button"
+            onClick={spin}
+            disabled={spinning || remaining <= 0}
+            aria-label={copy.chapters.gift.spin}
+            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-4 border-white/85 disabled:cursor-default disabled:opacity-60 sm:h-20 sm:w-20"
             style={{
               background: `radial-gradient(circle at 30% 30%, #FFFFFF, ${primaryColor}dd, ${primaryColor}99)`,
               boxShadow: `0 4px 16px ${primaryColor}60, inset 0 -4px 8px rgba(0,0,0,0.2), inset 0 4px 8px rgba(255,255,255,0.3)`,
-              border: "4px solid rgba(255,255,255,0.85)",
             }}
+            whileHover={spinning || remaining <= 0 ? {} : { scale: 1.06 }}
+            whileTap={spinning || remaining <= 0 ? {} : { scale: 0.94 }}
           >
-            <div className="flex flex-col items-center">
+            <span className="flex flex-col items-center">
               <Sparkles className="h-5 w-5 text-white sm:h-6 sm:w-6" aria-hidden />
-              <div className="text-[8px] font-bold uppercase tracking-wide text-white/90 sm:text-[9px]">
+              <span className="text-[8px] font-bold uppercase tracking-wide text-white/90 sm:text-[9px]">
                 {copy.chapters.gift.spin}
-              </div>
-            </div>
-          </div>
+              </span>
+            </span>
+          </motion.button>
         </div>
 
         {/* Pointer at top — teardrop in theme pink; gentle tick while wheel spins */}
@@ -2149,6 +2270,7 @@ const MiniGame = ({
                     item: winner.item,
                     proof: winner.proof,
                     primaryColor,
+                    senderName: senderName ?? "",
                     wishSlug: window.location.pathname.split("/")[2] ?? "",
                   })
                 }
@@ -2213,10 +2335,12 @@ const PAPER_COLORS = {
 const PrizeTicket = ({
   won,
   index,
+  senderName,
   primaryColor,
 }: {
   won: WonReward;
   index: number;
+  senderName?: string;
   primaryColor: string;
 }) => {
   const { item, proof } = won;
@@ -2296,6 +2420,7 @@ const PrizeTicket = ({
                   item,
                   proof,
                   primaryColor,
+                  senderName: senderName ?? "",
                   wishSlug: window.location.pathname.split("/")[2] ?? "",
                 })
               }
@@ -2381,11 +2506,13 @@ const PrizeTicket = ({
 
 const RewardResult = ({
   wonItems,
+  senderName,
   onComplete,
   primaryColor,
   foregroundColor,
 }: {
   wonItems: WonReward[];
+  senderName?: string;
   onComplete: () => void;
   primaryColor: string;
   foregroundColor: string;
@@ -2436,6 +2563,7 @@ const RewardResult = ({
             key={`${won.proof.verifyToken}-${i}`}
             won={won}
             index={i}
+            senderName={senderName}
             primaryColor={primaryColor}
           />
         ))}

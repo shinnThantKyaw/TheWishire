@@ -7,7 +7,6 @@ import type { StartAction } from "@/types/experience";
 
 interface StartScreenProps {
   recipientName: string;
-  senderName: string;
   startAction: StartAction;
   onNext: () => void;
   onBack: () => void;
@@ -23,7 +22,6 @@ interface StartScreenProps {
  */
 export const StartScreen = ({
   recipientName,
-  senderName,
   startAction,
   onNext,
   onBack,
@@ -109,9 +107,6 @@ export const StartScreen = ({
             >
               {/* Greeting */}
               <h1 className="text-2xl font-bold leading-tight sm:text-3xl">
-                <span style={{ color: foregroundColor, opacity: 0.45, fontWeight: 400 }}>
-                  {copy.start.hey}{" "}
-                </span>
                 <span
                   style={{
                     background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
@@ -120,7 +115,7 @@ export const StartScreen = ({
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  {recipientName}!
+                  {interpolate(copy.start.hey, { recipientName })}
                 </span>
               </h1>
 
@@ -143,10 +138,7 @@ export const StartScreen = ({
 
               {/* Sender message */}
               <p className="text-sm leading-relaxed opacity-70">
-                <span className="font-semibold" style={{ color: primaryColor }}>
-                  {senderName}
-                </span>
-                {interpolate(copy.start.birthdayGreeting, { senderName: "" })}
+                {interpolate(copy.start.birthdayGreeting, { recipientName })}
               </p>
             </div>
           </div>

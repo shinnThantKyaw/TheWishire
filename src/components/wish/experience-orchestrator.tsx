@@ -143,7 +143,6 @@ export const ExperienceOrchestrator = ({
         return (
           <StartScreen
             recipientName={recipientName}
-            senderName={senderName}
             startAction={resolvedStartAction}
             onNext={actions.next}
             onBack={actions.back}
@@ -165,7 +164,6 @@ export const ExperienceOrchestrator = ({
             primaryColor={theme.colors.primary}
             secondaryColor={theme.colors.secondary}
             backgroundColor={theme.colors.background}
-            foregroundColor={theme.colors.foreground}
           />
         );
 
@@ -180,6 +178,8 @@ export const ExperienceOrchestrator = ({
                 giftSubScreen={state.giftSubScreen}
                 stages={stages}
                 giftConfig={giftConfig}
+                recipientName={recipientName}
+                senderName={senderName}
                 primaryColor={primaryColor}
                 onNext={actions.next}
                 onBack={actions.back}

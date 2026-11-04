@@ -17,7 +17,7 @@ You've always been the person everyone turns to when things get tough. Your kind
 
 Here's to 25 more years of laughter, adventure, and memories together.
 
-With all my love,
+ချစ်ခြင်းမေတ္တာဖြင့်
 Alex ❤️`,
   poem: {
     id: "birthday-wish-1",
@@ -84,7 +84,8 @@ export const SHARED_SETTINGS_BASE: SeedSettingsBase = {
       pin: "1609",
       hint: "our anniversary date",
     },
-    mainGiftMessage: "This is just the beginning of forever. I love you more than words can say. 💝",
+    // mainGiftMessage intentionally unset — demo shows the gift photo only
+    // (creator can add a personal note per wish; Wave 4)
     mainGiftPhotoIds: ["/Gift.jpg"],
     // Bonus prize wheel — spins are server-authoritative; every win is
     // persisted as a verifiable proof ticket (GIFT-03)
