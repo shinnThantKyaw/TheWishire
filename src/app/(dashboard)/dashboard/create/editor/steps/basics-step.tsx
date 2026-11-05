@@ -165,7 +165,7 @@ export const BasicsStep = ({
 
       <div className="space-y-2">
         <Label htmlFor="recipient-birthdate">
-          Recipient&apos;s birth date <span className="text-muted-foreground">(powers the facts chapter)</span>
+          Recipient&apos;s birth date
         </Label>
         <Input
           id="recipient-birthdate"

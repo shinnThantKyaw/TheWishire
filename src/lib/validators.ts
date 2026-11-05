@@ -204,6 +204,9 @@ export const GiftChapterConfigSchema = z.object({
 export const WishSettingsSchema = z.object({
   intensity: z.enum(["subtle", "celebration"]),
   flowMode: FlowModeSchema,
+  gateType: z.enum(["padlock", "ribbon", "wax-seal", "chain"]).optional(),
+  startAction: StartActionSchema.optional(),
+  boxOpenMethod: z.enum(["tap", "ribbon-cut", "shake"]).optional(),
   giftChapter: GiftChapterConfigSchema.optional(),
   enableGiftBox: z.boolean(),
   enableCake: z.boolean(),

@@ -176,6 +176,17 @@ export const WishEditor = ({ id }: { id: string }) => {
     setStepValid(valid);
   }, []);
 
+  const refreshWish = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/wishes/${id}`);
+      if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
+      const data = (await res.json()) as { wish: WishRow };
+      setWish(data.wish);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id]);
+
   // ── Render ────────────────────────────────────────────
   if (loadError) {
     return (
@@ -204,6 +215,7 @@ export const WishEditor = ({ id }: { id: string }) => {
     updateBasics,
     updateConfig,
     onValidityChange,
+    refreshWish,
   };
 
   const renderStep = () => {

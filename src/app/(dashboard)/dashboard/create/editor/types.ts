@@ -2,6 +2,15 @@ import type { WishConfig } from "@/types/wish";
 import type { CreateWishInput } from "@/lib/validators";
 import type { WishConfigPatch } from "@/lib/wish-config";
 
+export interface MediaRow {
+  id: string;
+  type: string;
+  url: string;
+  filename: string | null;
+  sizeBytes: number | null;
+  sortOrder: number;
+}
+
 /** Wish row shape returned by /api/wishes/[id]. */
 export interface WishRow {
   id: string;
@@ -17,6 +26,7 @@ export interface WishRow {
   publishedAt: Date | string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
+  media?: MediaRow[];
 }
 
 export type StepId =
@@ -56,4 +66,6 @@ export interface StepProps {
   updateConfig: (patch: WishConfigPatch) => void;
   /** Steps gate the Next button (empty required fields, bad URLs, …). */
   onValidityChange: (valid: boolean) => void;
+  /** Re-fetch the wish row (media uploads/deletes change it server-side). */
+  refreshWish: () => void;
 }
