@@ -50,15 +50,17 @@
 
 ## Wave 2 — Missing gift challenges
 
-**SKIPPED 2026-11-05** (deferred until after Wave 3 — user decision; 4.9 still depends on it).
+**DONE 2026-11-05** (skipped earlier same day, executed after Wave 3).
 
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
-| 2.1 | Multiple choice challenge: UI component + config type + Zod validator | 3–4h | 1.2 | Reuse gift-challenge gate pattern |
-| 2.2 | Server-side answer validation API for multiple choice | 1h | 2.1 | Don't trust client |
-| 2.3 | Heart catch game: canvas/touch game component (catch N hearts in T seconds) | 4–6h | 1.2 | Mobile-first; reuse spin-wheel attempt logic |
-| 2.4 | Heart catch server validation + difficulty config | 1h | 2.3 | |
-| 2.5 | Wire both into gift-chapter challenge selector + template schema | 1–2h | 2.1–2.4 | `challengeType` union grows |
+| ~~2.1~~ | **DONE:** `GiftChallengeConfig` union (pin/multiple-choice/heart-catch) in types/wish.ts + `GiftChallengeConfigSchema` Zod discriminated union; `MultipleChoiceGate` component | done | 1.2 | |
+| ~~2.2~~ | **DONE:** `POST /api/w/[slug]/challenge` — server compares answerIndex against DB config; client never receives correctIndex | done | 2.1 | 11 route tests |
+| ~~2.3~~ | **DONE:** `HeartCatchGame` — falling hearts, tap to catch, N in T seconds, mobile-first (56px targets) | done | 1.2 | DOM/motion, not canvas |
+| ~~2.4~~ | **DONE:** same route validates caught≥N + 1s≤elapsed≤T+500ms grace; difficulty from config (`heartsToCatch`/`timeLimitSeconds`/`spawnIntervalMs`) | done | 2.3 | |
+| ~~2.5~~ | **DONE:** GiftGate renders `config.challenge` (legacy gateAction = fallback); seed: demo-scroll=MC, demo-pages=heart-catch, sarah/interactive=legacy PIN. Builder selector UI → Wave 4.9 | done | 2.1–2.4 | 54/54 tests |
+
+**Visual check:** `/w/demo-scroll` (MC wrong-shake → correct opens gift), `/w/demo-pages` (heart game → server validate → gift), `/w/happy-birthday-sarah` (PIN 1609 unchanged).
 
 **Wave 2 total: ~10–14h**
 
