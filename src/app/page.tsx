@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Gift, Sparkles, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { StartCreatingButton } from "@/components/start-creating-button";
 
 export default function Home() {
   return (
@@ -24,10 +25,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" render={<Link href="/login" />}>
-            <Sparkles className="mr-2 h-4 w-4" />
-            Start Creating
-          </Button>
+          <StartCreatingButton />
           <Button size="lg" variant="outline" render={<Link href="/dashboard" />}>
             Go to Dashboard
           </Button>
