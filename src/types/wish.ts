@@ -130,10 +130,37 @@ export interface WishSettings {
   materialTheme?: MaterialTheme;
 }
 
+/**
+ * The gift-challenge gate (Wave 2). When present it takes precedence over
+ * the legacy `gateAction` pin/password flow; when absent the legacy path runs.
+ * The correct multiple-choice answer never reaches the client — it is
+ * validated server-side by POST /api/w/[slug]/challenge.
+ */
+export type GiftChallengeConfig =
+  | { type: "pin"; pin: string; hint: string }
+  | {
+      type: "multiple-choice";
+      question: string;
+      /** 2-4 answer options; correct one identified only server-side. */
+      options: string[];
+      correctIndex: number;
+    }
+  | {
+      type: "heart-catch";
+      /** Hearts the recipient must catch (N). */
+      heartsToCatch: number;
+      /** Time limit in seconds (T). */
+      timeLimitSeconds: number;
+      /** Milliseconds between heart spawns — lower = harder. */
+      spawnIntervalMs?: number;
+    };
+
 /** Configuration for the Gift & Rewards chapter (Screen 10). */
 export interface GiftChapterConfig {
   /** The pre-reveal gate challenge. */
   gateAction?: StartAction;
+  /** Wave 2 challenge gate; overrides gateAction when present. */
+  challenge?: GiftChallengeConfig;
   /** Main gift message from the creator. */
   mainGiftMessage?: string;
   /** Photos of the physical gift (URLs from WishMedia). */

@@ -167,9 +167,31 @@ export const MiniGameConfigSchema = z.object({
   ),
 });
 
+/** Gift-challenge gate (GiftChallengeConfig in src/types/wish.ts). */
+export const GiftChallengeConfigSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("pin"),
+    pin: z.string().min(1),
+    hint: z.string(),
+  }),
+  z.object({
+    type: z.literal("multiple-choice"),
+    question: z.string().min(1),
+    options: z.array(z.string().min(1)).min(2).max(4),
+    correctIndex: z.number().int().min(0).max(3),
+  }),
+  z.object({
+    type: z.literal("heart-catch"),
+    heartsToCatch: z.number().int().min(1).max(50),
+    timeLimitSeconds: z.number().int().min(3).max(120),
+    spawnIntervalMs: z.number().int().min(200).max(5000).optional(),
+  }),
+]);
+
 /** Gift & rewards chapter config (GiftChapterConfig in src/types/wish.ts). */
 export const GiftChapterConfigSchema = z.object({
   gateAction: StartActionSchema.optional(),
+  challenge: GiftChallengeConfigSchema.optional(),
   mainGiftMessage: z.string().optional(),
   mainGiftPhotoIds: z.array(z.string()).optional(),
   miniGame: MiniGameConfigSchema.optional(),

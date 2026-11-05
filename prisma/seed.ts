@@ -39,7 +39,7 @@ async function main() {
   for (const wishDef of TEST_WISHES) {
     // WishConfig is a plain interface; Prisma's InputJsonValue needs an index
     // signature only object literals get, so cast at the persistence boundary.
-    const config = buildWishConfig(wishDef.flowMode) as unknown as Prisma.InputJsonValue;
+    const config = buildWishConfig(wishDef.flowMode, wishDef.challenge) as unknown as Prisma.InputJsonValue;
 
     const wish = await prisma.wish.upsert({
       where: { slug: wishDef.slug },

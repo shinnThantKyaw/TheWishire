@@ -594,6 +594,24 @@ export const copy = {
     skipToClosing: "တိုက်ရိုက် ဇာတ်သိမ်းသို့ →",
   },
 
+  /** Wave 2 — gift challenge gates (server-validated). */
+  challenges: {
+    networkError: "အင်တာနက် မအောင်မြင်ပါ — ထပ်ကြိုးစားပါ",
+    checking: "စစ်ဆေးနေပါတယ်…",
+    multipleChoice: {
+      wrong: "မမှန်ပါဘူး 😅 ထပ်ကြိုးစားကြည့်ပါ",
+      correct: "မှန်ပါတယ်! 🎉",
+    },
+    heartCatch: {
+      intro: "{hearts}လုံးကို {seconds} စက္ကန်းအတွင်း ဖမ်းယူပါ",
+      start: "စတင်မယ်",
+      progress: "ဖမ်းမိပြီ: {caught}/{hearts}",
+      timeLeft: "ကျန်ချိန်: {seconds} စက္ကန်း",
+      timeUp: "အချိန်ကုန်ပါပြီ! ထပ်ကြိုးစားကြည့်ပါ",
+      success: "အောင်မြင်ပါတယ်! 🎉",
+    },
+  },
+
   /**
    * GIFT-03 — default prize pool. Labels/descriptions are the single source
    * for rewards-shared.ts (server) — probabilities live in rewards-shared.

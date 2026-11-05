@@ -1,5 +1,5 @@
 import type { FlowMode } from "@/types/experience";
-import type { WishConfig, WishSettings } from "@/types/wish";
+import type { GiftChallengeConfig, WishConfig, WishSettings } from "@/types/wish";
 
 /**
  * Shared seed data — pure values, no Prisma import, so tests can validate
@@ -130,35 +130,54 @@ export const TEST_WISHES: Array<{
   title: string;
   flowMode: FlowMode;
   label: string;
+  /** Wave 2 challenge gate override; omitted wishes keep the legacy PIN gate. */
+  challenge?: GiftChallengeConfig;
 }> = [
   {
     slug: "happy-birthday-sarah",
     title: "Happy Birthday, ဂျူလီယာ!",
     flowMode: "scroll",
     label: "Scroll layout (original)",
+    // No challenge — legacy gateAction PIN 1609 flow stays documented
   },
   {
     slug: "demo-scroll",
     title: "Demo — Scroll Layout",
     flowMode: "scroll",
     label: "Scroll layout (demo)",
+    challenge: {
+      type: "multiple-choice",
+      question: "ကျွန်တော်တို့ တွေ့ခဲ့တဲ့နေ့က ဘယ်နှစ်လလဲ?",
+      options: ["မတ်လ", "စက်တင်ဘာလ", "ဒီဇင်ဘာလ"],
+      correctIndex: 1,
+    },
   },
   {
     slug: "demo-pages",
     title: "Demo — Pages Layout",
     flowMode: "buttons",
     label: "Pages layout (button navigation)",
+    challenge: {
+      type: "heart-catch",
+      heartsToCatch: 8,
+      timeLimitSeconds: 15,
+      spawnIntervalMs: 900,
+    },
   },
   {
     slug: "demo-interactive",
     title: "Demo — Interactive Layout",
     flowMode: "tap-to-reveal",
     label: "Interactive layout (tap-to-reveal)",
+    // No challenge — legacy gateAction path
   },
 ];
 
 /** Build the full WishConfig the seed persists for one flow mode. */
-export const buildWishConfig = (flowMode: FlowMode): WishConfig => ({
+export const buildWishConfig = (
+  flowMode: FlowMode,
+  challenge?: GiftChallengeConfig,
+): WishConfig => ({
   stages: SHARED_STAGES,
   content: SHARED_CONTENT,
   // Casual names for sender-voice copy slots; DB columns hold the full names
@@ -168,5 +187,10 @@ export const buildWishConfig = (flowMode: FlowMode): WishConfig => ({
     ...SHARED_SETTINGS_BASE,
     intensity: "celebration",
     flowMode,
+    giftChapter: {
+      ...SHARED_SETTINGS_BASE.giftChapter,
+      // Wave 2 challenge overrides the legacy gate when present
+      ...(challenge ? { challenge } : {}),
+    },
   },
 });

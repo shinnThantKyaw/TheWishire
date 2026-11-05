@@ -9,6 +9,8 @@ import type { GiftSubScreen, SpinProof, WonReward } from "@/types/experience";
 import type { GiftChapterConfig } from "@/types/wish";
 import { DEFAULT_ATTEMPTS, DEFAULT_MINI_GAME_ITEMS } from "@/lib/rewards-shared";
 import { downloadRewardTicketPng } from "@/lib/reward-ticket";
+import { MultipleChoiceGate } from "../challenges/multiple-choice-gate";
+import { HeartCatchGame } from "../challenges/heart-catch-game";
 
 interface GiftChapterProps {
   giftSubScreen: GiftSubScreen;
@@ -204,16 +206,49 @@ const GiftGate = ({
         })}
       </p>
 
-      {gate.type === "password" && (
+      {/* Wave 2 challenge gate — takes precedence over legacy gateAction */}
+      {config?.challenge?.type === "multiple-choice" && (
+        <MultipleChoiceGate
+          question={config.challenge.question}
+          options={config.challenge.options}
+          onComplete={handleComplete}
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
+      )}
+      {config?.challenge?.type === "heart-catch" && (
+        <HeartCatchGame
+          heartsToCatch={config.challenge.heartsToCatch}
+          timeLimitSeconds={config.challenge.timeLimitSeconds}
+          spawnIntervalMs={config.challenge.spawnIntervalMs}
+          onComplete={handleComplete}
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
+      )}
+      {config?.challenge?.type === "pin" && (
+        <PinGate
+          pin={config.challenge.pin}
+          hint={config.challenge.hint}
+          recipientName={recipientName}
+          recipientNickname={recipientNickname}
+          onComplete={handleComplete}
+          primaryColor={primaryColor}
+          foregroundColor={foregroundColor}
+        />
+      )}
+
+      {/* Legacy gate (no Wave 2 challenge configured) */}
+      {!config?.challenge && gate.type === "password" && (
         <PasswordGate answer={gate.answer} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
-      {gate.type === "pin" && (
+      {!config?.challenge && gate.type === "pin" && (
         <PinGate pin={gate.pin} hint={gate.hint} recipientName={recipientName} recipientNickname={recipientNickname} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
-      {gate.type === "yes-no" && (
+      {!config?.challenge && gate.type === "yes-no" && (
         <YesNoGate prompt={gate.prompt} onComplete={handleComplete} primaryColor={primaryColor} foregroundColor={foregroundColor} />
       )}
-      {gate.type === "tap" && (
+      {!config?.challenge && gate.type === "tap" && (
         <motion.button
           onClick={handleComplete}
           className="mt-4 rounded-full px-8 py-3 text-sm font-semibold text-white shadow-lg"
