@@ -85,22 +85,24 @@
 
 ## Wave 4 — Creator flow
 
+**CODE DONE 2026-11-05 (4.1–4.13); 4.14 awaiting user visual pass.**
+
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
-| 4.1 | Auth: Supabase magic link OR secret edit-token on wish row (per 0.1) | 2–5h | 0.1 | Magic link = higher end |
-| 4.2 | Wish CRUD API routes + Zod + ownership check | 3–4h | 4.1 | |
-| 4.3 | Create flow shell: multi-step form skeleton + progress + resume draft | 2–3h | 4.2 | React Hook Form + Zod per CLAUDE.md |
-| 4.4 | Step: basics — occasion, template, recipient/sender names, dates | 2–3h | 4.3 | |
-| 4.5 | Step: letter + poem + facts (all dynamic text fields from 1.1) | 2–3h | 4.4 | |
-| 4.6 | Step: media upload UI → Supabase Storage (photos, video, gift photos) | 4–5h | 4.4 | Client upload + progress + delete; 5MB bucket limit per file |
-| 4.7 | Step: song chapter — YouTube URL input + validation + thumbnail preview | 1–2h | 4.4 | |
-| 4.8 | Step: timeline entries editor (add/remove/reorder) | 2–3h | 4.5 | |
-| 4.9 | Step: gift chapter config — challenge type (all 3), main gift, bonus rewards, spin wheel items/attempts | 3–4h | 2.5, 4.5 | Depends on Wave 2 |
-| 4.10 | Step: experience settings — gate type, start action, flow mode, decorations, music | 2–3h | 4.3 | Depends on 0.2 for labels |
-| 4.11 | Preview mode: draft wish renders at `/w/[slug]?preview=1` without publish | 2–3h | 4.2 | |
-| 4.12 | Publish: slug generation, status flip, share page (link + QR) | 2–3h | 4.6–4.10 | QR lib already in deps |
-| 4.13 | Edit-after-publish + dashboard wish list (status, views, edit, delete) | 3–4h | 4.12 | |
-| 4.14 | Creator flow visual polish + small-laptop pass | 1.5–2h | all | 1366×768 rule |
+| ~~4.1~~ | **DONE:** Model C — `proxy.ts` session refresh, `ensureUser`/`ensureUserRow`, anonymous Start button, magic-link login/signup, ClaimBanner (safeguards 4+5) | done | 0.1 | Requires **Anonymous provider enabled** in Supabase dashboard |
+| ~~4.2~~ | **DONE:** `/api/wishes` CRUD, owner-only (404 for non-owners), `UpdateWishSchema`, in-memory rate limits (10 creates/hour) | done | 4.1 | |
+| ~~4.3~~ | **DONE:** `/dashboard/create` → immediate draft →8-step editor shell, chips nav, debounced autosave, template-seeded defaults. (Plain controlled state instead of RHF — fewer moving parts; resume = dashboard Edit reopens draft) | done | 4.2 | |
+| ~~4.4~~ | **DONE:** Basics — title/occasion/template/names/nicknames + birthdate (`content.birthdate`) | done | 4.3 | |
+| ~~4.5~~ | **DONE:** Story — letter (counter) + optional poem. Note: facts chapter still static copy — birthdate not consumed yet (backlog) | done | 4.4 | |
+| ~~4.6~~ | **DONE:** Media — supabase upload + WishMedia rows, 5MB/10 photos/1 video both sides, bucket-URL allowlist, delete w/ storage cleanup | done | 4.4 | |
+| ~~4.7~~ | **DONE:** Song — `extractYouTubeId` (watch/youtu.be/shorts/embed/bare) + thumbnail preview | done | 4.4 | |
+| ~~4.8~~ | **DONE:** Timeline — add/remove/reorder, date+title validity | done | 4.5 | |
+| ~~4.9~~ | **DONE:** Gift — challenge selector (all 3 types), main gift message/photos, spin-wheel attempts + weighted prizes | done | 2.5 | |
+| ~~4.10~~ | **DONE:** Experience — flow mode/gate/start action/decorations/music; Zod now includes gateType/startAction/boxOpenMethod | done | 4.3 | |
+| ~~4.11~~ | **DONE:** `/w/[slug]?preview=1` owner-only draft render, amber banner + noindex | done | 4.2 | |
+| ~~4.12~~ | **DONE:** slug at draft creation, `POST …/publish` full-validation gate, share card (link + QR + copy), unpublish | done | 4.6–4.10 | |
+| ~~4.13~~ | **DONE:** dashboard wish list (chips, edit/preview/copy/delete), edit-after-publish works via same editor | done | 4.12 | |
+| 4.14 | Creator flow visual polish + small-laptop pass | 1.5–2h | all | Code audit done (breakpoints/truncate/dark tokens); **user visual pass pending** |
 
 **Wave 4 total: ~30–43h**
 
