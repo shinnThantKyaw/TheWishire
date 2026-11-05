@@ -244,6 +244,17 @@ export const CreateWishSchema = z.object({
   senderName: z.string().min(1).max(100),
 });
 
+/** Partial wish update (editor autosave). Config stays loose here —
+ *  the full WishConfigSchema runs at publish time (4.12). */
+export const UpdateWishSchema = z.object({
+  title: z.string().min(1).max(100).optional(),
+  occasion: z.string().min(1).optional(),
+  templateId: z.string().min(1).optional(),
+  recipientName: z.string().min(1).max(100).optional(),
+  senderName: z.string().min(1).max(100).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
+});
+
 // ──────────────────────────────────────────────
 // Inferred Types
 // ──────────────────────────────────────────────
