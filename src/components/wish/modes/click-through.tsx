@@ -151,6 +151,10 @@ export const ClickThrough = ({
             {chapterIndex === 4 && (
               <TimelineChapter
                 entries={timelineStage?.content.memoryTimeline ?? []}
+                recipientName={recipientName}
+                senderName={senderName}
+                recipientNickname={recipientNickname}
+                senderNickname={senderNickname}
                 primaryColor={primaryColor}
               />
             )}

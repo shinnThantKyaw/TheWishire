@@ -391,9 +391,10 @@ export const copy = {
     timeline: {
       eyebrow: "ကျွန်တော်တို့၏ ဇာတ်လမ်း",
       titleLead: "အမှတ်တရ",
-      titleAccent: "မှတ်တမ်း",
+      titleAccent: "မှတ်တမ်းဒိုင်ယာရီ",
       subtitleStory: "Every moment with you is a beautiful chapter in our story.",
-      subtitleMine: "Every moment with you is a beautiful chapter in my life story.",
+      subtitleMine:
+        "{recipientNickname}နဲ့အတူဖြတ်သန်းခဲ့ရတဲ့အချိန်တိုင်း၊ အမှတ်တရတိုင်းဟာ {senderNickname}ဘဝရဲ့ အလှပဆုံး စာမျက်နှာတွေပါပဲ",
     },
     closing: {
       withLove: "အချစ်ဖြင့် ❤️",
@@ -505,7 +506,7 @@ export const copy = {
     },
     timeline: {
       empty: "အမှတ်တရ မရှိသေးပါ",
-      chapterLabel: "ကျွန်တော်တို့၏ ဇာတ်လမ်း",
+      chapterLabel: "{senderNickname}တို့ရဲ့ အမှတ်တရလေးတွေ",
     },
     /** Screen 9 — Gift & Rewards chapter (largest group). Sender voice. */
     gift: {
@@ -582,6 +583,14 @@ export const copy = {
       title: "အပြန်အလှန် ဆက်သွယ်မုဒ်",
       description: "ပစ္စည်းတွေကို နှိပ်ပြီး အခန်းတစ်ခုချင်း ဖွင့်ပါ။",
       coming: "Phase 2.6 မှာ ရောက်လာပါမည်။",
+      materials: {
+        letter: "စာလေး",
+        photos: "ဓာတ်ပုံတွေ",
+        poem: "ကဗျာလေး",
+        song: "သီချင်းလေး",
+        timeline: "အမှတ်တရတွေ",
+        gift: "လက်ဆောင်",
+      },
     },
     skipToClosing: "တိုက်ရိုက် ဇာတ်သိမ်းသို့ →",
   },

@@ -9,11 +9,16 @@ import {
   TimelineHeader,
 } from "../timeline/timeline-visuals";
 import { cn } from "@/lib/utils";
-import { copy } from "@/config/copy";
+import { copy, interpolate } from "@/config/copy";
 import type { MemoryTimelineEntry } from "@/types/wish";
 
 interface TimelineChapterProps {
   entries: MemoryTimelineEntry[];
+  recipientName?: string;
+  senderName?: string;
+  /** Casual names for sender-voice copy; fall back to the full names. */
+  recipientNickname?: string;
+  senderNickname?: string;
   primaryColor?: string;
   foregroundColor?: string;
   /** Eyebrow above the timeline title (defaults to the Burmese story label — no chapter numbers). */
@@ -29,6 +34,10 @@ interface TimelineChapterProps {
  */
 export const TimelineChapter = ({
   entries,
+  recipientName = "",
+  senderName = "",
+  recipientNickname = recipientName,
+  senderNickname = senderName,
   primaryColor = "#E91E63",
   foregroundColor = "#1A1A2E",
   chapterLabel = copy.chapters.timeline.chapterLabel,
@@ -60,10 +69,13 @@ export const TimelineChapter = ({
         }}
       >
         <TimelineHeader
-          eyebrow={chapterLabel}
+          eyebrow={interpolate(chapterLabel, { senderNickname })}
           titleLead={copy.stages.timeline.titleLead}
           titleAccent={copy.stages.timeline.titleAccent}
-          subtitle={copy.stages.timeline.subtitleMine}
+          subtitle={interpolate(copy.stages.timeline.subtitleMine, {
+            recipientNickname,
+            senderNickname,
+          })}
           primaryColor={primaryColor}
           foregroundColor={foregroundColor}
         />
