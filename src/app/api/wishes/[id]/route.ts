@@ -11,7 +11,10 @@ import { UpdateWishSchema } from "@/lib/validators";
  */
 
 const loadOwnedWish = async (id: string, userId: string) => {
-  const wish = await prisma.wish.findUnique({ where: { id } });
+  const wish = await prisma.wish.findUnique({
+    where: { id },
+    include: { media: { orderBy: { sortOrder: "asc" } } },
+  });
   if (!wish || wish.userId !== userId) return null;
   return wish;
 };
