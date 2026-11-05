@@ -26,11 +26,11 @@
 | ~~1.3~~ | **DONE 2026-10-25:** `--font-padauk` wired via themeToCSSVars setters (globals.css would be dead code — inline vars win); 10 `'Padauk'` literals → `var(--font-padauk)` | done | — | Myanmar glyph/line-height eyeball → 1.6 |
 | ~~1.4~~ | **DONE 2026-10-25:** `resolveCanvasFonts()` reads `--font-padauk`/`--font-playfair` from computed style + `document.fonts.load` with Burmese sample before draw; 7 `rewards.ticket.*` keys wired (was missed by 1.2 — lib/ outside sweep scope) | done | 1.3 | Also fixed pre-existing `'Playfair Display'` canvas miss |
 | ~~1.5~~ | **DONE 2026-10-25:** Burmese wired into copy.ts (worksheet `MYANMAR-COPY.md` = source of record). Follow-ups closed: Q1 A → server pool builds from `copy.rewards.pool`; Q2 A → dates stay en-US; Q3 approved. Occasion set swapped to 7 main (birthday, anniversary, valentine, girlfriend-day, boyfriend-day, thadingyut, thingyan); wedding/graduation/friendship/thank-you parked (git history). `Occasion` union + occasions.ts updated. Sender-voice strings (cake screen onward) = Wave 4 editable suggestion defaults. Section C new-occasion Burmese = drafts pending final review | done | 1.2, 0.2 | Untranslated blanks stay English |
-| 1.6 | Visual pass: all screens at 1366×768, 1920×900, mobile — Myanmar wrapping, truncation, contrast | 1.5–2h | 1.5 | Dark mode too |
+| ~~1.6~~ | **DONE 2026-11-05:** visual pass — user checked on Windows; timeline nicknames, gift tease, scroll stack all passed. Committed `723f9ed` + `f95de3a`. | done | 1.5 | Dark mode spot-check passed |
 
 ### 1.6 Visual test checklist (user runs on Windows — `npm run dev` → localhost:3000)
 
-**Status: WAITING ON USER (2026-10-25) — taking a break; resume here.**
+**Status: DONE (2026-11-05).**
 
 - **Viewports:** 1366×768 + 1920×900 = no horizontal scroll, no clipped/overlapping content, no height overflow; quick 390px mobile pass too.
 - **Slugs:** `/w/happy-birthday-sarah` (main), `/w/demo-scroll`, `/w/demo-interactive`, `/w/demo-pages`.
@@ -40,7 +40,7 @@
 - **Gift run:** PIN `1609` → gift → Let's Play → spin (Burmese wheel) → PNG ticket (Burmese) → QR → verify page → Prize Booth.
 - **Dark mode:** app pages spot-check.
 - **Do NOT flag (intentional English blanks):** fallback occasion texts, closing thankYou + fallback headline, timeline subtitles, facts sample (except zodiac), photos movingMemory/worthKeeping/moreMemories, song emptyHeading, brand Wishire.
-- Findings → fix in next session → then Wave 2 (2.1 multiple-choice challenge).
+- ~~Findings → fix → then Wave 2~~ → **SKIPPED Wave 2 on 2026-11-05** (user decision: do Wave 3 first). Wave 2 still required before Wave 4.9.
 
 **WSL dev recipe (works):** `NEXT_TEST_WASM=1 npm run dev -- --webpack` — WASM skips Next 16 lockfile (drvfs lock fails); Turbopack needs native so `--webpack` mandatory.
 
@@ -49,6 +49,8 @@
 ---
 
 ## Wave 2 — Missing gift challenges
+
+**SKIPPED 2026-11-05** (deferred until after Wave 3 — user decision; 4.9 still depends on it).
 
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
@@ -66,11 +68,11 @@
 
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
-| 3.1 | Demo seed data: 3 wishes in DB (click-through, scroll, interactive) | 1–2h | — | Script or dashboard-less insert |
-| 3.2 | Scroll mode real implementation: stacked sections, `useInView` animations, sticky progress bar | 5–7h | 1.2 | Replace placeholder `scroll-mode.tsx` |
-| 3.3 | Interactive mode real implementation: materials from box, tap-to-open, glow tracking, all-opened → closing | 5–7h | 1.2 | Replace placeholder `interactive-mode.tsx` |
-| 3.4 | Gift chapter sub-screens (10A–10E) in scroll mode (stacked) | 3–4h | 3.2 | Hardest scroll part |
-| 3.5 | Gift chapter + closing in interactive mode (gift = last material, closing after all) | 2–3h | 3.3 | |
+| ~~3.1~~ | **DONE:** 4 demo slugs in `prisma/seed-config.ts` (happy-birthday-sarah + demo-scroll/pages/interactive) | done | — | |
+| ~~3.2~~ | **DONE:** stacked sections + `whileInView` + `onSectionVisible` → progress bar (commit e84d1b0, `scroll-sections.ts` + test) | done | 1.2 | |
+| 3.3 | Interactive mode real implementation: materials grid, tap-to-open overlay, glow tracking, all-opened → closing | 5–7h | 1.2 | Groundwork landed f95de3a (`materials.ts`, `interactive-state.ts` reducer + tests) |
+| ~~3.4~~ | **DONE:** gift island in scroll mode — GiftChapter receives `giftSubScreen`/`onNextGiftSubScreen` | done | 3.2 | |
+| 3.5 | Gift chapter + closing in interactive mode (gift = last material, closing after all opened) | 2–3h | 3.3 | Ship together with 3.3 |
 | 3.6 | Demo review session: pick mode behaviors to keep/adjust | 1h | 3.2–3.5 | User decision |
 
 **Wave 3 total: ~17–24h**
