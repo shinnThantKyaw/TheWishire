@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ensureUser, ensureUserRow } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
+import { generateSlug } from "@/lib/slug";
 import { CreateWishSchema } from "@/lib/validators";
 
 /**
@@ -43,17 +44,29 @@ export async function POST(req: Request) {
     );
   }
 
-  const wish = await prisma.wish.create({
-    data: {
-      userId: user.id,
-      title: parsed.data.title,
-      occasion: parsed.data.occasion,
-      templateId: parsed.data.templateId,
-      recipientName: parsed.data.recipientName,
-      senderName: parsed.data.senderName,
-      config: {},
-    },
-  });
+  // Slug assigned at draft creation so preview links work pre-publish
+  // (4.11). Retry on the (unlikely) random-suffix collision.
+  let wish;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      wish = await prisma.wish.create({
+        data: {
+          userId: user.id,
+          title: parsed.data.title,
+          occasion: parsed.data.occasion,
+          templateId: parsed.data.templateId,
+          recipientName: parsed.data.recipientName,
+          senderName: parsed.data.senderName,
+          slug: generateSlug(parsed.data.title),
+          config: {},
+        },
+      });
+      break;
+    } catch (error) {
+      const code = (error as { code?: string }).code;
+      if (code !== "P2002" || attempt >= 2) throw error;
+    }
+  }
 
   return NextResponse.json({ wish }, { status: 201 });
 }

@@ -91,6 +91,10 @@ export const TemplateConfigSchema = z.object({
 // ──────────────────────────────────────────────
 
 export const WishContentSchema = z.object({
+  birthdate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD")
+    .optional(),
   letter: z.string().max(5000).optional(),
   poem: z
     .object({

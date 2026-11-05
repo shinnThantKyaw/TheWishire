@@ -54,6 +54,8 @@ import type {
 export type FlowMode = ExperienceFlowMode;
 
 export interface WishContent {
+  /** Recipient's birth date (YYYY-MM-DD) — drives the facts chapter (4.5). */
+  birthdate?: string;
   letter?: string;
   poem?: PoemSelection;
   song?: SongSelection;
