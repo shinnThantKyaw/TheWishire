@@ -66,6 +66,10 @@ const getNextGiftSubScreen = (current: GiftSubScreen): GiftSubScreen | null => {
   return index < GIFT_SUB_ORDER.length - 1 ? GIFT_SUB_ORDER[index + 1] : null;
 };
 
+/** True when the gift chapter has no next sub-screen (last = reward-result). */
+export const isFinalGiftSubScreen = (current: GiftSubScreen): boolean =>
+  getNextGiftSubScreen(current) === null;
+
 // ─── Progress Calculation ──────────────────────────────
 
 /**

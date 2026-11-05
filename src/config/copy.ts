@@ -577,12 +577,11 @@ export const copy = {
     scroll: {
       title: "စာမျက်နှာ လျှောက်မုဒ်",
       description: "အခန်းအားလုံးကို ဆက်တိုက် လျှောက်ကြည့်နိုင်ပါတယ်။",
-      coming: "Phase 2.6 မှာ ရောက်လာပါမည်။",
     },
     interactive: {
       title: "အပြန်အလှန် ဆက်သွယ်မုဒ်",
       description: "ပစ္စည်းတွေကို နှိပ်ပြီး အခန်းတစ်ခုချင်း ဖွင့်ပါ။",
-      coming: "Phase 2.6 မှာ ရောက်လာပါမည်။",
+      closeAria: "အခန်းပိတ်ရန်",
       materials: {
         letter: "စာလေး",
         photos: "ဓာတ်ပုံတွေ",

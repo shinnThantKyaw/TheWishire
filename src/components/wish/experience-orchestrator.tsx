@@ -217,8 +217,16 @@ export const ExperienceOrchestrator = ({
             return (
               <InteractiveMode
                 stages={stages}
+                giftConfig={giftConfig}
+                recipientName={recipientName}
+                senderName={senderName}
+                recipientNickname={recipientNickname}
+                senderNickname={senderNickname}
                 primaryColor={primaryColor}
-                onComplete={actions.next}
+                giftSubScreen={state.giftSubScreen}
+                onNextGiftSubScreen={actions.nextGiftSubScreen}
+                observeChapter={actions.observeChapter}
+                onComplete={() => actions.goToPhase("closing")}
               />
             );
         }
@@ -299,13 +307,14 @@ export const ExperienceOrchestrator = ({
           // giftSubScreen intentionally NOT in the key — GiftChapter owns its
           // sub-screen transitions internally; remounting here would wipe
           // chapter state (e.g. won spin-wheel rewards) on every sub-screen change.
-          // Scroll mode also excludes chapterIndex: observeChapter updates it
-          // on every scroll, and a key change would remount the whole page
-          // (scroll jumps to top, gift island state lost).
+          // Scroll and interactive modes also exclude chapterIndex:
+          // observeChapter updates it on scroll/open, and a key change would
+          // remount the whole page (scroll jumps to top; interactive grid
+          // and visited-chapter overlay state would be wiped).
           key={
-            normalizedFlowMode === "scroll"
-              ? activePhase
-              : `${activePhase}-${state.chapterIndex}`
+            normalizedFlowMode === "click-through"
+              ? `${activePhase}-${state.chapterIndex}`
+              : activePhase
           }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
