@@ -66,14 +66,16 @@
 
 ## Wave 3 — Scroll + interactive mode demos
 
+**DONE 2026-11-05** (3.6 visual check passed; only scroll chapters full 1366×768 sweep remains optional).
+
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
 | ~~3.1~~ | **DONE:** 4 demo slugs in `prisma/seed-config.ts` (happy-birthday-sarah + demo-scroll/pages/interactive) | done | — | |
 | ~~3.2~~ | **DONE:** stacked sections + `whileInView` + `onSectionVisible` → progress bar (commit e84d1b0, `scroll-sections.ts` + test) | done | 1.2 | |
-| 3.3 | Interactive mode real implementation: materials grid, tap-to-open overlay, glow tracking, all-opened → closing | 5–7h | 1.2 | Groundwork landed f95de3a (`materials.ts`, `interactive-state.ts` reducer + tests) |
+| ~~3.3~~ | **DONE 2026-11-05:** material grid, tap-to-open overlay, glow tracking, all-opened → closing (commits f95de3a + 79cd67d, 6 RTL tests) | done | 1.2 | |
 | ~~3.4~~ | **DONE:** gift island in scroll mode — GiftChapter receives `giftSubScreen`/`onNextGiftSubScreen` | done | 3.2 | |
-| 3.5 | Gift chapter + closing in interactive mode (gift = last material, closing after all opened) | 2–3h | 3.3 | Ship together with 3.3 |
-| 3.6 | Demo review session: pick mode behaviors to keep/adjust | 1h | 3.2–3.5 | User decision |
+| ~~3.5~~ | **DONE 2026-11-05:** gift = last material (finishes on final sub-screen continue), closing after all opened — shipped with 3.3 in 79cd67d | done | 3.3 | |
+| ~~3.6~~ | **DONE 2026-11-05:** user visual check of `/w/demo-interactive` passed — no adjustments requested | done | 3.2–3.5 | |
 
 **Wave 3 total: ~17–24h**
 
