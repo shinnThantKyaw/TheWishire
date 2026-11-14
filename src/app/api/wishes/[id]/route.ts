@@ -50,7 +50,8 @@ export async function PATCH(
   try {
     user = await ensureUser();
     await ensureUserRow(user);
-  } catch {
+  } catch (error) {
+    console.error("PATCH /api/wishes/[id] auth failure:", error);
     return NextResponse.json({ error: "Auth unavailable" }, { status: 401 });
   }
 
