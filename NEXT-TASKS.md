@@ -117,7 +117,7 @@
 
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
-| 5.1 | E2E manual test: 3 modes × birthday/anniversary, edge cases (no photos, no poem, no bonus) | 2–3h | Wave 4 | |
+| ~~5.1~~ | **DONE 2026-11-14:** user E2E passed — 3 modes × occasions, edge cases, challenge gates, media, small-laptop sweep | done | Wave 4 | |
 | ~~5.2~~ | **DONE 2026-11-14:** `PROJECT-STATUS.md` rewritten to current state; native memory files refreshed (claude-mem observer still credential-refused) | done | Wave 4 | |
 | 5.3 | Production deploy verify (Vercel) — fonts, uploads, ISR, Myanmar rendering live | 1h | 5.1 | |
 
