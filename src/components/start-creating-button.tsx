@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/client";
 
 interface StartCreatingButtonProps {
   className?: string;
+  /** Applied to the inner Button — hero/footer CTAs need custom size/color. */
+  buttonClassName?: string;
   children?: React.ReactNode;
 }
 
@@ -19,6 +21,7 @@ interface StartCreatingButtonProps {
  */
 export const StartCreatingButton = ({
   className,
+  buttonClassName,
   children,
 }: StartCreatingButtonProps) => {
   const router = useRouter();
@@ -49,7 +52,12 @@ export const StartCreatingButton = ({
 
   return (
     <div className={className}>
-      <Button size="lg" onClick={handleStart} disabled={loading}>
+      <Button
+        size="lg"
+        onClick={handleStart}
+        disabled={loading}
+        className={buttonClassName}
+      >
         <Sparkles className="mr-2 h-4 w-4" />
         {children ?? "Start Creating"}
       </Button>
