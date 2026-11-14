@@ -19,7 +19,7 @@ A web app that lets non-technical people create personalized interactive surpris
 | 2 — Gift challenges | Multiple-choice (server-validated), heart-catch game, legacy PIN; visual check folds into 5.1 | ✅ code |
 | 3 — Flow modes | Scroll stack + interactive material grid demos | ✅ done |
 | 4 — Creator flow | Model C auth (anon entry, magic link, claim banner), wish CRUD + rate limits, 8-step builder w/ autosave, media upload, YouTube song, all-3-challenge gift config, experience step (incl. **music picker with preview**), preview mode, validated publish + QR share card, dashboard list, landing page redesign, **4.14 visual pass passed 2026-11-14** | ✅ done |
-| 5 — Wrap | 5.1 E2E manual test → 5.2 docs (done) → 5.3 prod deploy verify | 🔄 in progress |
+| 5 — Wrap | 5.1 E2E passed, 5.2 docs, 5.3 prod verified live (2026-11-14) — **all waves complete** | ✅ done |
 
 **Test suite:** 118+ tests green, `tsc --noEmit` clean, changed files lint-clean (16 pre-existing lint errors in legacy recipient components — see NEXT-TASKS backlog).
 
@@ -32,16 +32,18 @@ A web app that lets non-technical people create personalized interactive surpris
 | Anonymous provider enabled | ✅ verified in 4.14 pass (Start Creating works) |
 | Custom SMTP (magic links to non-team emails) | ✅ verified 2026-11-14 (3/3 invites delivered) |
 | `wish-media` public storage bucket | ✅ created in Phase 1 — re-confirm during 5.1 media upload |
-| `REWARD_HMAC_SECRET` in Vercel prod env | ❌ still missing (dev fallback active in prod until set) |
+| `REWARD_HMAC_SECRET` in Vercel prod env | ✅ set 2026-11-14 (Wave 5.3) |
 
 ---
 
 ## What's Next
 
-### Wave 5 — Wrap
+### Wave 5 — Wrap ✅ (closed 2026-11-14)
 
-1. **5.1 E2E manual test** — 3 flow modes × birthday/anniversary; edge cases (no photos, no poem, no bonus gift); challenge gates on `/w/demo-scroll` (MC) + `/w/demo-pages` (heart-catch) + `/w/happy-birthday-sarah` (PIN 1609)
-2. **5.3 Production deploy verify** — push to GitHub (main is ahead), then verify `the-wishire.vercel.app`: fonts, uploads, ISR, Myanmar rendering, set `REWARD_HMAC_SECRET`
+- 5.1 E2E passed (3 modes × occasions, edge cases, challenge gates, media)
+- 5.3 Prod live + verified: `the-wishire.vercel.app` — landing/login/health/4 demo wishes 200, Burmese SSR, ISR headers
+- **Deploy fix:** win32 packages moved to `optionalDependencies` (EBADPLATFORM had failed every deploy since 2026-08-26); `NEXT_PUBLIC_SUPABASE_URL`/`_ANON_KEY` + `REWARD_HMAC_SECRET` added to Vercel env
+- **Network note:** `api.vercel.com` unreachable from this network — use GitHub commit statuses + Vercel dashboard via VPN for logs
 
 ### Backlog (post Wave 5)
 
