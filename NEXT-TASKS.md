@@ -13,7 +13,12 @@
 | ~~0.2~~ | **DECIDED 2026-10-20:** Myanmar = recipient flow only first; landing/auth/builder/dashboard stay English (translate later, separate backlog) | done | — | Wave 1 scope = wish components only |
 | ~~0.3~~ | **DONE 2026-10-25:** reviewed inventory with fresh eyes (caught chanceLeft addition) | done | 1.1 | Catch missed strings |
 
-**Backlog (post Wave 4):** Myanmar translation for creator-facing UI (landing, auth, builder, dashboard).
+**Backlog (post Wave 4):**
+- Myanmar translation for creator-facing UI (landing, auth, builder, dashboard)
+- **Theme toggle** — `dark:` styles exist (`globals.css` `.dark` class variant) but nothing sets the class; dark mode unreachable in UI (found in 4.14 pass)
+- **Logout button** — no `signOut` anywhere; testers must clear site data (found in 4.14 pass)
+- **Lint debt:** 16 pre-existing errors in recipient-flow files (react-hooks/purity `Math.random` in gift-box/closing stages, conditional `useMemo` in letter-chapter, unescaped quotes in start-screen, ref-in-render in music-player) — all predate Wave 4 close; changed files are clean
+- Facts chapter: consume `content.birthdate` (collected in builder, unused)
 
 ---
 
@@ -85,7 +90,7 @@
 
 ## Wave 4 — Creator flow
 
-**CODE DONE 2026-11-05 (4.1–4.13); 4.14 awaiting user visual pass.**
+**DONE 2026-11-14 — 4.1–4.14 complete. User visual pass passed 2026-11-14 (landing, anonymous entry, magic link, claim, music picker).**
 
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
@@ -102,7 +107,7 @@
 | ~~4.11~~ | **DONE:** `/w/[slug]?preview=1` owner-only draft render, amber banner + noindex | done | 4.2 | |
 | ~~4.12~~ | **DONE:** slug at draft creation, `POST …/publish` full-validation gate, share card (link + QR + copy), unpublish | done | 4.6–4.10 | |
 | ~~4.13~~ | **DONE:** dashboard wish list (chips, edit/preview/copy/delete), edit-after-publish works via same editor | done | 4.12 | |
-| 4.14 | Creator flow visual polish + small-laptop pass | 1.5–2h | all | Code audit done (breakpoints/truncate/dark tokens); **user visual pass pending** |
+| ~~4.14~~ | **DONE 2026-11-14:** user visual pass passed (1366×768 + 1920×900, light/dark via devtools). Scope add during pass: **music picker** with preview replaced raw URL input (commit `c7bbaf3`). Findings → backlog: no theme toggle, no logout button | done | all | |
 
 **Wave 4 total: ~30–43h**
 
@@ -113,7 +118,7 @@
 | # | Task | Est | Depends | Notes |
 |---|------|-----|---------|-------|
 | 5.1 | E2E manual test: 3 modes × birthday/anniversary, edge cases (no photos, no poem, no bonus) | 2–3h | Wave 4 | |
-| 5.2 | Update `PROJECT-STATUS.md` + memory files | 1h | Wave 4 | Currently stale |
+| ~~5.2~~ | **DONE 2026-11-14:** `PROJECT-STATUS.md` rewritten to current state; native memory files refreshed (claude-mem observer still credential-refused) | done | Wave 4 | |
 | 5.3 | Production deploy verify (Vercel) — fonts, uploads, ISR, Myanmar rendering live | 1h | 5.1 | |
 
 **Wave 5 total: ~4–5h**
