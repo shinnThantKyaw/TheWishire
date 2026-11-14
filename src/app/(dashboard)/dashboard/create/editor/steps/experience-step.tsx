@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { copy } from "@/config/copy";
 import type { StartAction } from "@/types/experience";
 import type { StepProps } from "../types";
+import { MusicPicker } from "./music-picker";
 
 const FLOW_MODES = [
   { value: "click-through", label: "Click-through", hint: "One chapter at a time with next/back buttons" },
@@ -263,21 +263,17 @@ export const ExperienceStep = ({
         </label>
         {settings.enableMusic && (
           <div className="space-y-2">
-            <Label htmlFor="music-url">
-              Music file URL{" "}
-              <span className="text-muted-foreground">(mp3)</span>
-            </Label>
-            <Input
-              id="music-url"
-              value={content.musicUrl ?? ""}
-              onChange={(e) =>
-                updateConfig({
-                  content: { ...content, musicUrl: e.target.value || undefined },
-                })
+            <MusicPicker
+              value={content.musicUrl}
+              onChange={(src) =>
+                updateConfig({ content: { ...content, musicUrl: src } })
               }
-              placeholder="/music/birthday-song.mp3"
-              maxLength={500}
             />
+            {!content.musicUrl && (
+              <p className="text-xs text-muted-foreground">
+                No track selected — the recipient won&apos;t hear music yet.
+              </p>
+            )}
           </div>
         )}
       </section>
