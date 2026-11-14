@@ -16,9 +16,28 @@ export async function POST(req: Request) {
   let user;
   try {
     user = await ensureUser();
+  } catch (error) {
+    // TEMP diagnostic (prod 401 investigation) — revert after fix.
+    return NextResponse.json(
+      {
+        error: "Auth unavailable",
+        phase: "ensureUser",
+        detail: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      },
+      { status: 401 },
+    );
+  }
+  try {
     await ensureUserRow(user);
-  } catch {
-    return NextResponse.json({ error: "Auth unavailable" }, { status: 401 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Auth unavailable",
+        phase: "ensureUserRow",
+        detail: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      },
+      { status: 401 },
+    );
   }
 
   const limit = rateLimit(`wish-create:${user.id}`, CREATE_LIMIT.max, CREATE_LIMIT.windowMs);
