@@ -513,6 +513,10 @@ export const copy = {
       intro: "Suprise!",
       introSub:
         "ဒါကတော့ {recipientNickname}အတွက် {senderNickname}ပေမယ့်လက်ဆောင်လေးပါ။ ဘာလဲသိချင်ရင် အောက်က passcode လေးကို မှန်အောင်ဖြေနော် 😜",
+      /** Lead-in shared by all gate instructions; challenge-specific tail
+       *  lives in challenges.instructions (PIN/legacy keep full introSub). */
+      introSubLead:
+        "ဒါကတော့ {recipientNickname}အတွက် {senderNickname}ပေမယ့်လက်ဆောင်လေးပါ။",
       mainGiftHeading:
         "{recipientNickname}အတွက်လက်ဆောင်လေးကတော့ဒါလေးပါ။ {recipientNickname}သဘောကျမယ်လို့ မျှော်လင့်ပါတယ်နော်",
       hint: "အရိပ်အမြွက်",
@@ -596,6 +600,12 @@ export const copy = {
 
   /** Wave 2 — gift challenge gates (server-validated). */
   challenges: {
+    /** Gate instruction tail after gift.introSubLead — differs per challenge.
+     *  PIN and legacy gates use chapters.gift.introSub instead (unchanged). */
+    instructions: {
+      multipleChoice: "ဘာလဲသိချင်ရင် အောက်ကအဖြေကိုမှန်အောင်ရွေးနော်။",
+      heartCatch: "ဘာလဲသိချင်ရင် အောက်ကဂိမ်းလေးကိုနိုင်အောင်ဆော့နော်။",
+    },
     networkError: "အင်တာနက် မအောင်မြင်ပါ — ထပ်ကြိုးစားပါ",
     checking: "စစ်ဆေးနေပါတယ်…",
     multipleChoice: {

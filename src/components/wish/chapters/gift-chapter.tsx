@@ -169,6 +169,14 @@ const GiftGate = ({
   const gate = config?.gateAction ?? { type: "tap" as const, prompt: copy.gateDefaults.gift };
   const [done, setDone] = useState(false);
 
+  // Instruction tail varies by challenge type (PIN/legacy keep full introSub).
+  const challengeInstruction =
+    config?.challenge?.type === "multiple-choice"
+      ? copy.challenges.instructions.multipleChoice
+      : config?.challenge?.type === "heart-catch"
+        ? copy.challenges.instructions.heartCatch
+        : undefined;
+
   const handleComplete = () => {
     setDone(true);
     setTimeout(onComplete, 800);
@@ -200,10 +208,15 @@ const GiftGate = ({
         className="mb-1 max-w-sm px-4 text-center text-sm leading-relaxed"
         style={{ color: foregroundColor, opacity: 0.65 }}
       >
-        {interpolate(copy.chapters.gift.introSub, {
-          recipientNickname: recipientNickname ?? recipientName ?? "",
-          senderNickname: senderNickname ?? senderName ?? "",
-        })}
+        {interpolate(
+          challengeInstruction
+            ? `${copy.chapters.gift.introSubLead} ${challengeInstruction}`
+            : copy.chapters.gift.introSub,
+          {
+            recipientNickname: recipientNickname ?? recipientName ?? "",
+            senderNickname: senderNickname ?? senderName ?? "",
+          },
+        )}
       </p>
 
       {/* Wave 2 challenge gate — takes precedence over legacy gateAction */}

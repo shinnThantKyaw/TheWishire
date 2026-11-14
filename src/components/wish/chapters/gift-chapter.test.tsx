@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react";
 import { GiftChapter } from "./gift-chapter";
+import type { GiftChallengeConfig } from "@/types/wish";
 
 // vitest globals are off, so RTL's automatic cleanup never registers.
 afterEach(cleanup);
@@ -125,5 +126,49 @@ describe("MainGiftReveal tease interaction", () => {
     expect(
       screen.getByRole("button", { name: "စတာပါ သဘောကျတယ်နော်" }),
     ).toBeDefined();
+  });
+});
+
+describe("GiftGate challenge instruction", () => {
+  const renderGate = (challenge: GiftChallengeConfig) =>
+    render(
+      <GiftChapter
+        giftSubScreen="challenge"
+        recipientName="ဂျူလီယာ"
+        senderName="ကိုသျှား"
+        recipientNickname="ကလေး"
+        senderNickname="ကိုကို"
+        config={{ challenge }}
+        onNextSubScreen={() => {}}
+      />,
+    );
+
+  it("shows the multiple-choice instruction for MC challenges", () => {
+    renderGate({
+      type: "multiple-choice",
+      question: "အနီရောင်က ဘာလဲ?",
+      options: ["နှင်းဆီ", "ယုန်"],
+      correctIndex: 0,
+    });
+
+    expect(
+      screen.getByText(/ဘာလဲသိချင်ရင် အောက်ကအဖြေကိုမှန်အောင်ရွေးနော်/),
+    ).toBeDefined();
+    expect(screen.queryByText(/passcode/)).toBeNull();
+  });
+
+  it("shows the game instruction for heart-catch challenges", () => {
+    renderGate({ type: "heart-catch", heartsToCatch: 8, timeLimitSeconds: 15 });
+
+    expect(
+      screen.getByText(/ဘာလဲသိချင်ရင် အောက်ကဂိမ်းလေးကိုနိုင်အောင်ဆော့နော်/),
+    ).toBeDefined();
+    expect(screen.queryByText(/passcode/)).toBeNull();
+  });
+
+  it("keeps the passcode instruction for PIN challenges", () => {
+    renderGate({ type: "pin", pin: "1609", hint: "ချစ်သူ့မွေးနေ့" });
+
+    expect(screen.getByText(/passcode လေးကို မှန်အောင်ဖြေနော်/)).toBeDefined();
   });
 });
